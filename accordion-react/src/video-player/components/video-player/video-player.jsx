@@ -1,11 +1,31 @@
+import useWindowDimensions from '../../hooks/useWindowDimensions';
 import {
   MAX_VIDEO_PLAYER_WIDTH,
   VIDEO_PLAYER_ASPECT_RATIO,
 } from '../../common/constants';
 import styles from './video-player.module.scss';
 
-function VideoPlayer({ width, height }) {
+export default function VideoPlayer({ width, height }) {
   /** Container for the video and user controls */
+
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
+
+  if (!width && !height) {
+    width = windowWidth;
+    height = windowHeight;
+  }
+  if (width && !height) {
+    height = width * VIDEO_PLAYER_ASPECT_RATIO;
+  }
+  if (!width && height) {
+    width = height / VIDEO_PLAYER_ASPECT_RATIO;
+  }
+  if (width > windowWidth) {
+    width = windowWidth;
+  }
+  if (height > windowHeight) {
+    height = windowHeight;
+  }
 
   let playerWidth = 0.9 * width;
   let playerHeight = playerWidth * VIDEO_PLAYER_ASPECT_RATIO;
@@ -20,9 +40,9 @@ function VideoPlayer({ width, height }) {
   const spaceAbove = (height - playerHeight) / 2.0;
 
   const playerStyle = {
-    width: playerWidth + 'px',
-    height: playerHeight + 'px',
-    marginTop: spaceAbove + 'px',
+    width: `${playerWidth}px`,
+    height: `${playerHeight}px`,
+    marginTop: `${spaceAbove}px`,
   };
   return (
     <div className={styles.videoPlayer} style={{ ...playerStyle }}>
@@ -30,5 +50,3 @@ function VideoPlayer({ width, height }) {
     </div>
   );
 }
-
-export default VideoPlayer;
