@@ -1,21 +1,23 @@
 import { useState, useEffect } from 'react';
 
+/** Returns the innerWidth and innerHeight of the browser window  */
 function getWindowDimensions() {
-  /** Returns the innerWidth and innerHeight of the browser window  */
   const { innerWidth: width, innerHeight: height } = window;
   return {
     width,
-    height
+    height,
   };
 }
 
+/** Fetches and returns browser window size when browser is resized */
 export default function useWindowDimensions() {
-  /** Fetches and returns browser window size when browser is resized */
-  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+  const [windowDimensions, setWindowDimensions] = useState(
+    getWindowDimensions()
+  );
 
   useEffect(() => {
+    /** Updates browser window dimensions */
     function handleWindowResize() {
-      /** Updates browser window dimensions */
       setWindowDimensions(getWindowDimensions());
     }
 
