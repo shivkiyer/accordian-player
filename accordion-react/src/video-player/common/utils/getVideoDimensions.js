@@ -4,7 +4,12 @@ import {
 } from '../constants';
 
 /** Calculate video dimensions from inputs or max constraints */
-export default function getVideoDimensions(width, height, maxWidth, maxHeight) {
+export default function getVideoDimensions({
+  width,
+  height,
+  maxWidth,
+  maxHeight,
+}) {
   const areaCoverage = 0.9;
 
   if (!width && !height) {
@@ -20,10 +25,10 @@ export default function getVideoDimensions(width, height, maxWidth, maxHeight) {
     width = height / VIDEO_PLAYER_ASPECT_RATIO;
   }
   // Width and height cannot exceed max dimensions
-  if (width > maxWidth) {
+  if (maxWidth && width > maxWidth) {
     width = maxWidth;
   }
-  if (height > maxHeight) {
+  if (maxHeight && height > maxHeight) {
     height = maxHeight;
   }
 
@@ -33,7 +38,8 @@ export default function getVideoDimensions(width, height, maxWidth, maxHeight) {
   if (playerHeight > height) {
     playerHeight = areaCoverage * height;
     playerWidth = playerHeight / VIDEO_PLAYER_ASPECT_RATIO;
-  } else if (playerWidth > MAX_VIDEO_PLAYER_WIDTH) {
+  }
+  if (playerWidth > MAX_VIDEO_PLAYER_WIDTH) {
     playerWidth = MAX_VIDEO_PLAYER_WIDTH;
     playerHeight = playerWidth * VIDEO_PLAYER_ASPECT_RATIO;
   }

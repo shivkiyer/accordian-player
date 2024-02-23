@@ -6,12 +6,12 @@ import styles from './video-player.module.scss';
 export default function VideoPlayer({ width, height }) {
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
 
-  const { playerWidth, playerHeight, marginTop } = getVideoDimensions(
+  const { playerWidth, playerHeight, marginTop } = getVideoDimensions({
     width,
     height,
-    windowWidth,
-    windowHeight
-  );
+    maxWidth: windowWidth,
+    maxHeight: windowHeight,
+  });
 
   const playerStyle = {
     width: `${playerWidth}px`,
