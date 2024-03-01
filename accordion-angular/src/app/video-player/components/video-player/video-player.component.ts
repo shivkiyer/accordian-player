@@ -1,18 +1,13 @@
 import {
   OnInit,
   Component,
-  HostListener,
-  afterNextRender,
-  Injector,
-  inject,
+  HostListener
 } from '@angular/core';
 
 import { AppConstants } from '../../common/constants';
 
 @Component({
   selector: 'app-video-player',
-  standalone: true,
-  imports: [],
   templateUrl: './video-player.component.html',
   styleUrl: './video-player.component.scss',
 })
@@ -21,13 +16,8 @@ export class VideoPlayerComponent implements OnInit {
 
   constructor() {}
 
-  injector = inject(Injector);
-
   ngOnInit(): void {
-    afterNextRender(
-      () => this.generateVideoStyle(window.innerWidth, window.innerHeight),
-      { injector: this.injector }
-    );
+    this.generateVideoStyle(window.innerWidth, window.innerHeight);
   }
 
   generateVideoStyle(inpWidth: number, inpHeight: number): void {
