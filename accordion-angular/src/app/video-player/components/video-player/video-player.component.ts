@@ -1,6 +1,6 @@
 import { OnInit, Component, HostListener, Input } from '@angular/core';
 
-import { AppConstants } from '../../common/constants';
+import { getVideoPlayerStyle } from '../../common/utils/video-utils';
 
 @Component({
   selector: 'app-video-player',
@@ -19,7 +19,7 @@ export class VideoPlayerComponent implements OnInit {
   }
 
   setVideoDimensions(): void {
-    const playerStyle = this.generateVideoStyle(
+    const playerStyle = getVideoPlayerStyle(
       this.width,
       this.height,
       window.innerWidth,
@@ -30,45 +30,6 @@ export class VideoPlayerComponent implements OnInit {
       width: `${playerStyle.playerWidth}px`,
       marginTop: `${playerStyle.playerMarginTop}px`,
     };
-  }
-
-  generateVideoStyle(
-    inpWidth: number,
-    inpHeight: number,
-    maxWidth: number,
-    maxHeight: number
-  ): any {
-    let width, height;
-    let playerWidth, playerHeight, playerMarginTop: number;
-    const coverageArea = 0.9;
-
-    if (inpWidth > 0) {
-      width = inpWidth;
-      height = width * AppConstants.VIDEO_ASPECT_RATIO;
-    } else if (inpHeight > 0) {
-      height = inpHeight;
-      width = height / AppConstants.VIDEO_ASPECT_RATIO;
-    } else {
-      width = maxWidth;
-      height = maxHeight;
-    }
-
-    playerWidth = coverageArea * width;
-    if (playerWidth > AppConstants.MAX_VIDEO_WIDTH) {
-      playerWidth = AppConstants.MAX_VIDEO_WIDTH;
-    }
-    playerHeight = playerWidth * AppConstants.VIDEO_ASPECT_RATIO;
-    if (playerHeight > height) {
-      playerHeight = coverageArea * height;
-      playerWidth = playerHeight / AppConstants.VIDEO_ASPECT_RATIO;
-    }
-    playerMarginTop = (height - playerHeight) / 2.0;
-
-    return {
-      playerHeight,
-      playerWidth,
-      playerMarginTop
-    }
   }
 
   @HostListener('window:resize', ['$event'])
