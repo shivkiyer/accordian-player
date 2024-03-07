@@ -10,10 +10,10 @@ export function getVideoPlayerStyle(
   let playerWidth, playerHeight, playerMarginTop: number;
   const coverageArea = 0.9;
 
-  if (inpWidth > 0) {
+  if (inpWidth > 0 && inpWidth <= maxWidth) {
     width = inpWidth;
     height = width * VIDEO_ASPECT_RATIO;
-  } else if (inpHeight > 0) {
+  } else if (inpHeight > 0 && inpHeight <= maxHeight) {
     height = inpHeight;
     width = height / VIDEO_ASPECT_RATIO;
   } else {
