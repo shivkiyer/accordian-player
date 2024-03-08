@@ -3,6 +3,7 @@ import getVideoDimensions from '../../common/utils/getVideoDimensions';
 import styles from './video-player.module.scss';
 
 /**
+ * @component
  * Container for the video and user controls that has either
  * a specified width or height, or scales according to the
  * browser window size.
@@ -10,6 +11,18 @@ import styles from './video-player.module.scss';
  * @param {number} width The width of the container (optional)
  * @param {number} height The height of the container (optional)
  * @returns {ReactNode} A react element with fixed height and width
+ *
+ * @example
+ * Use with only width to produce container of fixed width
+ * <Video Player width="300" />
+ *
+ * @example
+ * Use with only height to produce container of fixed height
+ * <Video Player height="300" />
+ *
+ * @example
+ * Use without any inputs to scale to browser window
+ * <Video Player />
  *
  */
 export default function VideoPlayer({ width, height }) {
