@@ -17,6 +17,16 @@ describe('getVideoPlayerStyle', () => {
     expect(Math.trunc(videoStyle.playerHeight)).toBe(270);
   });
 
+  it('should use max width if width is greater than max width', () => {
+    const videoStyle = getVideoPlayerStyle(900, 0, 600, 1000);
+    expect(videoStyle.playerWidth).toBe(540);
+  });
+
+  it('should use max height if height is greater than max height', () => {
+    const videoStyle = getVideoPlayerStyle(0, 900, 1000, 500);
+    expect(videoStyle.playerHeight).toBe(450);
+  });
+
   it('should use max width if width and height are not provided', () => {
     const videoStyle = getVideoPlayerStyle(0, 0, 1000, 1000);
     expect(videoStyle.playerWidth).toBe(900);

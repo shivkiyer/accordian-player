@@ -46,6 +46,26 @@ describe('getVideoDimensions', () => {
     expect(dimensions2.playerHeight).toBe(0.9 * 100);
   });
 
+  it('should adjust to max width if input width is greater than max width', () => {
+    const dimensions = getVideoDimensions({
+      width: 900,
+      maxWidth: 800,
+      maxHeight: 1000,
+    });
+
+    expect(dimensions.playerWidth).toBe(0.9 * 800);
+  });
+
+  it('should adjust to max height if input height is greater than max height', () => {
+    const dimensions = getVideoDimensions({
+      height: 900,
+      maxWidth: 1000,
+      maxHeight: 500,
+    });
+
+    expect(dimensions.playerHeight).toBe(0.9 * 500);
+  });
+
   it('should limit container width to 1080px', () => {
     const dimensions = getVideoDimensions({ maxWidth: 1400, maxHeight: 1000 });
 
