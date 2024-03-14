@@ -1,6 +1,7 @@
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import getVideoDimensions from '../../common/utils/getVideoDimensions';
 import styles from './video-player.module.scss';
+import ControlBar from '../control-bar/control-bar';
 
 /**
  * Container for the video and user controls that has either
@@ -43,8 +44,9 @@ export default function VideoPlayer({ width, height }) {
     marginTop: `${marginTop}px`,
   };
   return (
-    <div className={styles.videoPlayer} style={{ ...playerStyle }}>
+    <div className={styles.videoPlayer} style={playerStyle}>
       This is video player box
+      <ControlBar width={playerWidth} height={playerHeight} />
     </div>
   );
 }
