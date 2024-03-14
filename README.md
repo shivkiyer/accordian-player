@@ -7,4 +7,4 @@ The video player can be used in any application that features significant amount
 
 The creator of the videos can configure these options using a template which is then inserted into a Comma Separated Values (.csv) file. The config file can be found along with the video files on any online hosting.
 
-The app is currently being built using Angular 17 and React 18. This is to ensure that it can be embedded into larger apps that could utilize an interactive video player.
+The app is currently being built using React 18. This is to ensure that it can be embedded into larger apps that could utilize an interactive video player.
