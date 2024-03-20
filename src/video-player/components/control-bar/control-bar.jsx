@@ -4,6 +4,7 @@ import {
   CONTROL_BAR_HEIGHT_LARGE,
   CONTROL_BAR_HEIGHT_SMALL,
 } from '../../common/constants';
+import ProgressBar from '../progress-bar/progress-bar';
 
 /**
  * Produces a control bar at the bottom of the video player
@@ -31,5 +32,9 @@ export default function ControlBar({ width: videoWidth, height: videoHeight }) {
     height: `${barHeight}px`,
   };
 
-  return <div className={styles.ControlBar} style={controlBarStyle}></div>;
+  return (
+  <div className={styles.ControlBar} style={controlBarStyle}>
+    <ProgressBar />
+  </div>
+  );
 }
