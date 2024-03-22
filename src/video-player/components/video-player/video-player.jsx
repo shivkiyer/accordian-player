@@ -1,7 +1,10 @@
+import { useDispatch } from 'react-redux';
+
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import getVideoDimensions from '../../common/utils/getVideoDimensions';
 import styles from './video-player.module.scss';
 import ControlBar from '../control-bar/control-bar';
+import { setDimensions } from '../../app/videoReducer';
 
 /**
  * Container for the video and user controls that has either
@@ -29,6 +32,7 @@ import ControlBar from '../control-bar/control-bar';
  *
  */
 export default function VideoPlayer({ width, height }) {
+  const dispatch = useDispatch();
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
 
   const { playerWidth, playerHeight, marginTop } = getVideoDimensions({
@@ -38,6 +42,8 @@ export default function VideoPlayer({ width, height }) {
     maxHeight: windowHeight,
   });
 
+  dispatch(setDimensions({ width: playerWidth, height: playerHeight }));
+
   const playerStyle = {
     width: `${playerWidth}px`,
     height: `${playerHeight}px`,
@@ -46,7 +52,7 @@ export default function VideoPlayer({ width, height }) {
   return (
     <div className={styles.videoPlayer} style={playerStyle}>
       This is video player box
-      <ControlBar width={playerWidth} height={playerHeight} />
+      <ControlBar />
     </div>
   );
 }

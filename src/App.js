@@ -1,7 +1,7 @@
-import VideoPlayer from './video-player/components/video-player/video-player';
+import AccordionPlayer from './video-player/components/accordion-player/accordion-player';
 
 function App() {
-  return <VideoPlayer />;
+  return <AccordionPlayer />;
 }
 
 export default App;

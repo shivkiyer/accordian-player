@@ -1,3 +1,5 @@
+import { useSelector } from 'react-redux';
+
 import styles from './control-bar.module.scss';
 import getScaledDimension from '../../common/utils/getScaledDimension';
 import {
@@ -5,23 +7,22 @@ import {
   CONTROL_BAR_HEIGHT_SMALL,
 } from '../../common/constants';
 import ProgressBar from '../progress-bar/progress-bar';
+import { selectVideoWidth } from '../../app/videoReducer';
 
 /**
  * Produces a control bar at the bottom of the video player
  * This will contain video and audio controls, track info
  * and also video clip selection.
  *
- * @param {number} width The width of the video player
- * @param {number} height The height of the video player
- *
  * @returns {ReactNode} A react element with dynamic height and full width
  *
  * @component
  * @example
- * Use with width and height
- * <ControlBar width="300" height="250" />
+ * <ControlBar />
  */
-export default function ControlBar({ width: videoWidth, height: videoHeight }) {
+export default function ControlBar() {
+  const videoWidth = useSelector(selectVideoWidth);
+
   const barHeight = getScaledDimension({
     smallDim: CONTROL_BAR_HEIGHT_SMALL,
     largeDim: CONTROL_BAR_HEIGHT_LARGE,

@@ -24,5 +24,5 @@ export default function getScaledDimension({ smallDim, largeDim, videoWidth }) {
   } else if (videoWidth > UPPER_DEVICE_WIDTH) {
     scaledDimension = largeDim * (videoWidth / UPPER_DEVICE_WIDTH);
   }
-  return +scaledDimension.toFixed(2);
+  return Number(scaledDimension.toFixed(2));
 }
