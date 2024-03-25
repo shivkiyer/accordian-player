@@ -29,7 +29,7 @@ describe('VideoPlayer', () => {
 
     const videoPlayer = container.querySelector('.videoPlayer');
     expect(videoPlayer).toBeDefined();
-    const expectedWidth = 1024;
+    const expectedWidth = 0.9 * 1024;
     expect(videoPlayer).toHaveStyle(`width: ${expectedWidth}px`);
   });
 });

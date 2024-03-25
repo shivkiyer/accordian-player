@@ -33,22 +33,22 @@ export default function getVideoDimensions({
   maxWidth,
   maxHeight,
 }) {
-  const areaCoverage = 1.0;
+  const areaCoverage = 0.9;
 
   if (width && width <= maxWidth) {
     height = width * VIDEO_PLAYER_ASPECT_RATIO;
   } else if (height && height <= maxHeight) {
     width = height / VIDEO_PLAYER_ASPECT_RATIO;
   } else {
-    width = maxWidth;
-    height = maxHeight;
+    width = areaCoverage * maxWidth;
+    height = areaCoverage * maxHeight;
   }
 
-  let playerWidth = areaCoverage * width;
+  let playerWidth = width;
   let playerHeight = playerWidth * VIDEO_PLAYER_ASPECT_RATIO;
   // If player is too tall or wide, resize the player box
   if (playerHeight > height) {
-    playerHeight = areaCoverage * height;
+    playerHeight = height;
     playerWidth = playerHeight / VIDEO_PLAYER_ASPECT_RATIO;
   }
   if (playerWidth > MAX_VIDEO_PLAYER_WIDTH) {
@@ -56,7 +56,7 @@ export default function getVideoDimensions({
     playerHeight = playerWidth * VIDEO_PLAYER_ASPECT_RATIO;
   }
 
-  const marginTop = (height - playerHeight) / 2.0;
+  const marginTop = (height / areaCoverage - playerHeight) / 2.0;
 
   return {
     playerWidth,

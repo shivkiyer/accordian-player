@@ -53,7 +53,7 @@ describe('getVideoDimensions', () => {
       maxHeight: 1000,
     });
 
-    expect(dimensions.playerWidth).toBe(800);
+    expect(dimensions.playerWidth).toBe(720);
   });
 
   it('should adjust to max height if input height is greater than max height', () => {
@@ -63,7 +63,7 @@ describe('getVideoDimensions', () => {
       maxHeight: 500,
     });
 
-    expect(dimensions.playerHeight).toBe(500);
+    expect(dimensions.playerHeight).toBe(450);
   });
 
   it('should limit container width to 1080px', () => {
@@ -78,14 +78,14 @@ describe('getVideoDimensions', () => {
     const dimensions = getVideoDimensions({ maxWidth: 1000, maxHeight: 1000 });
 
     expect(dimensions).toHaveProperty('playerWidth');
-    expect(dimensions.playerWidth).toBe(1000);
-    expect(dimensions.playerHeight).toBe((1000 * 9.0) / 16.0);
+    expect(dimensions.playerWidth).toBe(900);
+    expect(dimensions.playerHeight).toBe((900 * 9.0) / 16.0);
   });
 
   it('should adjust container width to maxHeight if maxHeight is a constraint', () => {
     const dimensions = getVideoDimensions({ maxWidth: 1000, maxHeight: 500 });
 
     expect(dimensions).toHaveProperty('playerHeight');
-    expect(dimensions.playerHeight).toBe(500);
+    expect(dimensions.playerHeight).toBe(450);
   });
 });
