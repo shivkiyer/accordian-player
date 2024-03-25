@@ -17,7 +17,7 @@ describe('VideoPlayer', () => {
 
     const videoPlayer = container.querySelector('.videoPlayer');
     expect(videoPlayer).toBeDefined();
-    expect(videoPlayer).toHaveStyle('width: 270px');
+    expect(videoPlayer).toHaveStyle('width: 300px');
   });
 
   it('should be rendered according to browser width if no width specified', () => {
@@ -29,7 +29,7 @@ describe('VideoPlayer', () => {
 
     const videoPlayer = container.querySelector('.videoPlayer');
     expect(videoPlayer).toBeDefined();
-    const expectedWidth = 0.9 * 1024;
+    const expectedWidth = 1024;
     expect(videoPlayer).toHaveStyle(`width: ${expectedWidth}px`);
   });
 });

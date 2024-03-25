@@ -12,8 +12,8 @@ describe('getVideoDimensions', () => {
     });
 
     expect(dimensions1).toHaveProperty('playerWidth');
-    expect(dimensions1.playerWidth).toBe(0.9 * 100);
-    expect(dimensions1.playerHeight).toBe((0.9 * 100 * 9.0) / 16.0);
+    expect(dimensions1.playerWidth).toBe(100);
+    expect(dimensions1.playerHeight).toBe((100 * 9.0) / 16.0);
 
     const dimensions2 = getVideoDimensions({
       width: 100,
@@ -22,8 +22,8 @@ describe('getVideoDimensions', () => {
     });
 
     expect(dimensions2).toHaveProperty('playerWidth');
-    expect(dimensions2.playerWidth).toBe(0.9 * 100);
-    expect(dimensions2.playerHeight).toBe((0.9 * 100 * 9.0) / 16.0);
+    expect(dimensions2.playerWidth).toBe(100);
+    expect(dimensions2.playerHeight).toBe((100 * 9.0) / 16.0);
   });
 
   it('should return a container of fixed dimensions if height is input', () => {
@@ -34,7 +34,7 @@ describe('getVideoDimensions', () => {
     });
 
     expect(dimensions1).toHaveProperty('playerWidth');
-    expect(dimensions1.playerHeight).toBe(0.9 * 100);
+    expect(dimensions1.playerHeight).toBe(100);
 
     const dimensions2 = getVideoDimensions({
       height: 100,
@@ -43,7 +43,7 @@ describe('getVideoDimensions', () => {
     });
 
     expect(dimensions2).toHaveProperty('playerWidth');
-    expect(dimensions2.playerHeight).toBe(0.9 * 100);
+    expect(dimensions2.playerHeight).toBe(100);
   });
 
   it('should adjust to max width if input width is greater than max width', () => {
@@ -53,7 +53,7 @@ describe('getVideoDimensions', () => {
       maxHeight: 1000,
     });
 
-    expect(dimensions.playerWidth).toBe(0.9 * 800);
+    expect(dimensions.playerWidth).toBe(800);
   });
 
   it('should adjust to max height if input height is greater than max height', () => {
@@ -63,7 +63,7 @@ describe('getVideoDimensions', () => {
       maxHeight: 500,
     });
 
-    expect(dimensions.playerHeight).toBe(0.9 * 500);
+    expect(dimensions.playerHeight).toBe(500);
   });
 
   it('should limit container width to 1080px', () => {
@@ -78,14 +78,14 @@ describe('getVideoDimensions', () => {
     const dimensions = getVideoDimensions({ maxWidth: 1000, maxHeight: 1000 });
 
     expect(dimensions).toHaveProperty('playerWidth');
-    expect(dimensions.playerWidth).toBe(900);
-    expect(dimensions.playerHeight).toBe((900 * 9.0) / 16.0);
+    expect(dimensions.playerWidth).toBe(1000);
+    expect(dimensions.playerHeight).toBe((1000 * 9.0) / 16.0);
   });
 
   it('should adjust container width to maxHeight if maxHeight is a constraint', () => {
     const dimensions = getVideoDimensions({ maxWidth: 1000, maxHeight: 500 });
 
     expect(dimensions).toHaveProperty('playerHeight');
-    expect(dimensions.playerHeight).toBe(450);
+    expect(dimensions.playerHeight).toBe(500);
   });
 });

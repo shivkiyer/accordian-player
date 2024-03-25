@@ -33,7 +33,7 @@ export default function getVideoDimensions({
   maxWidth,
   maxHeight,
 }) {
-  const areaCoverage = 0.9;
+  const areaCoverage = 1.0;
 
   if (width && width <= maxWidth) {
     height = width * VIDEO_PLAYER_ASPECT_RATIO;
