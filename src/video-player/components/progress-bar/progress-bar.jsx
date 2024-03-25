@@ -1,3 +1,5 @@
+import { useSelector } from 'react-redux';
+
 import styles from './progress-bar.module.scss';
 import {
   PROGRESS_BAR_HEIGHT_LARGE,
@@ -5,23 +7,43 @@ import {
   PROGRESS_BAR_POSITION_LARGE,
   PROGRESS_BAR_POSITION_SMALL,
   PROGRESS_BAR_MARGIN_SIDE_LARGE,
-  PROGRESS_BAR_MARGIN_SIDE_SMALL
+  PROGRESS_BAR_MARGIN_SIDE_SMALL,
 } from '../../common/constants';
+import getScaledDimension from '../../common/utils/getScaledDimension';
+import { selectVideoWidth } from '../../app/videoReducer';
 
 export default function ProgressBar() {
-  
+  const videoWidth = useSelector(selectVideoWidth);
+
+  const height = getScaledDimension({
+    smallDim: PROGRESS_BAR_HEIGHT_SMALL,
+    largeDim: PROGRESS_BAR_HEIGHT_LARGE,
+    videoWidth,
+  });
+  const positionFromTop = getScaledDimension({
+    smallDim: PROGRESS_BAR_POSITION_LARGE,
+    largeDim: PROGRESS_BAR_POSITION_SMALL,
+    videoWidth,
+  });
+  const margin = getScaledDimension({
+    smallDim: PROGRESS_BAR_MARGIN_SIDE_LARGE,
+    largeDim: PROGRESS_BAR_MARGIN_SIDE_SMALL,
+    videoWidth,
+  });
+
   return (
     <div
+      className={styles.ProgressBar}
       style={{
-        height: '5px',
-        marginLeft: '24px',
-        marginRight: '24px',
-        marginTop: '19px',
-        backgroundColor: 'white',
+        height: `${height}px`,
+        marginLeft: `${margin}px`,
+        marginRight: `${margin}px`,
+        marginTop: `${positionFromTop - height}px`,
       }}
     >
       <div
-        style={{ width: '50%', height: '100%', backgroundColor: 'red' }}
+        className={styles.ProgressBarComplete}
+        style={{ width: '50%' }}
       ></div>
     </div>
   );
