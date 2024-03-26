@@ -21,13 +21,13 @@ export default function ProgressBar() {
     videoWidth,
   });
   const positionFromTop = getScaledDimension({
-    smallDim: PROGRESS_BAR_POSITION_LARGE,
-    largeDim: PROGRESS_BAR_POSITION_SMALL,
+    smallDim: PROGRESS_BAR_POSITION_SMALL,
+    largeDim: PROGRESS_BAR_POSITION_LARGE,
     videoWidth,
   });
   const margin = getScaledDimension({
-    smallDim: PROGRESS_BAR_MARGIN_SIDE_LARGE,
-    largeDim: PROGRESS_BAR_MARGIN_SIDE_SMALL,
+    smallDim: PROGRESS_BAR_MARGIN_SIDE_SMALL,
+    largeDim: PROGRESS_BAR_MARGIN_SIDE_LARGE,
     videoWidth,
   });
 
