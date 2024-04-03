@@ -8,6 +8,7 @@ import {
 } from '../../common/constants';
 import ProgressBar from '../progress-bar/progress-bar';
 import { selectVideoWidth } from '../../app/videoReducer';
+import LeftControls from '../left-controls/left-controls';
 
 /**
  * Produces a control bar at the bottom of the video player
@@ -33,9 +34,14 @@ export default function ControlBar() {
     height: `${barHeight}px`,
   };
 
+  // TODO - black background only temporary!!!!
   return (
-  <div className={styles.ControlBar} style={controlBarStyle}>
-    <ProgressBar />
-  </div>
+    <div
+      className={styles.ControlBar}
+      style={{ ...controlBarStyle, backgroundColor: 'black' }}
+    >
+      <ProgressBar />
+      <LeftControls />
+    </div>
   );
 }
