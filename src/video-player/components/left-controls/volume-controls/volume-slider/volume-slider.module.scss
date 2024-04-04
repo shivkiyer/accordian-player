@@ -1,0 +1,17 @@
+.VolumeRail {
+  position: absolute;
+}
+
+.VolumeRailDark {
+  z-index: 5;
+  background-color: #eaeaea;
+}
+
+.VolumeRailLight {
+  z-index: 1;
+  opacity: 0.5;
+}
+
+.VolumeHandle {
+  position: absolute;
+}

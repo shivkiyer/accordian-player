@@ -37,7 +37,44 @@ export const LEFT_BUTTON_LEFT_MARGIN_SMALL = 15.75;
 
 // Play button
 
-export const PLAY_BTN_HEIGHT_LARGE = 29;
+export const PLAY_BTN_HEIGHT_LARGE = 30;
 export const PLAY_BTN_HEIGHT_SMALL = 20;
 export const PLAY_BTN_WIDTH_LARGE = 23;
 export const PLAY_BTN_WIDTH_SMALL = 16;
+
+// Pause button
+
+export const PAUSE_BTN_HEIGHT_LARGE = 30;
+export const PAUSE_BTN_HEIGHT_SMALL = 20;
+export const PAUSE_BTN_WIDTH_LARGE = 23;
+export const PAUSE_BTN_WIDTH_SMALL = 16;
+
+// Rewind button
+
+export const REWIND_BTN_HEIGHT_LARGE = 38;
+export const REWIND_BTN_HEIGHT_SMALL = 28;
+export const REWIND_BTN_WIDTH_LARGE = 32;
+export const REWIND_BTN_WIDTH_SMALL = 23;
+
+// Volume button
+
+export const VOLUME_BTN_HEIGHT_LARGE = 30;
+export const VOLUME_BTN_HEIGHT_SMALL = 20;
+export const VOLUME_BTN_WIDTH_LARGE = 31;
+export const VOLUME_BTN_WIDTH_SMALL = 21;
+
+// Volume Rail
+
+export const VOLUME_RAIL_HEIGHT_LARGE = 5;
+export const VOLUME_RAIL_HEIGHT_SMALL = 4;
+export const VOLUME_RAIL_WIDTH_LARGE = 78;
+export const VOLUME_RAIL_WIDTH_SMALL = 51;
+export const VOLUME_RAIL_PADDING_LARGE = 12;
+export const VOLUME_RAIL_PADDING_SMALL = 7.875;
+
+// Volume handle
+
+export const VOLUME_HANDLE_HEIGHT_LARGE = 18;
+export const VOLUME_HANDLE_HEIGHT_SMALL = 12;
+export const VOLUME_HANDLE_WIDTH_LARGE = 18;
+export const VOLUME_HANDLE_WIDTH_SMALL = 12;
