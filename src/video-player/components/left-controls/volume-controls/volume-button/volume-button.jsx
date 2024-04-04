@@ -7,6 +7,15 @@ import {
 } from './../../../../common/constants';
 import ControlButton from './../../control-button/control-button';
 
+/**
+ * Volume control icon that toggles volume slider
+ *
+ * @returns {ReactNode} Control button of type Volume control
+ *
+ * @example
+ * <VolumeButton />
+ *
+ */
 export default function VolumeButton() {
   return (
     <ControlButton

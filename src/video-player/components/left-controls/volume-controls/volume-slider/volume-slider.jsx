@@ -20,6 +20,15 @@ import getScaledDimension from '../../../../common/utils/getScaledDimension';
 import { selectVideoWidth } from '../../../../app/videoReducer';
 import styles from './volume-slider.module.scss';
 
+/**
+ * Volume adjustment slider
+ *
+ * @returns {ReactNode} A slider for adjusting video volume
+ *
+ * @example
+ * <VolumeSlider className='VolumeControls' />
+ *
+ */
 export default function VolumeSlider() {
   const videoWidth = useSelector(selectVideoWidth);
 

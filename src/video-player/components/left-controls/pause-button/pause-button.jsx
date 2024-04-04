@@ -7,6 +7,15 @@ import {
 } from '../../../common/constants';
 import ControlButton from '../control-button/control-button';
 
+/**
+ * Pause control button
+ *
+ * @returns {ReactNode} Control button of type Pause
+ *
+ * @example
+ * <PauseButton />
+ *
+ */
 export default function PauseButton() {
   return (
     <ControlButton

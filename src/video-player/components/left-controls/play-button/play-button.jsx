@@ -7,6 +7,15 @@ import {
 } from '../../../common/constants';
 import ControlButton from '../control-button/control-button';
 
+/**
+ * Play control button
+ *
+ * @returns {ReactNode} A control button of type Play
+ *
+ * @example
+ * <PlayButton />
+ *
+ */
 export default function PlayButton() {
   return (
     <ControlButton

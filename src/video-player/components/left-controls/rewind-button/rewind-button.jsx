@@ -7,6 +7,15 @@ import {
 } from '../../../common/constants';
 import ControlButton from '../control-button/control-button';
 
+/**
+ * Rewind control button
+ *
+ * @returns {ReactNode} Control button of type Rewind
+ *
+ * @example
+ * <RewindButton />
+ *
+ */
 export default function RewindButton() {
   return (
     <ControlButton

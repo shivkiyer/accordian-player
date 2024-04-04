@@ -14,6 +14,16 @@ import PauseButton from './pause-button/pause-button';
 import RewindButton from './rewind-button/rewind-button';
 import VolumeControls from './volume-controls/volume-controls';
 
+/**
+ * A container for the left control buttons -
+ * Play/pause button, rewind button and volume controls
+ *
+ * @returns {ReactNode} A parent element for the three control buttons
+ *
+ * @example
+ * <LeftControls />
+ *
+ */
 export default function LeftControls() {
   const videoWidth = useSelector(selectVideoWidth);
 

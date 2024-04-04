@@ -12,6 +12,14 @@ import {
 import getScaledDimension from '../../common/utils/getScaledDimension';
 import { selectVideoWidth } from '../../app/videoReducer';
 
+/**
+ * Progress slider bar
+ *
+ * @returns {ReactNode} A slider control bar for video play position
+ *
+ * <ProgressBar />
+ *
+ */
 export default function ProgressBar() {
   const videoWidth = useSelector(selectVideoWidth);
 
