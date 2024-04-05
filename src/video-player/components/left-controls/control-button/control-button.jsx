@@ -11,6 +11,7 @@ import {
 import getScaledDimension from '../../../common/utils/getScaledDimension';
 import { selectVideoWidth } from '../../../app/videoReducer';
 import getButtonPlacement from '../../../common/utils/getButtonPlacement';
+import styles from './control-button.module.scss';
 
 /**
  * A generic control button that is placed centrally
@@ -35,6 +36,7 @@ import getButtonPlacement from '../../../common/utils/getButtonPlacement';
       btnWidthLarge={PLAY_BTN_WIDTH_LARGE}
       btnImage={playBtn}
       btnAltText='play'
+      btnClickHandler={fn}
     />
  */
 export default function ControlButton({
@@ -44,6 +46,7 @@ export default function ControlButton({
   btnWidthLarge,
   btnImage,
   btnAltText,
+  btnClickHandler,
 }) {
   const videoWidth = useSelector(selectVideoWidth);
 
@@ -86,12 +89,19 @@ export default function ControlButton({
   const elStyle = {
     height: `${elHeight}px`,
     width: `${elWidth}px`,
-    marginLeft: `${elMarginLeft}px`,
-    marginTop: `${elMarginTop}px`,
-    marginBottom: `${elMarginTop}px`,
-    paddingLeft: `${elPaddingLeft}px`,
-    paddingRight: `${elPaddingRight}px`,
+    paddingLeft: `${elMarginLeft / 2 + elPaddingLeft}px`,
+    paddingRight: `${elMarginLeft / 2 + elPaddingRight}px`,
+    paddingTop: `${elMarginTop}px`,
+    paddingBottom: `${elMarginTop}px`,
   };
 
-  return <img src={btnImage} alt={btnAltText} style={elStyle} />;
+  return (
+    <img
+      src={btnImage}
+      alt={btnAltText}
+      className={styles.ControlButton}
+      style={elStyle}
+      onClick={btnClickHandler}
+    />
+  );
 }

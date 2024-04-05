@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import { selectVideoWidth } from '../../app/videoReducer';
+import { selectIsPlaying, selectVideoWidth } from '../../app/videoReducer';
 import getScaledDimension from '../../common/utils/getScaledDimension';
 import {
   LEFT_BUTTONS_HEIGHT_LARGE,
@@ -26,8 +26,7 @@ import VolumeControls from './volume-controls/volume-controls';
  */
 export default function LeftControls() {
   const videoWidth = useSelector(selectVideoWidth);
-
-  const isVideoPlaying = Math.random() > 0.5 ? true : false;
+  const isVideoPlaying = useSelector(selectIsPlaying);
 
   const elHeight = getScaledDimension({
     smallDim: LEFT_BUTTONS_HEIGHT_SMALL,
@@ -47,7 +46,7 @@ export default function LeftControls() {
 
   return (
     <div className={styles.LeftButtons} style={elStyle}>
-      {isVideoPlaying ? <PlayButton /> : <PauseButton />}
+      {isVideoPlaying ? <PauseButton /> : <PlayButton />}
       <RewindButton />
       <VolumeControls />
     </div>

@@ -3,6 +3,10 @@ import { useSelector } from 'react-redux';
 import volumeRail from './../../../../assets/images/volume_rail.svg';
 import volumeHandle from './../../../../assets/images/volume_handle.svg';
 import {
+  VOLUME_SLIDER_HEIGHT_LARGE,
+  VOLUME_SLIDER_HEIGHT_SMALL,
+  VOLUME_SLIDER_WIDTH_LARGE,
+  VOLUME_SLIDER_WIDTH_SMALL,
   VOLUME_RAIL_HEIGHT_LARGE,
   VOLUME_RAIL_HEIGHT_SMALL,
   VOLUME_RAIL_WIDTH_LARGE,
@@ -71,8 +75,20 @@ export default function VolumeSlider() {
   const darkHandleWidth = volumeLevel * volumeRailWidth;
   const volumeHandleLeftPosition = volumeRailPadding + darkHandleWidth;
 
+  const volWidth = getScaledDimension({
+    smallDim: VOLUME_SLIDER_WIDTH_SMALL,
+    largeDim: VOLUME_SLIDER_WIDTH_LARGE,
+    videoWidth,
+  });
+
+  const volHeight = getScaledDimension({
+    smallDim: VOLUME_SLIDER_HEIGHT_SMALL,
+    largeDim: VOLUME_SLIDER_HEIGHT_LARGE,
+    videoWidth,
+  });
+
   return (
-    <>
+    <div style={{ width: `${volWidth}px`, height: `${volHeight}px` }}>
       <img
         src={volumeRail}
         alt='volume-rail-default'
@@ -106,6 +122,6 @@ export default function VolumeSlider() {
           left: `${volumeHandleLeftPosition}px`,
         }}
       />
-    </>
+    </div>
   );
 }

@@ -1,3 +1,5 @@
+import { useDispatch } from 'react-redux';
+
 import pauseBtn from './../../../assets/images/pause.svg';
 import {
   PAUSE_BTN_HEIGHT_LARGE,
@@ -6,6 +8,7 @@ import {
   PAUSE_BTN_WIDTH_SMALL,
 } from '../../../common/constants';
 import ControlButton from '../control-button/control-button';
+import { playPauseVideo } from '../../../app/videoReducer';
 
 /**
  * Pause control button
@@ -17,6 +20,11 @@ import ControlButton from '../control-button/control-button';
  *
  */
 export default function PauseButton() {
+  const dispatch = useDispatch();
+  const pauseHandler = () => {
+    dispatch(playPauseVideo());
+  };
+
   return (
     <ControlButton
       btnHeightSmall={PAUSE_BTN_HEIGHT_SMALL}
@@ -25,6 +33,7 @@ export default function PauseButton() {
       btnWidthLarge={PAUSE_BTN_WIDTH_LARGE}
       btnImage={pauseBtn}
       btnAltText='pause'
+      btnClickHandler={pauseHandler}
     />
   );
 }

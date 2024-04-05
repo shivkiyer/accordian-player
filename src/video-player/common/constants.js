@@ -63,6 +63,13 @@ export const VOLUME_BTN_HEIGHT_SMALL = 20;
 export const VOLUME_BTN_WIDTH_LARGE = 31;
 export const VOLUME_BTN_WIDTH_SMALL = 21;
 
+// Volume Slider
+
+export const VOLUME_SLIDER_HEIGHT_LARGE = 72;
+export const VOLUME_SLIDER_HEIGHT_SMALL = 47.25;
+export const VOLUME_SLIDER_WIDTH_LARGE = 96;
+export const VOLUME_SLIDER_WIDTH_SMALL = 63;
+
 // Volume Rail
 
 export const VOLUME_RAIL_HEIGHT_LARGE = 5;
