@@ -21,7 +21,7 @@ import {
   LEFT_BUTTONS_HEIGHT_SMALL,
 } from '../../../../common/constants';
 import getScaledDimension from '../../../../common/utils/getScaledDimension';
-import { selectVideoWidth } from '../../../../app/videoReducer';
+import { selectVideoWidth, selectVolume } from '../../../../app/videoReducer';
 import styles from './volume-slider.module.scss';
 
 /**
@@ -35,8 +35,7 @@ import styles from './volume-slider.module.scss';
  */
 export default function VolumeSlider() {
   const videoWidth = useSelector(selectVideoWidth);
-
-  const volumeLevel = Math.random();
+  const volumeLevel = useSelector(selectVolume);
 
   const volumeRailWidth = getScaledDimension({
     smallDim: VOLUME_RAIL_WIDTH_SMALL,

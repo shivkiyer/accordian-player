@@ -3,8 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import VolumeButton from './volume-button/volume-button';
 import VolumeSlider from './volume-slider/volume-slider';
 import styles from './volume-controls.module.scss';
-import { selectIsVolumeSliderVisible } from '../../../app/videoReducer';
-import { setVolumeSlider } from '../../../app/videoReducer';
+import {
+  selectIsVolumeMuted,
+  selectIsVolumeSliderVisible,
+} from '../../../app/videoReducer';
+import { setVolumeSlider, toggleVolumeMute } from '../../../app/videoReducer';
 
 /**
  * Volume controls containing the volume icon
@@ -18,6 +21,7 @@ import { setVolumeSlider } from '../../../app/videoReducer';
  */
 export default function VolumeControls() {
   const isVolumeSliderVisible = useSelector(selectIsVolumeSliderVisible);
+  const isVolumeMuted = useSelector(selectIsVolumeMuted);
   const dispatch = useDispatch();
 
   const showVolumeSlider = () => {
@@ -28,13 +32,17 @@ export default function VolumeControls() {
     dispatch(setVolumeSlider(false));
   };
 
+  const toggleMute = () => {
+    dispatch(toggleVolumeMute());
+  };
+
   return (
     <div
       style={{ display: 'inline-block' }}
       onMouseEnter={showVolumeSlider}
       onMouseLeave={hideVolumeSlider}
     >
-      <VolumeButton />
+      <VolumeButton isMute={isVolumeMuted} clickHandler={toggleMute} />
       <div className={styles.VolumeControls}>
         {isVolumeSliderVisible && <VolumeSlider />}
       </div>
