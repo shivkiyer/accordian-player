@@ -4,6 +4,7 @@ import VolumeButton from './volume-button/volume-button';
 import VolumeSlider from './volume-slider/volume-slider';
 import styles from './volume-controls.module.scss';
 import {
+  selectIsVolumeChanging,
   selectIsVolumeMuted,
   selectIsVolumeSliderVisible,
 } from '../../../app/videoReducer';
@@ -22,6 +23,7 @@ import { setVolumeSlider, toggleVolumeMute } from '../../../app/videoReducer';
 export default function VolumeControls() {
   const isVolumeSliderVisible = useSelector(selectIsVolumeSliderVisible);
   const isVolumeMuted = useSelector(selectIsVolumeMuted);
+  const isVolumeChanging = useSelector(selectIsVolumeChanging);
   const dispatch = useDispatch();
 
   const showVolumeSlider = () => {
@@ -29,7 +31,9 @@ export default function VolumeControls() {
   };
 
   const hideVolumeSlider = () => {
-    dispatch(setVolumeSlider(false));
+    if (!isVolumeChanging) {
+      dispatch(setVolumeSlider(false));
+    }
   };
 
   const toggleMute = () => {

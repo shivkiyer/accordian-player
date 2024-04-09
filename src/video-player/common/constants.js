@@ -76,8 +76,6 @@ export const VOLUME_RAIL_HEIGHT_LARGE = 5;
 export const VOLUME_RAIL_HEIGHT_SMALL = 4;
 export const VOLUME_RAIL_WIDTH_LARGE = 78;
 export const VOLUME_RAIL_WIDTH_SMALL = 51;
-export const VOLUME_RAIL_PADDING_LARGE = 12;
-export const VOLUME_RAIL_PADDING_SMALL = 7.875;
 
 // Volume handle
 

@@ -9,12 +9,16 @@ import { createSlice } from '@reduxjs/toolkit';
  * volume {number} Volume level between 0 and 1
  * isPlaying {boolean} Indicated whether the video is playing
  * isVolumeSliderVisible {boolean} Indicates whether volume is being controlled
+ * isVolumeMuted {boolean} Indicates whether volume is muted
+ * isVolumeChanging {boolean} Indicates whether volume slider is being changed
  *
  * Reducers:
  * setDimensions : Setting the width and height of the video player
  * playPauseVideo: Toggling play/pause status of the video
  * setVolumeSlider: Toggle visible status of volume slider
  * toggleVolumeMute: Mute/unmute volume
+ * setVolumeLevel: Set the volume of the video
+ * setIsVolumeChanging: Set the flag whether volume slider is being changed
  *
  */
 export const videoSlice = createSlice({
@@ -27,6 +31,7 @@ export const videoSlice = createSlice({
     isPlaying: false,
     isVolumeSliderVisible: false,
     isVolumeMuted: false,
+    isVolumeChanging: false,
   },
   reducers: {
     /**
@@ -64,6 +69,30 @@ export const videoSlice = createSlice({
       }
       state.isVolumeMuted = !state.isVolumeMuted;
     },
+    /**
+     * Set the volume level
+     *
+     * @param {number} payload Volume level
+     */
+    setVolumeLevel: (state, action) => {
+      let volInput = action.payload;
+      if (action.payload < 0.05) {
+        volInput = 0;
+        state.isVolumeMuted = true;
+      } else {
+        state.isVolumeMuted = false;
+      }
+      state.prevVolume = state.volume;
+      state.volume = volInput;
+    },
+    /**
+     * Set the flag whether volume slider is being changed
+     *
+     * @param {boolean} payload Flag whether volume slider is being changed
+     */
+    setIsVolumeChanging: (state, action) => {
+      state.isVolumeChanging = action.payload;
+    },
   },
 });
 
@@ -72,6 +101,8 @@ export const {
   playPauseVideo,
   setVolumeSlider,
   toggleVolumeMute,
+  setVolumeLevel,
+  setIsVolumeChanging,
 } = videoSlice.actions;
 
 export const selectVideoWidth = (state) => state.video.width;
@@ -81,5 +112,6 @@ export const selectIsVolumeSliderVisible = (state) =>
   state.video.isVolumeSliderVisible;
 export const selectIsVolumeMuted = (state) => state.video.isVolumeMuted;
 export const selectVolume = (state) => state.video.volume;
+export const selectIsVolumeChanging = (state) => state.video.isVolumeChanging;
 
 export default videoSlice.reducer;

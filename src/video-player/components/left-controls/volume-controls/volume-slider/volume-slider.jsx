@@ -1,4 +1,5 @@
-import { useSelector } from 'react-redux';
+import { useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 import volumeRail from './../../../../assets/images/volume_rail.svg';
 import volumeHandle from './../../../../assets/images/volume_handle.svg';
@@ -11,8 +12,6 @@ import {
   VOLUME_RAIL_HEIGHT_SMALL,
   VOLUME_RAIL_WIDTH_LARGE,
   VOLUME_RAIL_WIDTH_SMALL,
-  VOLUME_RAIL_PADDING_LARGE,
-  VOLUME_RAIL_PADDING_SMALL,
   VOLUME_HANDLE_HEIGHT_LARGE,
   VOLUME_HANDLE_HEIGHT_SMALL,
   VOLUME_HANDLE_WIDTH_LARGE,
@@ -21,7 +20,13 @@ import {
   LEFT_BUTTONS_HEIGHT_SMALL,
 } from '../../../../common/constants';
 import getScaledDimension from '../../../../common/utils/getScaledDimension';
-import { selectVideoWidth, selectVolume } from '../../../../app/videoReducer';
+import {
+  selectVideoWidth,
+  selectVolume,
+  selectIsVolumeChanging,
+  setVolumeLevel,
+  setIsVolumeChanging,
+} from '../../../../app/videoReducer';
 import styles from './volume-slider.module.scss';
 
 /**
@@ -36,6 +41,9 @@ import styles from './volume-slider.module.scss';
 export default function VolumeSlider() {
   const videoWidth = useSelector(selectVideoWidth);
   const volumeLevel = useSelector(selectVolume);
+  const isVolumeChanging = useSelector(selectIsVolumeChanging);
+  const dispatch = useDispatch();
+  const sliderRef = useRef();
 
   const volumeRailWidth = getScaledDimension({
     smallDim: VOLUME_RAIL_WIDTH_SMALL,
@@ -45,11 +53,6 @@ export default function VolumeSlider() {
   const volumeRailHeight = getScaledDimension({
     smallDim: VOLUME_RAIL_HEIGHT_SMALL,
     largeDim: VOLUME_RAIL_HEIGHT_LARGE,
-    videoWidth,
-  });
-  const volumeRailPadding = getScaledDimension({
-    smallDim: VOLUME_RAIL_PADDING_SMALL,
-    largeDim: VOLUME_RAIL_PADDING_LARGE,
     videoWidth,
   });
   const totalHeight = getScaledDimension({
@@ -72,7 +75,7 @@ export default function VolumeSlider() {
   const volumeHandleTopPosition = totalHeight / 2.0 - volumeHandleHeight / 2.0;
 
   const darkHandleWidth = volumeLevel * volumeRailWidth;
-  const volumeHandleLeftPosition = volumeRailPadding + darkHandleWidth;
+  const volumeHandleLeftPosition = darkHandleWidth - volumeHandleWidth / 2.0;
 
   const volWidth = getScaledDimension({
     smallDim: VOLUME_SLIDER_WIDTH_SMALL,
@@ -86,18 +89,64 @@ export default function VolumeSlider() {
     videoWidth,
   });
 
+  const detectVolume = (mouseEvent) => {
+    const { clientX } = mouseEvent;
+    const { x: xMin, width } = sliderRef.current.getBoundingClientRect();
+    let volPos = clientX - xMin;
+    if (volPos < 0) {
+      volPos = 0;
+    }
+    if (volPos > width) {
+      volPos = width;
+    }
+    let volLevel;
+    if (width > 0) {
+      volLevel = volPos / width;
+    } else {
+      volLevel = null;
+    }
+    return volLevel;
+  };
+
+  const mouseDownHandler = (event) => {
+    dispatch(setIsVolumeChanging(true));
+    const newVolume = detectVolume(event);
+    if (newVolume) {
+      dispatch(setVolumeLevel(newVolume));
+    }
+  };
+
+  const mouseMoveHandler = (event) => {
+    if (isVolumeChanging) {
+      const varyingVolume = detectVolume(event);
+      if (varyingVolume) {
+        dispatch(setVolumeLevel(varyingVolume));
+      }
+    }
+  };
+
+  const mouseUpHandler = () => {
+    dispatch(setIsVolumeChanging(false));
+  };
+
   return (
-    <div style={{ width: `${volWidth}px`, height: `${volHeight}px` }}>
+    <div
+      style={{ width: `${volWidth}px`, height: `${volHeight}px` }}
+      onMouseDown={mouseDownHandler}
+      onMouseMove={mouseMoveHandler}
+      onMouseUp={mouseUpHandler}
+    >
       <img
+        ref={sliderRef}
         src={volumeRail}
         alt='volume-rail-default'
         className={`${styles.VolumeRail} ${styles.VolumeRailLight}`}
         style={{
           width: `${volumeRailWidth}px`,
           height: `${volumeRailHeight}px`,
-          left: `${volumeRailPadding}px`,
           top: `${volumeRailMarginTop}px`,
         }}
+        draggable='false'
       />
       <img
         src={volumeRail}
@@ -106,9 +155,9 @@ export default function VolumeSlider() {
         style={{
           width: `${darkHandleWidth}px`,
           height: `${volumeRailHeight}px`,
-          left: `${volumeRailPadding}px`,
           top: `${volumeRailMarginTop}px`,
         }}
+        draggable='false'
       />
       <img
         src={volumeHandle}
@@ -120,6 +169,7 @@ export default function VolumeSlider() {
           top: `${volumeHandleTopPosition}px`,
           left: `${volumeHandleLeftPosition}px`,
         }}
+        draggable='false'
       />
     </div>
   );

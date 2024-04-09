@@ -1,5 +1,6 @@
 .VolumeRail {
   position: absolute;
+  user-select: none;
 }
 
 .VolumeRailDark {
@@ -14,4 +15,5 @@
 
 .VolumeHandle {
   position: absolute;
+  user-select: none;
 }

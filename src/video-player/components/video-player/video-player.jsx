@@ -4,7 +4,7 @@ import useWindowDimensions from '../../hooks/useWindowDimensions';
 import getVideoDimensions from '../../common/utils/getVideoDimensions';
 import styles from './video-player.module.scss';
 import ControlBar from '../control-bar/control-bar';
-import { setDimensions } from '../../app/videoReducer';
+import { setDimensions, setIsVolumeChanging } from '../../app/videoReducer';
 
 /**
  * Container for the video and user controls that has either
@@ -49,8 +49,17 @@ export default function VideoPlayer({ width, height }) {
     height: `${playerHeight}px`,
     marginTop: `${marginTop}px`,
   };
+
+  const mouseUpHandler = () => {
+    dispatch(setIsVolumeChanging(false));
+  };
+
   return (
-    <div className={styles.videoPlayer} style={playerStyle}>
+    <div
+      className={styles.videoPlayer}
+      style={playerStyle}
+      onMouseUp={mouseUpHandler}
+    >
       This is video player box
       <ControlBar />
     </div>
