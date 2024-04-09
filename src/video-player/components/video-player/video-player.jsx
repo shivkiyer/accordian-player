@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import useWindowDimensions from '../../hooks/useWindowDimensions';
@@ -42,7 +43,9 @@ export default function VideoPlayer({ width, height }) {
     maxHeight: windowHeight,
   });
 
-  dispatch(setDimensions({ width: playerWidth, height: playerHeight }));
+  useEffect(() => {
+    dispatch(setDimensions({ width: playerWidth, height: playerHeight }));
+  }, [playerHeight, playerWidth, dispatch]);
 
   const playerStyle = {
     width: `${playerWidth}px`,
