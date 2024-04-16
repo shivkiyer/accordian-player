@@ -11,6 +11,7 @@ import { createSlice } from '@reduxjs/toolkit';
  * isVolumeSliderVisible {boolean} Indicates whether volume is being controlled
  * isVolumeMuted {boolean} Indicates whether volume is muted
  * isVolumeChanging {boolean} Indicates whether volume slider is being changed
+ * isFullScreen {boolean} Indicates whether video playing in full screen mode
  *
  * Reducers:
  * setDimensions : Setting the width and height of the video player
@@ -32,6 +33,7 @@ export const videoSlice = createSlice({
     isVolumeSliderVisible: false,
     isVolumeMuted: false,
     isVolumeChanging: false,
+    isFullScreen: false,
   },
   reducers: {
     /**
@@ -93,6 +95,13 @@ export const videoSlice = createSlice({
     setIsVolumeChanging: (state, action) => {
       state.isVolumeChanging = action.payload;
     },
+    /**
+     * Toggles full screen mode
+     *
+     */
+    toggleFullScreen: (state) => {
+      state.isFullScreen = !state.isFullScreen;
+    },
   },
 });
 
@@ -103,6 +112,7 @@ export const {
   toggleVolumeMute,
   setVolumeLevel,
   setIsVolumeChanging,
+  toggleFullScreen,
 } = videoSlice.actions;
 
 export const selectVideoWidth = (state) => state.video.width;
@@ -113,5 +123,6 @@ export const selectIsVolumeSliderVisible = (state) =>
 export const selectIsVolumeMuted = (state) => state.video.isVolumeMuted;
 export const selectVolume = (state) => state.video.volume;
 export const selectIsVolumeChanging = (state) => state.video.isVolumeChanging;
+export const selectIsFullScreen = (state) => state.video.isFullScreen;
 
 export default videoSlice.reducer;
