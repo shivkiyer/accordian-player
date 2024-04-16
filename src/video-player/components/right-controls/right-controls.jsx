@@ -11,6 +11,13 @@ import {
 import getScaledDimension from '../../common/utils/getScaledDimension';
 import { selectVideoWidth } from '../../app/videoReducer';
 
+/**
+ * Container for right aligned control buttons
+ * Along with full screen toggle, there will also be
+ * video selector buttons
+ *
+ * @returns {ReactNode} A container with control buttons
+ */
 export default function RightControls() {
   const videoWidth = useSelector(selectVideoWidth);
 

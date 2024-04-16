@@ -3,7 +3,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import ControlButton from '../../left-controls/control-button/control-button';
 import fullScreenBtn from '../../../assets/images/full_screen_icon.svg';
 import smallScreenBtn from '../../../assets/images/small_screen_icon.svg';
-import { selectIsFullScreen, toggleFullScreen } from '../../../app/videoReducer';
+import {
+  selectIsFullScreen,
+  toggleFullScreen,
+} from '../../../app/videoReducer';
 
 import {
   FULLSCREEN_BTN_WIDTH_LARGE,
@@ -12,6 +15,11 @@ import {
   FULLSCREEN_BTN_HEIGHT_SMALL,
 } from '../../../common/constants';
 
+/**
+ * Button to enter and exit fullscreen mode
+ *
+ * @returns {ReactNode} Control button to toggle video full screen mode
+ */
 export default function FullScreenButton() {
   const isFullScreen = useSelector(selectIsFullScreen);
   const dispatch = useDispatch();
