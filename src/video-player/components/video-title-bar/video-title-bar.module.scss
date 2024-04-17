@@ -1,5 +1,6 @@
 .VideoTitleBar {
   display: inline-block;
+  overflow: hidden !important;
   vertical-align: top;
   color: white;
   text-transform: uppercase;

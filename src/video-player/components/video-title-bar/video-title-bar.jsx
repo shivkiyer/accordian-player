@@ -1,9 +1,13 @@
+import { useRef } from 'react';
 import { useSelector } from 'react-redux';
 
 import VideoTitle from './video-title/video-title';
 import VideoProgress from './video-progress/video-progress';
-import styles from './video-title.module.scss';
-import { selectVideoWidth } from '../../app/videoReducer';
+import styles from './video-title-bar.module.scss';
+import {
+  selectVideoWidth,
+  selectIsVolumeSliderVisible,
+} from '../../app/videoReducer';
 import getScaledDimension from '../../common/utils/getScaledDimension';
 import {
   TITLE_BAR_HEIGHT_LARGE,
@@ -16,10 +20,31 @@ import {
   TITLE_BAR_LEFT_PADDING_SMALL,
   TITLE_BAR_RIGHT_PADDING_LARGE,
   TITLE_BAR_RIGHT_PADDING_SMALL,
+  LEFT_BUTTONS_LEFT_MARGIN_LARGE,
+  LEFT_BUTTONS_LEFT_MARGIN_SMALL,
+  LEFT_BUTTONS_WIDTH_LARGE,
+  LEFT_BUTTONS_WIDTH_SMALL,
+  LEFT_BUTTON_LEFT_MARGIN_LARGE,
+  LEFT_BUTTON_LEFT_MARGIN_SMALL,
+  RIGHT_CONTROL_BTNS_LEFT_MARGIN_LARGE,
+  RIGHT_CONTROL_BTNS_LEFT_MARGIN_SMALL,
+  RIGHT_CONTROL_BTNS_RIGHT_MARGIN_LARGE,
+  RIGHT_CONTROL_BTNS_RIGHT_MARGIN_SMALL,
+  VOLUME_SLIDER_WIDTH_LARGE,
+  VOLUME_SLIDER_WIDTH_SMALL,
+  TIME_LEFT_DEFAULT_WIDTH_LARGE,
+  TIME_LEFT_DEFAULT_WIDTH_SMALL,
 } from '../../common/constants';
 
+/**
+ * Displays title of video and video time
+ *
+ * @returns {ReactNode} Container with video title and video time
+ */
 export default function VideoTitleBar() {
+  const progressRef = useRef();
   const videoWidth = useSelector(selectVideoWidth);
+  const isVolumeSliderVisible = useSelector(selectIsVolumeSliderVisible);
 
   const barHeight = getScaledDimension({
     smallDim: TITLE_BAR_HEIGHT_SMALL,
@@ -51,21 +76,94 @@ export default function VideoTitleBar() {
     videoWidth,
   });
 
+  const controlBtnWidth = getScaledDimension({
+    smallDim: LEFT_BUTTONS_WIDTH_SMALL,
+    largeDim: LEFT_BUTTONS_WIDTH_LARGE,
+    videoWidth,
+  });
+
+  const leftControlsLeftMargin = getScaledDimension({
+    smallDim: LEFT_BUTTONS_LEFT_MARGIN_SMALL,
+    largeDim: LEFT_BUTTONS_LEFT_MARGIN_LARGE,
+    videoWidth,
+  });
+
+  const leftControlBtnLeftMargin = getScaledDimension({
+    smallDim: LEFT_BUTTON_LEFT_MARGIN_SMALL,
+    largeDim: LEFT_BUTTON_LEFT_MARGIN_LARGE,
+    videoWidth,
+  });
+
+  const volumeSliderWidth = getScaledDimension({
+    smallDim: VOLUME_SLIDER_WIDTH_SMALL,
+    largeDim: VOLUME_SLIDER_WIDTH_LARGE,
+    videoWidth,
+  });
+
+  const rightControlsLeftMargin = getScaledDimension({
+    smallDim: RIGHT_CONTROL_BTNS_LEFT_MARGIN_SMALL,
+    largeDim: RIGHT_CONTROL_BTNS_LEFT_MARGIN_LARGE,
+    videoWidth,
+  });
+
+  const rightControlsRightMargin = getScaledDimension({
+    smallDim: RIGHT_CONTROL_BTNS_RIGHT_MARGIN_SMALL,
+    largeDim: RIGHT_CONTROL_BTNS_RIGHT_MARGIN_LARGE,
+    videoWidth,
+  });
+
+  const progressDefaultWidth = getScaledDimension({
+    smallDim: TIME_LEFT_DEFAULT_WIDTH_SMALL,
+    largeDim: TIME_LEFT_DEFAULT_WIDTH_LARGE,
+    videoWidth,
+  });
+
   const fontSpaceCorrection = 4.0;
   const topMargin = (controlBarHeight - barHeight) / 2;
   const topPadding = (barHeight - fontSize - fontSpaceCorrection) / 2;
+
+  let totalElWidth = 0;
+  totalElWidth += leftControlsLeftMargin;
+  totalElWidth += leftControlBtnLeftMargin + controlBtnWidth; // play button
+  totalElWidth += leftControlBtnLeftMargin + controlBtnWidth; // rewind button
+  totalElWidth += leftControlBtnLeftMargin + controlBtnWidth; // volume button
+  if (isVolumeSliderVisible) {
+    totalElWidth += volumeSliderWidth; // volume slider
+  }
+  totalElWidth += leftControlBtnLeftMargin / 2; // left margin for title bar
+  totalElWidth += rightControlsLeftMargin; // left margin for right control button
+  totalElWidth += leftControlBtnLeftMargin + controlBtnWidth; // fullscreen button
+  totalElWidth += rightControlsRightMargin; // right margin for right controls button
+
+  let progressWidth = 0;
+  if (progressRef.current) {
+    // Width of video time + right/left margin of time div
+    // + margin between title and time
+    progressWidth =
+      2.5 * leftControlBtnLeftMargin + progressRef.current.clientWidth;
+  } else {
+    progressWidth = progressDefaultWidth;
+  }
+
+  const maxWidth = videoWidth - totalElWidth;
+
+  const maxTitleWidth = maxWidth - progressWidth;
 
   const style = {
     marginTop: `${topMargin}px`,
     marginBottom: `${topMargin}px`,
     padding: `${topPadding}px ${rightPadding}px ${topPadding}px ${leftPadding}px`,
     fontSize: `${fontSize}px`,
+    maxWidth: `${maxWidth}px`,
   };
+
+  const videoTitle =
+    'Some really long text for a video just to check the truncation at the end with three dots';
 
   return (
     <div className={styles.VideoTitleBar} style={style}>
-      <VideoTitle title='Some title' />
-      <VideoProgress />
+      <VideoTitle title={videoTitle} width={maxTitleWidth} />
+      <VideoProgress ref={progressRef} />
     </div>
   );
 }
