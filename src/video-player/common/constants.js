@@ -97,3 +97,14 @@ export const FULLSCREEN_BTN_HEIGHT_LARGE = 30;
 export const FULLSCREEN_BTN_HEIGHT_SMALL = 20;
 export const FULLSCREEN_BTN_WIDTH_LARGE = 30;
 export const FULLSCREEN_BTN_WIDTH_SMALL = 20;
+
+// Video Title Bar
+
+export const TITLE_BAR_HEIGHT_LARGE = 48;
+export const TITLE_BAR_HEIGHT_SMALL = 32;
+export const TITLE_BAR_FONT_LARGE = 20;
+export const TITLE_BAR_FONT_SMALL = 14;
+export const TITLE_BAR_LEFT_PADDING_LARGE = 12;
+export const TITLE_BAR_LEFT_PADDING_SMALL = 7.875;
+export const TITLE_BAR_RIGHT_PADDING_LARGE = 24;
+export const TITLE_BAR_RIGHT_PADDING_SMALL = 15.75;

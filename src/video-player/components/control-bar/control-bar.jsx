@@ -10,6 +10,7 @@ import ProgressBar from '../progress-bar/progress-bar';
 import { selectVideoWidth } from '../../app/videoReducer';
 import LeftControls from '../left-controls/left-controls';
 import RightControls from '../right-controls/right-controls';
+import VideoTitleBar from '../video-title-bar/video-title-bar';
 
 /**
  * Produces a control bar at the bottom of the video player
@@ -43,6 +44,7 @@ export default function ControlBar() {
     >
       <ProgressBar />
       <LeftControls />
+      <VideoTitleBar />
       <RightControls />
     </div>
   );
