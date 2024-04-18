@@ -31,7 +31,12 @@ const VideoProgress = forwardRef((props, ref) => {
   };
 
   return (
-    <div ref={ref} className={styles.TimeComplete} style={style}>
+    <div
+      data-testid='test-video-progress'
+      ref={ref}
+      className={styles.TimeComplete}
+      style={style}
+    >
       0:07 / 2:32
     </div>
   );

@@ -14,7 +14,11 @@ export default function VideoTitle({ title, width }) {
   };
 
   return (
-    <div className={styles.VideoTitle} style={style}>
+    <div
+      data-testid='test-video-title'
+      className={styles.VideoTitle}
+      style={style}
+    >
       {title}
     </div>
   );
