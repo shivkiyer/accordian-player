@@ -1,11 +1,16 @@
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import getVideoDimensions from '../../common/utils/getVideoDimensions';
 import styles from './video-player.module.scss';
 import ControlBar from '../control-bar/control-bar';
-import { setDimensions, setIsVolumeChanging } from '../../app/videoReducer';
+import PlayerConfig from '../player-config/player-config';
+import {
+  setDimensions,
+  setIsVolumeChanging,
+  selectVideoUrl,
+} from '../../app/videoReducer';
 
 /**
  * Container for the video and user controls that has either
@@ -14,6 +19,8 @@ import { setDimensions, setIsVolumeChanging } from '../../app/videoReducer';
  *
  * @param {number} width The width of the container (optional)
  * @param {number} height The height of the container (optional)
+ * @param {string} url The URL of the video (optional)
+ *
  * @returns {ReactNode} A react element with fixed height and width
  *
  * @component
@@ -32,9 +39,11 @@ import { setDimensions, setIsVolumeChanging } from '../../app/videoReducer';
  * <Video Player />
  *
  */
-export default function VideoPlayer({ width, height }) {
+export default function VideoPlayer({ width, height, url }) {
   const dispatch = useDispatch();
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
+  const videoUrl = useSelector(selectVideoUrl);
+  const [baseUrl, setBaseUrl] = useState(null);
 
   const { playerWidth, playerHeight, marginTop } = getVideoDimensions({
     width,
@@ -57,13 +66,18 @@ export default function VideoPlayer({ width, height }) {
     dispatch(setIsVolumeChanging(false));
   };
 
+  setTimeout(() => {
+    setBaseUrl(url || videoUrl);
+  }, 1500);
+
   return (
     <div
       className={styles.videoPlayer}
       style={playerStyle}
       onMouseUp={mouseUpHandler}
     >
-      This is video player box
+      <h1>Welcome to the Accordion Player</h1>
+      {!baseUrl && <PlayerConfig />}
       <ControlBar />
     </div>
   );
