@@ -6,6 +6,13 @@ export const VIDEO_PLAYER_ASPECT_RATIO = 0.5625; // 9:16 - height:width
 export const LOWER_DEVICE_WIDTH = 630; // Smaller desktop
 export const UPPER_DEVICE_WIDTH = 1920; // Regular desktop
 
+// Player config panel
+
+export const CONFIG_HEADING_LARGE = 30;
+export const CONFIG_HEADING_SMALL = 18;
+export const CONFIG_TEXT_LARGE = 24;
+export const CONFIG_TEXT_SMALL = 14;
+
 // Control bar settings
 
 export const CONTROL_BAR_HEIGHT_LARGE = 96; // Control bar height for 1920px width
@@ -113,5 +120,5 @@ export const TITLE_BAR_RIGHT_PADDING_SMALL = 15.75;
 
 export const TIME_LEFT_MARGIN_LARGE = 24;
 export const TIME_LEFT_MARGIN_SMALL = 15.75;
-export const TIME_LEFT_DEFAULT_WIDTH_LARGE = 120;
-export const TIME_LEFT_DEFAULT_WIDTH_SMALL = 78.75;
+export const TIME_LEFT_DEFAULT_WIDTH_LARGE = 156;
+export const TIME_LEFT_DEFAULT_WIDTH_SMALL = 102.375;

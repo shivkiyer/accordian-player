@@ -36,12 +36,8 @@ export default function ControlBar() {
     height: `${barHeight}px`,
   };
 
-  // TODO - black background only temporary!!!!
   return (
-    <div
-      className={styles.ControlBar}
-      style={{ ...controlBarStyle, backgroundColor: 'black' }}
-    >
+    <div className={styles.ControlBar} style={controlBarStyle}>
       <ProgressBar />
       <LeftControls />
       <VideoTitleBar />

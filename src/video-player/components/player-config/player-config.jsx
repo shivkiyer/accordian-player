@@ -6,6 +6,13 @@ import {
   selectVideoHeight,
   setVideoUrl,
 } from '../../app/videoReducer';
+import getScaledDimension from '../../common/utils/getScaledDimension';
+import {
+  CONFIG_HEADING_LARGE,
+  CONFIG_HEADING_SMALL,
+  CONFIG_TEXT_LARGE,
+  CONFIG_TEXT_SMALL,
+} from '../../common/constants';
 
 /**
  * Configuring the video player with a base URL
@@ -18,8 +25,26 @@ export default function PlayerConfig() {
   const videoWidth = useSelector(selectVideoWidth);
   const videoHeight = useSelector(selectVideoHeight);
 
+  const headingFont = getScaledDimension({
+    smallDim: CONFIG_HEADING_SMALL,
+    largeDim: CONFIG_HEADING_LARGE,
+    videoWidth,
+  });
+  const headingStyle = {
+    fontSize: `${headingFont}px`,
+  };
+
+  const textFont = getScaledDimension({
+    smallDim: CONFIG_TEXT_SMALL,
+    largeDim: CONFIG_TEXT_LARGE,
+    videoWidth,
+  });
+  const textStyle = {
+    fontSize: `${textFont}px`,
+  };
+
   const inputWidth = 0.8 * videoWidth;
-  const inputHeight = videoWidth / 3;
+  const inputHeight = 0.4 * videoWidth;
   const inputTop = (videoHeight - inputHeight) / 2;
   const inputLeft = 0.1 * videoWidth;
 
@@ -36,7 +61,8 @@ export default function PlayerConfig() {
 
   return (
     <div className={styles.PlayerConfig} style={style}>
-      <p>
+      <h1 style={headingStyle}>Welcome to the Accordion Player</h1>
+      <p style={textStyle}>
         To get started using the Accordion Player, copy/paste a URL in the field
         below. The URL can be that of a single video or of a folder with
         multiple videos. In the case of multiple videos, the folder must contain
@@ -44,7 +70,7 @@ export default function PlayerConfig() {
         this configuration file, check out the documentation at the project
         homepage.
       </p>
-      <input type='text' onChange={changeHandler} />
+      <input type='text' onChange={changeHandler} style={textStyle} />
     </div>
   );
 }
