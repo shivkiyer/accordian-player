@@ -27,6 +27,7 @@ export default function PlayerConfig() {
   const videoWidth = useSelector(selectVideoWidth);
   const videoHeight = useSelector(selectVideoHeight);
   const [isCheckingUrl, setIsCheckingUrl] = useState(false);
+  const [errMsg, setErrMsg] = useState(null);
 
   const headingFont = getScaledDimension({
     smallDim: CONFIG_HEADING_SMALL,
@@ -47,7 +48,7 @@ export default function PlayerConfig() {
   };
 
   const inputWidth = 0.8 * videoWidth;
-  const inputHeight = 0.4 * videoWidth;
+  const inputHeight = 0.9 * videoHeight;
   const inputTop = (videoHeight - inputHeight) / 2;
   const inputLeft = 0.1 * videoWidth;
 
@@ -58,12 +59,34 @@ export default function PlayerConfig() {
     height: `${inputHeight}px`,
   };
 
-  const changeHandler = (event) => {
+  const changeHandler = async (event) => {
     setIsCheckingUrl(true);
-    setTimeout(() => {
-      dispatch(setVideoUrl(event.target.value));
+    let url;
+
+    try {
+      url = new URL(event.target.value);
+    } catch (_) {
+      setErrMsg('Please enter (copy/paste) a valid URL');
       setIsCheckingUrl(false);
-    }, 1500);
+    }
+    if (url) {
+      try {
+        const result = await fetch(url, { method: 'HEAD' });
+        setIsCheckingUrl(false);
+        if (result.ok) {
+          dispatch(setVideoUrl(url));
+        } else {
+          setErrMsg(
+            'Link entered was not accessible. Please ensure it opens in a browser window.'
+          );
+        }
+      } catch (e) {
+        setErrMsg(
+          'Unexpected error occurred. Please ensure that the resource can accept AJAX requests.'
+        );
+        setIsCheckingUrl(false);
+      }
+    }
   };
 
   return (
@@ -83,6 +106,12 @@ export default function PlayerConfig() {
         style={textStyle}
         placeholder='Enter URL here'
       />
+
+      {errMsg && (
+        <p className={styles.error} style={textStyle}>
+          {errMsg}
+        </p>
+      )}
       {isCheckingUrl && <LoaderSpinner />}
     </div>
   );
