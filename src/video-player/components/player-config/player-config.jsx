@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import styles from './player-config.module.scss';
@@ -13,6 +14,7 @@ import {
   CONFIG_TEXT_LARGE,
   CONFIG_TEXT_SMALL,
 } from '../../common/constants';
+import LoaderSpinner from '../../common/components/loader-spinner/loader-spinner';
 
 /**
  * Configuring the video player with a base URL
@@ -24,6 +26,7 @@ export default function PlayerConfig() {
   const dispatch = useDispatch();
   const videoWidth = useSelector(selectVideoWidth);
   const videoHeight = useSelector(selectVideoHeight);
+  const [isCheckingUrl, setIsCheckingUrl] = useState(false);
 
   const headingFont = getScaledDimension({
     smallDim: CONFIG_HEADING_SMALL,
@@ -56,7 +59,11 @@ export default function PlayerConfig() {
   };
 
   const changeHandler = (event) => {
-    dispatch(setVideoUrl(event.target.value));
+    setIsCheckingUrl(true);
+    setTimeout(() => {
+      dispatch(setVideoUrl(event.target.value));
+      setIsCheckingUrl(false);
+    }, 1500);
   };
 
   return (
@@ -76,6 +83,7 @@ export default function PlayerConfig() {
         style={textStyle}
         placeholder='Enter URL here'
       />
+      {isCheckingUrl && <LoaderSpinner />}
     </div>
   );
 }

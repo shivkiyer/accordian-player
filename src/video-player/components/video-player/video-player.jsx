@@ -6,7 +6,6 @@ import getVideoDimensions from '../../common/utils/getVideoDimensions';
 import styles from './video-player.module.scss';
 import ControlBar from '../control-bar/control-bar';
 import PlayerConfig from '../player-config/player-config';
-import LoaderSpinner from '../../common/components/loader-spinner/loader-spinner';
 import {
   setDimensions,
   setIsVolumeChanging,
@@ -45,26 +44,19 @@ export default function VideoPlayer({ width, height, url }) {
   const dispatch = useDispatch();
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const videoUrl = useSelector(selectVideoUrl);
-  const [baseUrl, setBaseUrl] = useState(' ');
-  const [isCheckingUrl, setIsCheckingUrl] = useState(false);
+  const [baseUrl, setBaseUrl] = useState(null);
 
   /**
    * If video player has an input URL,
    * this will be the only one used.
-   * Otherwise, the user will be asked for
-   * the URL and the input field will disappear
-   * after user enters the URL.
+   * Otherwise, the user will be asked for the
+   * URL in PlayerConfig and the input field
+   * will disappear after user enters the URL.
    */
   useEffect(() => {
     if (!url) {
-      if (!videoUrl) {
+      if (videoUrl) {
         setBaseUrl(videoUrl);
-      } else {
-        setIsCheckingUrl(true);
-        setTimeout(() => {
-          setIsCheckingUrl(false);
-          setBaseUrl(videoUrl);
-        }, 1500);
       }
     } else {
       setBaseUrl(url);
@@ -99,7 +91,6 @@ export default function VideoPlayer({ width, height, url }) {
       onMouseUp={mouseUpHandler}
     >
       {!baseUrl && <PlayerConfig />}
-      {isCheckingUrl && <LoaderSpinner />}
       {baseUrl && <ControlBar />}
     </div>
   );
