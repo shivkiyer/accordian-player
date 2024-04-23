@@ -70,7 +70,12 @@ export default function PlayerConfig() {
         this configuration file, check out the documentation at the project
         homepage.
       </p>
-      <input type='text' onChange={changeHandler} style={textStyle} />
+      <input
+        type='text'
+        onChange={changeHandler}
+        style={textStyle}
+        placeholder='Enter URL here'
+      />
     </div>
   );
 }
