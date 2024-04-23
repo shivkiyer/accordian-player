@@ -8,7 +8,7 @@ describe('VideoTitleBar', () => {
   it('should display the video title and video progress', () => {
     render(
       <Provider store={videoStore}>
-        <VideoPlayer width='630' />
+        <VideoPlayer width='630' url='some-url' />
       </Provider>
     );
     const videoTitleEl = screen.getByTestId('test-video-title');

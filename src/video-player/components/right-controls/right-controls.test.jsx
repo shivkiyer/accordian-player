@@ -9,7 +9,7 @@ describe('Right controls (buttons)', () => {
   it('should have the fullscreen button', () => {
     render(
       <Provider store={videoStore}>
-        <VideoPlayer width='630' />
+        <VideoPlayer width='630' url='some-url' />
       </Provider>
     );
 
@@ -20,7 +20,7 @@ describe('Right controls (buttons)', () => {
   it('should toggle between full screen and small screen icon when clicked', async () => {
     render(
       <Provider store={videoStore}>
-        <VideoPlayer width='630' />
+        <VideoPlayer width='630' url='some-url' />
       </Provider>
     );
 

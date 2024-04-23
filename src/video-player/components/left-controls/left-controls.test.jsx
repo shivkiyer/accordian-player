@@ -10,7 +10,7 @@ describe('LeftControls (buttons)', () => {
   it('should display the left control buttons', () => {
     render(
       <Provider store={videoStore}>
-        <VideoPlayer width='630' />
+        <VideoPlayer width='630' url='some-url' />
       </Provider>
     );
 
@@ -25,7 +25,7 @@ describe('LeftControls (buttons)', () => {
     it('should toggle between play btn and pause btn upon click', async () => {
       render(
         <Provider store={videoStore}>
-          <VideoPlayer width='630' />
+          <VideoPlayer width='630' url='some-url' />
         </Provider>
       );
 
@@ -50,7 +50,7 @@ describe('LeftControls (buttons)', () => {
   it('should toggle volume controls upon hover the volume icon', async () => {
     render(
       <Provider store={videoStore}>
-        <VideoPlayer width='630' />
+        <VideoPlayer width='630' url='some-url' />
       </Provider>
     );
 
@@ -84,7 +84,7 @@ describe('LeftControls (buttons)', () => {
   it('should toggle volume icon to mute and back when volume icon is clicked', async () => {
     render(
       <Provider store={videoStore}>
-        <VideoPlayer width='630' />
+        <VideoPlayer width='630' url='some-url' />
       </Provider>
     );
     const volumeBtn1 = screen.getByAltText('volume');

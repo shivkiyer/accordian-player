@@ -12,7 +12,7 @@ describe('ControlBar', () => {
   it('should produce a control bar of 64px height if video is 630px wide (design)', () => {
     const { container } = render(
       <Provider store={videoStore}>
-        <VideoPlayer width='630' />
+        <VideoPlayer width='630' url='some-url' />
       </Provider>
     );
     const controlBar = container.querySelector('.ControlBar');

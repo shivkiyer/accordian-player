@@ -13,7 +13,7 @@ describe('ProgressBar', () => {
   it('should be placed at the top of the control bar', () => {
     const { container } = render(
       <Provider store={videoStore}>
-        <VideoPlayer width='630' />
+        <VideoPlayer width='630' url='some-url' />
       </Provider>
     );
 
