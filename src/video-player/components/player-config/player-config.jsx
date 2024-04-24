@@ -8,6 +8,7 @@ import {
   setVideoUrl,
 } from '../../app/videoReducer';
 import getScaledDimension from '../../common/utils/getScaledDimension';
+import checkVideoUrl from '../../common/utils/checkVideoUrl';
 import {
   CONFIG_HEADING_LARGE,
   CONFIG_HEADING_SMALL,
@@ -61,32 +62,15 @@ export default function PlayerConfig() {
 
   const changeHandler = async (event) => {
     setIsCheckingUrl(true);
-    let url;
+    const url = event.target.value;
 
-    try {
-      url = new URL(event.target.value);
-    } catch (_) {
-      setErrMsg('Please enter (copy/paste) a valid URL');
-      setIsCheckingUrl(false);
+    const urlResult = await checkVideoUrl(url);
+    if (!urlResult) {
+      dispatch(setVideoUrl(url));
+    } else {
+      setErrMsg(urlResult);
     }
-    if (url) {
-      try {
-        const result = await fetch(url, { method: 'HEAD' });
-        setIsCheckingUrl(false);
-        if (result.ok) {
-          dispatch(setVideoUrl(url));
-        } else {
-          setErrMsg(
-            'Link entered was not accessible. Please ensure it opens in a browser window.'
-          );
-        }
-      } catch (e) {
-        setErrMsg(
-          'Unexpected error occurred. Please ensure that the resource can accept AJAX requests.'
-        );
-        setIsCheckingUrl(false);
-      }
-    }
+    setIsCheckingUrl(false);
   };
 
   return (
@@ -108,7 +92,7 @@ export default function PlayerConfig() {
       />
 
       {errMsg && (
-        <p className={styles.error} style={textStyle}>
+        <p className='error' style={textStyle}>
           {errMsg}
         </p>
       )}

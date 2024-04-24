@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import getVideoDimensions from '../../common/utils/getVideoDimensions';
+import checkVideoUrl from '../../common/utils/checkVideoUrl';
 import styles from './video-player.module.scss';
 import ControlBar from '../control-bar/control-bar';
 import PlayerConfig from '../player-config/player-config';
@@ -45,6 +46,7 @@ export default function VideoPlayer({ width, height, url }) {
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const videoUrl = useSelector(selectVideoUrl);
   const [baseUrl, setBaseUrl] = useState(null);
+  const [errMsg, setErrMsg] = useState(null);
 
   /**
    * If video player has an input URL,
@@ -54,13 +56,22 @@ export default function VideoPlayer({ width, height, url }) {
    * will disappear after user enters the URL.
    */
   useEffect(() => {
-    if (!url) {
-      if (videoUrl) {
-        setBaseUrl(videoUrl);
+    const fetchUrl = async (urlSetting, urlInput) => {
+      if (!urlSetting) {
+        if (urlInput) {
+          setBaseUrl(urlInput);
+        }
+      } else {
+        const urlResult = await checkVideoUrl(urlSetting);
+        if (!urlResult) {
+          setBaseUrl(urlSetting);
+        } else {
+          setErrMsg(urlResult);
+        }
       }
-    } else {
-      setBaseUrl(url);
-    }
+    };
+
+    fetchUrl(url, videoUrl);
   }, [url, videoUrl]);
 
   const { playerWidth, playerHeight, marginTop } = getVideoDimensions({
@@ -91,6 +102,7 @@ export default function VideoPlayer({ width, height, url }) {
       onMouseUp={mouseUpHandler}
     >
       {!baseUrl && <PlayerConfig />}
+      {errMsg && <p className='error'>{errMsg}</p>}
       {baseUrl && <ControlBar />}
     </div>
   );
