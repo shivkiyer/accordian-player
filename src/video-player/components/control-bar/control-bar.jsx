@@ -37,7 +37,11 @@ export default function ControlBar() {
   };
 
   return (
-    <div className={styles.ControlBar} style={controlBarStyle}>
+    <div
+      className={styles.ControlBar}
+      style={controlBarStyle}
+      data-testid='test-control-bar'
+    >
       <ProgressBar />
       <LeftControls />
       <VideoTitleBar />

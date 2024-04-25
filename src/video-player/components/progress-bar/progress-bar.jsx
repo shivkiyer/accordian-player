@@ -48,6 +48,7 @@ export default function ProgressBar() {
         marginRight: `${margin}px`,
         marginTop: `${positionFromTop - height}px`,
       }}
+      data-testid='test-progress-bar'
     >
       <div
         className={styles.ProgressBarComplete}

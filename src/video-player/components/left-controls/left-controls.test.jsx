@@ -3,70 +3,98 @@ import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { waitFor } from '@testing-library/react';
 
-import VideoPlayer from '../video-player/video-player';
 import videoStore from './../../app/store';
+import wait from '../../common/test-utils/wait';
 
 describe('LeftControls (buttons)', () => {
-  it('should display the left control buttons', () => {
+  const checkVideoUrlObj = require('./../../common/utils/checkVideoUrl');
+  const mockCheckVideoUrl = jest.spyOn(checkVideoUrlObj, 'default');
+
+  const VideoPlayer = require('../video-player/video-player').default;
+
+  it('should display the left control buttons', async () => {
+    mockCheckVideoUrl.mockReturnValue(null);
     render(
       <Provider store={videoStore}>
         <VideoPlayer width='630' url='some-url' />
       </Provider>
     );
 
-    const playBtn = screen.getByAltText('play');
+    await waitFor(() => {});
+    await wait();
+
+    const playBtn = await screen.findByAltText('play');
     expect(playBtn).toBeInTheDocument();
-    const rewindBtn = screen.getByAltText('rewind');
+    const rewindBtn = await screen.findByAltText('rewind');
     expect(rewindBtn).toBeInTheDocument();
-    const volumeBtn = screen.getByAltText('volume');
+    const volumeBtn = await screen.findByAltText('volume');
     expect(volumeBtn).toBeInTheDocument();
   });
 
-    it('should toggle between play btn and pause btn upon click', async () => {
-      render(
-        <Provider store={videoStore}>
-          <VideoPlayer width='630' url='some-url' />
-        </Provider>
-      );
+  it('should toggle between play btn and pause btn upon click', async () => {
+    mockCheckVideoUrl.mockReturnValue(null);
 
-      const playBtn1 = screen.getByAltText('play');
-
-      act(() => {
-        userEvent.click(playBtn1);
-      });
-
-
-      const pauseBtn1 = await screen.findByAltText('pause');
-      expect(pauseBtn1).toBeInTheDocument();
-
-      act(() => {
-        userEvent.click(pauseBtn1);
-      });
-
-      const playBtn2 = await screen.findByAltText('play');
-      expect(playBtn2).toBeInTheDocument();
-    });
-
-  it('should toggle volume controls upon hover the volume icon', async () => {
     render(
       <Provider store={videoStore}>
         <VideoPlayer width='630' url='some-url' />
       </Provider>
     );
 
-    const volumeBtn = screen.getByAltText('volume');
-    act(() => {
-      userEvent.hover(volumeBtn);
+    await waitFor(() => {});
+
+    const playBtn1 = await screen.findByAltText('play');
+
+    await act(async () => {
+      await userEvent.click(playBtn1);
     });
+
+    await waitFor(() => {});
+    await wait();
+
+    const pauseBtn1 = await screen.findByAltText('pause');
+    expect(pauseBtn1).toBeInTheDocument();
+
+    await act(async () => {
+      await userEvent.click(pauseBtn1);
+    });
+
+    await waitFor(() => {});
+    await wait();
+
+    const playBtn2 = await screen.findByAltText('play');
+    expect(playBtn2).toBeInTheDocument();
+  });
+
+  it('should toggle volume controls upon hover the volume icon', async () => {
+    mockCheckVideoUrl.mockReturnValue(null);
+
+    render(
+      <Provider store={videoStore}>
+        <VideoPlayer width='630' url='some-url' />
+      </Provider>
+    );
+
+    await waitFor(() => {});
+
+    const volumeBtn = await screen.findByAltText('volume');
+    await act(async () => {
+      await userEvent.hover(volumeBtn);
+    });
+
+    await waitFor(() => {});
+    await wait();
 
     const volumeRail1 = await screen.findByAltText('volume-rail');
     expect(volumeRail1).toBeInTheDocument();
     const volumeHandle1 = await screen.findByAltText('volume-handle');
     expect(volumeHandle1).toBeInTheDocument();
 
-    act(() => {
-      userEvent.unhover(volumeBtn);
+    await act(async () => {
+      await userEvent.unhover(volumeBtn);
     });
+
+    await waitFor(() => {});
+    await wait();
 
     let volumeRail2 = null;
     try {
@@ -82,22 +110,33 @@ describe('LeftControls (buttons)', () => {
   });
 
   it('should toggle volume icon to mute and back when volume icon is clicked', async () => {
+    mockCheckVideoUrl.mockReturnValue(null);
+
     render(
       <Provider store={videoStore}>
         <VideoPlayer width='630' url='some-url' />
       </Provider>
     );
-    const volumeBtn1 = screen.getByAltText('volume');
-    act(() => {
-      userEvent.click(volumeBtn1);
+
+    await waitFor(() => {});
+
+    const volumeBtn1 = await screen.findByAltText('volume');
+    await act(async () => {
+      await userEvent.click(volumeBtn1);
     });
+
+    await waitFor(() => {});
+    await wait();
 
     const volumeMuteBtn1 = await screen.findByAltText('volume');
     expect(volumeMuteBtn1).toHaveAttribute('src', 'volume_icon_mute.svg');
 
-    act(() => {
-      userEvent.click(volumeMuteBtn1);
+    await act(async () => {
+      await userEvent.click(volumeMuteBtn1);
     });
+
+    await waitFor(() => {});
+    await wait();
 
     const volumeBtn2 = await screen.findByAltText('volume');
     expect(volumeBtn2).toHaveAttribute('src', 'volume_icon.svg');

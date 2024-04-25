@@ -1,17 +1,26 @@
 import { Provider } from 'react-redux';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 
-import VideoPlayer from './../video-player/video-player';
 import videoStore from './../../app/store';
 
 describe('VideoTitleBar', () => {
-  it('should display the video title and video progress', () => {
+  const checkVideoUrlObj = require('./../../common/utils/checkVideoUrl');
+  const mockCheckVideoUrl = jest.spyOn(checkVideoUrlObj, 'default');
+
+  const VideoPlayer = require('./../video-player/video-player').default;
+
+  it('should display the video title and video progress', async () => {
+    mockCheckVideoUrl.mockReturnValue(null);
+
     render(
       <Provider store={videoStore}>
         <VideoPlayer width='630' url='some-url' />
       </Provider>
     );
-    const videoTitleEl = screen.getByTestId('test-video-title');
+
+    await waitFor(() => {});
+
+    const videoTitleEl = await screen.findByTestId('test-video-title');
     expect(videoTitleEl).toBeInTheDocument();
     const videoProgressEl = screen.getByTestId('test-video-progress');
     expect(videoProgressEl).toBeInTheDocument();

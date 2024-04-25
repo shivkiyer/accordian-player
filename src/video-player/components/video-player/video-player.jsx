@@ -60,12 +60,15 @@ export default function VideoPlayer({ width, height, url }) {
       if (!urlSetting) {
         if (urlInput) {
           setBaseUrl(urlInput);
+        } else {
+          setBaseUrl(null);
         }
       } else {
         const urlResult = await checkVideoUrl(urlSetting);
         if (!urlResult) {
           setBaseUrl(urlSetting);
         } else {
+          setBaseUrl(null);
           setErrMsg(urlResult);
         }
       }
@@ -101,7 +104,7 @@ export default function VideoPlayer({ width, height, url }) {
       style={playerStyle}
       onMouseUp={mouseUpHandler}
     >
-      {!baseUrl && <PlayerConfig />}
+      {!(url || baseUrl) && !errMsg && <PlayerConfig />}
       {errMsg && <p className='error'>{errMsg}</p>}
       {baseUrl && <ControlBar />}
     </div>
