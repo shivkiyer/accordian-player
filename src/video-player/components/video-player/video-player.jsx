@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import getVideoDimensions from '../../common/utils/getVideoDimensions';
+import getScaledDimension from '../../common/utils/getScaledDimension';
 import checkVideoUrl from '../../common/utils/checkVideoUrl';
 import styles from './video-player.module.scss';
 import ControlBar from '../control-bar/control-bar';
@@ -12,6 +13,7 @@ import {
   setIsVolumeChanging,
   selectVideoUrl,
 } from '../../app/videoReducer';
+import { CONFIG_TEXT_SMALL, CONFIG_TEXT_LARGE } from '../../common/constants';
 
 /**
  * Container for the video and user controls that has either
@@ -94,6 +96,16 @@ export default function VideoPlayer({ width, height, url }) {
     marginTop: `${marginTop}px`,
   };
 
+  const textFont = getScaledDimension({
+    smallDim: CONFIG_TEXT_SMALL,
+    largeDim: CONFIG_TEXT_LARGE,
+    videoWidth: playerWidth,
+  });
+  const textStyle = {
+    paddingTop: `${playerHeight / 2 - textFont}px`,
+    fontSize: `${textFont}px`,
+  };
+
   const mouseUpHandler = () => {
     dispatch(setIsVolumeChanging(false));
   };
@@ -105,7 +117,11 @@ export default function VideoPlayer({ width, height, url }) {
       onMouseUp={mouseUpHandler}
     >
       {!(url || baseUrl) && !errMsg && <PlayerConfig />}
-      {errMsg && <p className='error'>{errMsg}</p>}
+      {errMsg && (
+        <p className='error' style={textStyle}>
+          {errMsg}
+        </p>
+      )}
       {baseUrl && <ControlBar />}
     </div>
   );
