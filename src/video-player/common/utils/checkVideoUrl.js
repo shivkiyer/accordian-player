@@ -15,7 +15,7 @@ const checkVideoUrl = async (urlInput) => {
   }
   if (url) {
     try {
-      const result = await fetch(url, { method: 'HEAD' });
+      const result = await fetch(url, { method: 'GET' });
       if (result.ok) {
         return null;
       } else {

@@ -8,9 +8,11 @@ import checkVideoUrl from '../../common/utils/checkVideoUrl';
 import styles from './video-player.module.scss';
 import ControlBar from '../control-bar/control-bar';
 import PlayerConfig from '../player-config/player-config';
+import Video from './video/video';
 import {
   setDimensions,
   setIsVolumeChanging,
+  setVideoUrl,
   selectVideoUrl,
 } from '../../app/videoReducer';
 import { CONFIG_TEXT_SMALL, CONFIG_TEXT_LARGE } from '../../common/constants';
@@ -69,6 +71,7 @@ export default function VideoPlayer({ width, height, url }) {
         const urlResult = await checkVideoUrl(urlSetting);
         if (!urlResult) {
           setBaseUrl(urlSetting);
+          dispatch(setVideoUrl(urlSetting));
         } else {
           setBaseUrl(null);
           setErrMsg(urlResult);
@@ -77,7 +80,7 @@ export default function VideoPlayer({ width, height, url }) {
     };
 
     fetchUrl(url, videoUrl);
-  }, [url, videoUrl]);
+  }, [url, videoUrl, dispatch]);
 
   const { playerWidth, playerHeight, marginTop } = getVideoDimensions({
     width,
@@ -122,6 +125,7 @@ export default function VideoPlayer({ width, height, url }) {
           {errMsg}
         </p>
       )}
+      {baseUrl && <Video />}
       {baseUrl && <ControlBar />}
     </div>
   );
