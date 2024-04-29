@@ -48,10 +48,19 @@ export const videoSlice = createSlice({
       state.height = action.payload.height;
     },
     /**
-     * Toggles video state between pause and play
+     * Changes video state between pause and play
+     *
+     * @param {string} payload Play/pause status of video JS node
+     *
      */
-    playPauseVideo: (state) => {
-      state.isPlaying = !state.isPlaying;
+    playPauseVideo: (state, action) => {
+      if (action.payload === 'paused') {
+        state.isPlaying = false;
+      } else if (action.payload === 'playing') {
+        state.isPlaying = true;
+      } else {
+        state.isPlaying = !state.isPlaying;
+      }
     },
     /**
      * Sets visibility of volume slider
