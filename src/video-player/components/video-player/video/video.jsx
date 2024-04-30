@@ -1,10 +1,12 @@
 import { useRef, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import {
   selectVideoUrl,
   selectIsPlaying,
   selectVolume,
+  setCurrentTime,
+  setDuration,
 } from '../../../app/videoReducer';
 import styles from './video.module.scss';
 
@@ -16,6 +18,7 @@ import styles from './video.module.scss';
  */
 export default function Video() {
   const videoRef = useRef();
+  const dispatch = useDispatch();
   const videoUrl = useSelector(selectVideoUrl);
   const isPlaying = useSelector(selectIsPlaying);
   const volumeLevel = useSelector(selectVolume);
@@ -38,6 +41,16 @@ export default function Video() {
     videoRef.current.volume = volumeLevel;
   }, [volumeLevel]);
 
+  /**
+   * Updates progress bar on video
+   *
+   * @param {object} event Time update event object
+   */
+  const timeUpdateHandler = (event) => {
+    dispatch(setCurrentTime(event.target.currentTime));
+    dispatch(setDuration(event.target.duration));
+  };
+
   return (
     <video
       nocontrols='true'
@@ -47,6 +60,7 @@ export default function Video() {
       autoPlay={false}
       className={styles.Video}
       ref={videoRef}
+      onTimeUpdate={timeUpdateHandler}
     >
       <source src={videoUrl} type='video/mp4' />
       Your browser does not support the video tag.

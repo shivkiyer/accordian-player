@@ -8,6 +8,8 @@ import { createSlice } from '@reduxjs/toolkit';
  * height {number} The height of the video player
  * volume {number} Volume level between 0 and 1
  * isPlaying {boolean} Indicated whether the video is playing
+ * currentTime {number} Current time position in seconds of the video
+ * duration {number} Duration in seconds of the video
  * isVolumeSliderVisible {boolean} Indicates whether volume is being controlled
  * isVolumeMuted {boolean} Indicates whether volume is muted
  * isVolumeChanging {boolean} Indicates whether volume slider is being changed
@@ -31,6 +33,8 @@ export const videoSlice = createSlice({
     volume: 1.0,
     prevVolume: 1.0,
     isPlaying: false,
+    currentTime: 0,
+    duration: 0,
     isVolumeSliderVisible: false,
     isVolumeMuted: false,
     isVolumeChanging: false,
@@ -61,6 +65,22 @@ export const videoSlice = createSlice({
       } else {
         state.isPlaying = !state.isPlaying;
       }
+    },
+    /**
+     * Set the current play time of the video
+     *
+     * @param {number} payload currentTime from video
+     */
+    setCurrentTime: (state, action) => {
+      state.currentTime = action.payload;
+    },
+    /**
+     * Set the duration of the video
+     *
+     * @param {number} payload duration from video
+     */
+    setDuration: (state, action) => {
+      state.duration = action.payload;
     },
     /**
      * Sets visibility of volume slider
@@ -126,6 +146,8 @@ export const videoSlice = createSlice({
 export const {
   setDimensions,
   playPauseVideo,
+  setCurrentTime,
+  setDuration,
   setVolumeSlider,
   toggleVolumeMute,
   setVolumeLevel,
@@ -137,6 +159,8 @@ export const {
 export const selectVideoWidth = (state) => state.video.width;
 export const selectVideoHeight = (state) => state.video.height;
 export const selectIsPlaying = (state) => state.video.isPlaying;
+export const selectCurrentTime = (state) => state.video.currentTime;
+export const selectDuration = (state) => state.video.duration;
 export const selectIsVolumeSliderVisible = (state) =>
   state.video.isVolumeSliderVisible;
 export const selectIsVolumeMuted = (state) => state.video.isVolumeMuted;

@@ -10,7 +10,11 @@ import {
   PROGRESS_BAR_MARGIN_SIDE_SMALL,
 } from '../../common/constants';
 import getScaledDimension from '../../common/utils/getScaledDimension';
-import { selectVideoWidth } from '../../app/videoReducer';
+import {
+  selectVideoWidth,
+  selectDuration,
+  selectCurrentTime,
+} from '../../app/videoReducer';
 
 /**
  * Progress slider bar
@@ -22,6 +26,9 @@ import { selectVideoWidth } from '../../app/videoReducer';
  */
 export default function ProgressBar() {
   const videoWidth = useSelector(selectVideoWidth);
+  const currentTime = useSelector(selectCurrentTime);
+  const duration = useSelector(selectDuration);
+  let progress = 0;
 
   const height = getScaledDimension({
     smallDim: PROGRESS_BAR_HEIGHT_SMALL,
@@ -39,6 +46,12 @@ export default function ProgressBar() {
     videoWidth,
   });
 
+  if (duration > 0) {
+    if (currentTime > 0) {
+      progress = (100 * currentTime) / duration;
+    }
+  }
+
   return (
     <div
       className={styles.ProgressBar}
@@ -52,7 +65,7 @@ export default function ProgressBar() {
     >
       <div
         className={styles.ProgressBarComplete}
-        style={{ width: '50%' }}
+        style={{ width: `${progress}%` }}
       ></div>
     </div>
   );
