@@ -2,7 +2,12 @@ import { forwardRef } from 'react';
 import { useSelector } from 'react-redux';
 
 import getScaledDimension from '../../../common/utils/getScaledDimension';
-import { selectVideoWidth } from '../../../app/videoReducer';
+import getVideoTime from '../../../common/utils/getVideoTime';
+import {
+  selectVideoWidth,
+  selectCurrentTime,
+  selectDuration,
+} from '../../../app/videoReducer';
 import {
   TIME_LEFT_MARGIN_LARGE,
   TIME_LEFT_MARGIN_SMALL,
@@ -19,6 +24,10 @@ import styles from './video-progress.module.scss';
  */
 const VideoProgress = forwardRef((props, ref) => {
   const videoWidth = useSelector(selectVideoWidth);
+  const currentTime = useSelector(selectCurrentTime);
+  const duration = useSelector(selectDuration);
+  const currentTimeText = getVideoTime(currentTime);
+  const durationText = getVideoTime(duration);
 
   const leftMargin = getScaledDimension({
     smallDim: TIME_LEFT_MARGIN_SMALL,
@@ -37,7 +46,7 @@ const VideoProgress = forwardRef((props, ref) => {
       className={styles.TimeComplete}
       style={style}
     >
-      0:07 / 2:32
+      {currentTimeText} / {durationText}
     </div>
   );
 });
