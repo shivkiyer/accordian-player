@@ -89,6 +89,9 @@ export default function VideoPlayer({ width, height, url }) {
     maxHeight: windowHeight,
   });
 
+  /**
+   * Set dimensions of video
+   */
   useEffect(() => {
     dispatch(setDimensions({ width: playerWidth, height: playerHeight }));
   }, [playerHeight, playerWidth, dispatch]);
@@ -109,6 +112,10 @@ export default function VideoPlayer({ width, height, url }) {
     fontSize: `${textFont}px`,
   };
 
+  /**
+   * Release handler for when volume slider is being dragged
+   * but mouse is outside volume slider element.
+   */
   const mouseUpHandler = () => {
     dispatch(setIsVolumeChanging(false));
   };

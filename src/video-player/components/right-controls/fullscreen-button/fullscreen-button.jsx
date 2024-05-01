@@ -24,6 +24,10 @@ export default function FullScreenButton() {
   const isFullScreen = useSelector(selectIsFullScreen);
   const dispatch = useDispatch();
 
+  /**
+   * Switch between fullscreen and normal mode
+   * when full screen button is clicked.
+   */
   const clickHandler = () => {
     dispatch(toggleFullScreen());
   };

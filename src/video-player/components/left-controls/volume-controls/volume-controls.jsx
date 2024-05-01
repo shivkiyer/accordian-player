@@ -26,16 +26,27 @@ export default function VolumeControls() {
   const isVolumeChanging = useSelector(selectIsVolumeChanging);
   const dispatch = useDispatch();
 
+  /**
+   * Displays volume slider when mouse hovers
+   * over volume button.
+   */
   const showVolumeSlider = () => {
     dispatch(setVolumeSlider(true));
   };
 
+  /**
+   * Hides volume slider when mouse leaves
+   * the volume button.
+   */
   const hideVolumeSlider = () => {
     if (!isVolumeChanging) {
       dispatch(setVolumeSlider(false));
     }
   };
 
+  /**
+   * Mutes volume when volume button is clicked.
+   */
   const toggleMute = () => {
     dispatch(toggleVolumeMute());
   };

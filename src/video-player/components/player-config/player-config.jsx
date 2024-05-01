@@ -60,6 +60,10 @@ export default function PlayerConfig() {
     height: `${inputHeight}px`,
   };
 
+  /**
+   * Accepts & checks video URL from user
+   * @param {object} event
+   */
   const changeHandler = async (event) => {
     setIsCheckingUrl(true);
     const url = event.target.value;

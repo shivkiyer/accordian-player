@@ -89,6 +89,12 @@ export default function VolumeSlider() {
     videoWidth,
   });
 
+  /**
+   * Convert mouse position on slider to volume level
+   *
+   * @param {object} mouseEvent
+   * @returns {number} Volume level between 0 and 1
+   */
   const detectVolume = (mouseEvent) => {
     const { clientX } = mouseEvent;
     const { x: xMin, width } = sliderRef.current.getBoundingClientRect();
@@ -108,6 +114,12 @@ export default function VolumeSlider() {
     return volLevel;
   };
 
+  /**
+   * Starts tracking volume change when mouse is
+   * pressed in volume slider element
+   *
+   * @param {object} event
+   */
   const mouseDownHandler = (event) => {
     dispatch(setIsVolumeChanging(true));
     const newVolume = detectVolume(event);
@@ -116,6 +128,12 @@ export default function VolumeSlider() {
     }
   };
 
+  /**
+   * Tracks volume change as mouse is moved
+   * in volume slider element
+   *
+   * @param {object} event
+   */
   const mouseMoveHandler = (event) => {
     if (isVolumeChanging) {
       const varyingVolume = detectVolume(event);
@@ -125,6 +143,10 @@ export default function VolumeSlider() {
     }
   };
 
+  /**
+   * Ends volume change when mouse button
+   * is released in volume slider.
+   */
   const mouseUpHandler = () => {
     dispatch(setIsVolumeChanging(false));
   };
