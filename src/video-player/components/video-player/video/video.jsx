@@ -5,6 +5,8 @@ import {
   selectVideoUrl,
   selectIsPlaying,
   selectVolume,
+  selectCurrentTime,
+  selectIsVideoPositionChanging,
   setCurrentTime,
   setDuration,
   playPauseVideo,
@@ -23,6 +25,8 @@ export default function Video() {
   const videoUrl = useSelector(selectVideoUrl);
   const isPlaying = useSelector(selectIsPlaying);
   const volumeLevel = useSelector(selectVolume);
+  const currentTime = useSelector(selectCurrentTime);
+  const isVideoPositionChanging = useSelector(selectIsVideoPositionChanging);
 
   /**
    * Handling pause/play from user control action
@@ -41,6 +45,15 @@ export default function Video() {
   useEffect(() => {
     videoRef.current.volume = volumeLevel;
   }, [volumeLevel]);
+
+  /**
+   * Changing video position from user action on progress bar
+   */
+  useEffect(() => {
+    if (isVideoPositionChanging) {
+      videoRef.current.currentTime = currentTime;
+    }
+  }, [isVideoPositionChanging, dispatch, currentTime]);
 
   /**
    * Updates progress bar on video

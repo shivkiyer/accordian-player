@@ -13,7 +13,11 @@ import {
   setDimensions,
   setIsVolumeChanging,
   setVideoUrl,
+  setIsVideoPositionChanging,
+  setMousePositionX,
   selectVideoUrl,
+  selectIsVolumeChanging,
+  selectIsVideoPositionChanging,
 } from '../../app/videoReducer';
 import { CONFIG_TEXT_SMALL, CONFIG_TEXT_LARGE } from '../../common/constants';
 
@@ -49,6 +53,8 @@ export default function VideoPlayer({ width, height, url }) {
   const dispatch = useDispatch();
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const videoUrl = useSelector(selectVideoUrl);
+  const isVolumeChanging = useSelector(selectIsVolumeChanging);
+  const isVideoPositionChanging = useSelector(selectIsVideoPositionChanging);
   const [baseUrl, setBaseUrl] = useState(null);
   const [errMsg, setErrMsg] = useState(null);
 
@@ -97,9 +103,9 @@ export default function VideoPlayer({ width, height, url }) {
   }, [playerHeight, playerWidth, dispatch]);
 
   const playerStyle = {
-    width: `${playerWidth}px`,
-    height: `${playerHeight}px`,
-    marginTop: `${marginTop}px`,
+    paddingTop: `${marginTop}px`,
+    paddingLeft: `${(windowWidth - playerWidth)/2}px`,
+    paddingRight: `${(windowWidth - playerWidth)/2}px`,
   };
 
   const textFont = getScaledDimension({
@@ -117,14 +123,26 @@ export default function VideoPlayer({ width, height, url }) {
    * but mouse is outside volume slider element.
    */
   const mouseUpHandler = () => {
-    dispatch(setIsVolumeChanging(false));
+    if (isVolumeChanging) {
+      dispatch(setIsVolumeChanging(false));
+    }
+    if (isVideoPositionChanging) {
+      dispatch(setIsVideoPositionChanging(false));
+    }
   };
+
+  const mouseMoveHandler = (event) => {
+    if (isVideoPositionChanging || isVolumeChanging) {
+      dispatch(setMousePositionX(event.clientX));
+    }
+  }
 
   return (
     <div
       className={styles.videoPlayer}
       style={playerStyle}
       onMouseUp={mouseUpHandler}
+      onMouseMove={mouseMoveHandler}
     >
       {!(url || baseUrl) && !errMsg && <PlayerConfig />}
       {errMsg && (

@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import volumeRail from './../../../../assets/images/volume_rail.svg';
@@ -24,6 +24,7 @@ import {
   selectVideoWidth,
   selectVolume,
   selectIsVolumeChanging,
+  selectMousePositionX,
   setVolumeLevel,
   setIsVolumeChanging,
 } from '../../../../app/videoReducer';
@@ -42,6 +43,7 @@ export default function VolumeSlider() {
   const videoWidth = useSelector(selectVideoWidth);
   const volumeLevel = useSelector(selectVolume);
   const isVolumeChanging = useSelector(selectIsVolumeChanging);
+  const mousePositionX = useSelector(selectMousePositionX);
   const dispatch = useDispatch();
   const sliderRef = useRef();
 
@@ -90,15 +92,13 @@ export default function VolumeSlider() {
   });
 
   /**
-   * Convert mouse position on slider to volume level
-   *
-   * @param {object} mouseEvent
-   * @returns {number} Volume level between 0 and 1
+   * Calculate volume level from X positon of mouse
+   * @param {number} mousePosition X-coordinate of mouse on screen
+   * @returns Volume level between 0 and 1
    */
-  const detectVolume = (mouseEvent) => {
-    const { clientX } = mouseEvent;
+  const calculateVolumeLevel = (mousePosition) => {
     const { x: xMin, width } = sliderRef.current.getBoundingClientRect();
-    let volPos = clientX - xMin;
+    let volPos = mousePosition - xMin;
     if (volPos < 0) {
       volPos = 0;
     }
@@ -112,6 +112,17 @@ export default function VolumeSlider() {
       volLevel = null;
     }
     return volLevel;
+  };
+
+  /**
+   * Convert mouse position on slider to volume level
+   *
+   * @param {object} mouseEvent
+   * @returns {number} Volume level between 0 and 1
+   */
+  const detectVolume = (mouseEvent) => {
+    const { clientX } = mouseEvent;
+    return calculateVolumeLevel(clientX);
   };
 
   /**
@@ -150,6 +161,16 @@ export default function VolumeSlider() {
   const mouseUpHandler = () => {
     dispatch(setIsVolumeChanging(false));
   };
+
+  /**
+   * Calculate volume level is mouse position is changing
+   */
+  useEffect(() => {
+    const volLevel = calculateVolumeLevel(mousePositionX);
+    if (volLevel) {
+      dispatch(setVolumeLevel(volLevel));
+    }
+  }, [mousePositionX, dispatch]);
 
   return (
     <div

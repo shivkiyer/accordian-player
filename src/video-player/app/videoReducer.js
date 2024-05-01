@@ -15,6 +15,8 @@ import { createSlice } from '@reduxjs/toolkit';
  * isVolumeChanging {boolean} Indicates whether volume slider is being changed
  * isFullScreen {boolean} Indicates whether video playing in full screen mode
  * videoUrl {string} The URL of the video
+ * isVideoPositionChanging {boolean} Indicates whether user is moving through video
+ * mousePositonX {number} X-positon of the mouse
  *
  * Reducers:
  * setDimensions : Setting the width and height of the video player
@@ -23,6 +25,8 @@ import { createSlice } from '@reduxjs/toolkit';
  * toggleVolumeMute: Mute/unmute volume
  * setVolumeLevel: Set the volume of the video
  * setIsVolumeChanging: Set the flag whether volume slider is being changed
+ * setIsVideoPositionChanging: Set the flag if video position is changing
+ * setMousePositionX: Set the X-position of the mouse
  *
  */
 export const videoSlice = createSlice({
@@ -40,6 +44,8 @@ export const videoSlice = createSlice({
     isVolumeChanging: false,
     isFullScreen: false,
     videoUrl: null,
+    isVideoPositionChanging: false,
+    mousePositonX: 0,
   },
   reducers: {
     /**
@@ -140,6 +146,20 @@ export const videoSlice = createSlice({
     setVideoUrl: (state, action) => {
       state.videoUrl = action.payload;
     },
+    /**
+     * Sets the flag if video position is changing
+     * @param {boolean} payload Video positon changing flag
+     */
+    setIsVideoPositionChanging: (state, action) => {
+      state.isVideoPositionChanging = action.payload;
+    },
+    /**
+     * Set the X coordinate of the mouse on the screen
+     * @param {number} payload X-coordinate of mouse event
+     */
+    setMousePositionX: (state, action) => {
+      state.mousePositonX = action.payload;
+    },
   },
 });
 
@@ -154,6 +174,8 @@ export const {
   setIsVolumeChanging,
   toggleFullScreen,
   setVideoUrl,
+  setIsVideoPositionChanging,
+  setMousePositionX,
 } = videoSlice.actions;
 
 export const selectVideoWidth = (state) => state.video.width;
@@ -168,5 +190,8 @@ export const selectVolume = (state) => state.video.volume;
 export const selectIsVolumeChanging = (state) => state.video.isVolumeChanging;
 export const selectIsFullScreen = (state) => state.video.isFullScreen;
 export const selectVideoUrl = (state) => state.video.videoUrl;
+export const selectIsVideoPositionChanging = (state) =>
+  state.video.isVideoPositionChanging;
+export const selectMousePositionX = (state) => state.video.mousePositonX;
 
 export default videoSlice.reducer;

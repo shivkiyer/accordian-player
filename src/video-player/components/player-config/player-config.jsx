@@ -7,6 +7,7 @@ import {
   selectVideoHeight,
   setVideoUrl,
 } from '../../app/videoReducer';
+import useWindowDimensions from '../../hooks/useWindowDimensions';
 import getScaledDimension from '../../common/utils/getScaledDimension';
 import checkVideoUrl from '../../common/utils/checkVideoUrl';
 import {
@@ -29,6 +30,7 @@ export default function PlayerConfig() {
   const videoHeight = useSelector(selectVideoHeight);
   const [isCheckingUrl, setIsCheckingUrl] = useState(false);
   const [errMsg, setErrMsg] = useState(null);
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
 
   const headingFont = getScaledDimension({
     smallDim: CONFIG_HEADING_SMALL,
@@ -50,8 +52,8 @@ export default function PlayerConfig() {
 
   const inputWidth = 0.8 * videoWidth;
   const inputHeight = 0.9 * videoHeight;
-  const inputTop = (videoHeight - inputHeight) / 2;
-  const inputLeft = 0.1 * videoWidth;
+  const inputTop = (windowHeight - videoHeight) / 2;
+  const inputLeft = (windowWidth - videoWidth) / 2 + 0.1 * videoWidth;
 
   const style = {
     width: `${inputWidth}px`,
