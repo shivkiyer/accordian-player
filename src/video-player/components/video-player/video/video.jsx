@@ -7,6 +7,7 @@ import {
   selectVolume,
   setCurrentTime,
   setDuration,
+  playPauseVideo,
 } from '../../../app/videoReducer';
 import styles from './video.module.scss';
 
@@ -51,6 +52,13 @@ export default function Video() {
     dispatch(setDuration(event.target.duration));
   };
 
+  /**
+   * Play/pause video by clicking on the video
+   */
+  const clickHandler = () => {
+    dispatch(playPauseVideo());
+  };
+
   return (
     <video
       nocontrols='true'
@@ -61,6 +69,7 @@ export default function Video() {
       className={styles.Video}
       ref={videoRef}
       onTimeUpdate={timeUpdateHandler}
+      onClick={clickHandler}
     >
       <source src={videoUrl} type='video/mp4' />
       Your browser does not support the video tag.
