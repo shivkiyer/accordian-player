@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import styles from './progress-bar.module.scss';
@@ -59,17 +59,6 @@ export default function ProgressBar() {
   });
 
   /**
-   * Calculate and set currentTime from video position
-   * @param {number} videoPosition Video position between 0 and 1
-   */
-  const updateCurrentTime = (videoPosition) => {
-    const newTime = videoPosition * duration;
-    if (newTime) {
-      dispatch(setCurrentTime(newTime));
-    }
-  };
-
-  /**
    * Calculating the width of the progress bar
    *
    * @param {number} currentVideoTime currentTime of video
@@ -99,25 +88,29 @@ export default function ProgressBar() {
    * @param {number} mousePosition X-coordinate of mouse position
    * @returns
    */
-  const calculateVideoPosition = (mousePosition) => {
-    if (isVideoPositionChanging) {
-      const { x: xMin, width } = progressRef.current.getBoundingClientRect();
-      let videoLocation = mousePosition - xMin - margin;
-      if (videoLocation < 0) {
-        videoLocation = 0.01;
-      }
-      if (videoLocation > width - margin) {
-        videoLocation = width - margin;
-      }
-      let videoPositon;
-      if (width > 0) {
-        videoPositon = videoLocation / (width - 2 * margin);
-      } else {
-        videoPositon = null;
-      }
-      return videoPositon;
+  const calculateVideoPosition = useCallback((mousePosition, sideMargin) => {
+    const { x: xMin, width } = progressRef.current.getBoundingClientRect();
+    let videoLocation = mousePosition - xMin - sideMargin;
+    if (videoLocation < 0) {
+      videoLocation = 0.01;
     }
-  };
+    if (videoLocation > width - sideMargin) {
+      videoLocation = width - sideMargin;
+    }
+    let videoPositon;
+    if (width > 0) {
+      videoPositon = videoLocation / (width - 2 * sideMargin);
+    } else {
+      videoPositon = null;
+    }
+    if (videoPositon > 1) {
+      videoPositon = 1;
+    }
+    if (videoPositon < 0) {
+      videoPositon = 0;
+    }
+    return videoPositon;
+  }, []);
 
   /**
    * Convert mouse position on progress bar to video position
@@ -127,7 +120,7 @@ export default function ProgressBar() {
    */
   const detectPosition = (mouseEvent) => {
     const { clientX } = mouseEvent;
-    return calculateVideoPosition(clientX);
+    return calculateVideoPosition(clientX, margin);
   };
 
   /**
@@ -147,9 +140,12 @@ export default function ProgressBar() {
    * Update the current time from mouse movement on the screen
    */
   useEffect(() => {
-    const videoPosition = calculateVideoPosition(mousePositionX);
-    updateCurrentTime(videoPosition);
-  }, [mousePositionX, dispatch]);
+    const videoPosition = calculateVideoPosition(mousePositionX, margin);
+    const newTime = videoPosition * duration;
+    if (newTime) {
+      dispatch(setCurrentTime(newTime));
+    }
+  }, [mousePositionX, margin, duration, calculateVideoPosition, dispatch]);
 
   /**
    * Starts tracking video position when mouse is
