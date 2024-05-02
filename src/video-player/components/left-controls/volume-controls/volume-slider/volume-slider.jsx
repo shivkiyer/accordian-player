@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import volumeRail from './../../../../assets/images/volume_rail.svg';
@@ -96,7 +96,7 @@ export default function VolumeSlider() {
    * @param {number} mousePosition X-coordinate of mouse on screen
    * @returns Volume level between 0 and 1
    */
-  const calculateVolumeLevel = (mousePosition) => {
+  const calculateVolumeLevel = useCallback((mousePosition) => {
     const { x: xMin, width } = sliderRef.current.getBoundingClientRect();
     let volPos = mousePosition - xMin;
     if (volPos < 0) {
@@ -112,7 +112,7 @@ export default function VolumeSlider() {
       volLevel = null;
     }
     return volLevel;
-  };
+  }, []);
 
   /**
    * Convert mouse position on slider to volume level
@@ -172,7 +172,7 @@ export default function VolumeSlider() {
         dispatch(setVolumeLevel(volLevel));
       }
     }
-  }, [volumeMousePositionX, dispatch]);
+  }, [volumeMousePositionX, calculateVolumeLevel, dispatch]);
 
   return (
     <div
