@@ -7,6 +7,7 @@ import {
   selectIsVolumeChanging,
   selectIsVolumeMuted,
   selectIsVolumeSliderVisible,
+  selectIsVideoPositionChanging,
 } from '../../../app/videoReducer';
 import { setVolumeSlider, toggleVolumeMute } from '../../../app/videoReducer';
 
@@ -24,6 +25,7 @@ export default function VolumeControls() {
   const isVolumeSliderVisible = useSelector(selectIsVolumeSliderVisible);
   const isVolumeMuted = useSelector(selectIsVolumeMuted);
   const isVolumeChanging = useSelector(selectIsVolumeChanging);
+  const isVideoPositionChanging = useSelector(selectIsVideoPositionChanging);
   const dispatch = useDispatch();
 
   /**
@@ -31,7 +33,9 @@ export default function VolumeControls() {
    * over volume button.
    */
   const showVolumeSlider = () => {
-    dispatch(setVolumeSlider(true));
+    if (!isVideoPositionChanging) {
+      dispatch(setVolumeSlider(true));
+    }
   };
 
   /**
