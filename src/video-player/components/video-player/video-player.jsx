@@ -16,9 +16,11 @@ import {
   setIsVideoPositionChanging,
   setVolumeMousePositionX,
   setProgressMousePositionX,
+  playPauseVideo,
   selectVideoUrl,
   selectIsVolumeChanging,
   selectIsVideoPositionChanging,
+  selectPrevIsPlaying,
 } from '../../app/videoReducer';
 import { CONFIG_TEXT_SMALL, CONFIG_TEXT_LARGE } from '../../common/constants';
 
@@ -56,6 +58,7 @@ export default function VideoPlayer({ width, height, url }) {
   const videoUrl = useSelector(selectVideoUrl);
   const isVolumeChanging = useSelector(selectIsVolumeChanging);
   const isVideoPositionChanging = useSelector(selectIsVideoPositionChanging);
+  const prevIsPlaying = useSelector(selectPrevIsPlaying);
   const [baseUrl, setBaseUrl] = useState(null);
   const [errMsg, setErrMsg] = useState(null);
 
@@ -105,8 +108,8 @@ export default function VideoPlayer({ width, height, url }) {
 
   const playerStyle = {
     paddingTop: `${marginTop}px`,
-    paddingLeft: `${(windowWidth - playerWidth)/2}px`,
-    paddingRight: `${(windowWidth - playerWidth)/2}px`,
+    paddingLeft: `${(windowWidth - playerWidth) / 2}px`,
+    paddingRight: `${(windowWidth - playerWidth) / 2}px`,
   };
 
   const textFont = getScaledDimension({
@@ -131,6 +134,9 @@ export default function VideoPlayer({ width, height, url }) {
     if (isVideoPositionChanging) {
       dispatch(setIsVideoPositionChanging(false));
       dispatch(setProgressMousePositionX(null));
+      if (prevIsPlaying) {
+        dispatch(playPauseVideo('playing'));
+      }
     }
   };
 
@@ -141,7 +147,7 @@ export default function VideoPlayer({ width, height, url }) {
     if (isVolumeChanging) {
       dispatch(setVolumeMousePositionX(event.clientX));
     }
-  }
+  };
 
   return (
     <div

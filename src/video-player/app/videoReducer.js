@@ -8,6 +8,7 @@ import { createSlice } from '@reduxjs/toolkit';
  * height {number} The height of the video player
  * volume {number} Volume level between 0 and 1
  * isPlaying {boolean} Indicated whether the video is playing
+ * prevIsPlaying {boolean} Stores video playing status
  * currentTime {number} Current time position in seconds of the video
  * duration {number} Duration in seconds of the video
  * isVolumeSliderVisible {boolean} Indicates whether volume is being controlled
@@ -39,6 +40,7 @@ export const videoSlice = createSlice({
     volume: 1.0,
     prevVolume: 1.0,
     isPlaying: false,
+    prevIsPlaying: false,
     currentTime: 0,
     duration: 0,
     isVolumeSliderVisible: false,
@@ -67,6 +69,7 @@ export const videoSlice = createSlice({
      *
      */
     playPauseVideo: (state, action) => {
+      state.prevIsPlaying = state.isPlaying;
       if (action.payload === 'paused') {
         state.isPlaying = false;
       } else if (action.payload === 'playing') {
@@ -196,6 +199,7 @@ export const {
 export const selectVideoWidth = (state) => state.video.width;
 export const selectVideoHeight = (state) => state.video.height;
 export const selectIsPlaying = (state) => state.video.isPlaying;
+export const selectPrevIsPlaying = (state) => state.video.prevIsPlaying;
 export const selectCurrentTime = (state) => state.video.currentTime;
 export const selectDuration = (state) => state.video.duration;
 export const selectIsVolumeSliderVisible = (state) =>

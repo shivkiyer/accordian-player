@@ -18,6 +18,7 @@ import {
   selectIsVideoPositionChanging,
   selectProgressMousePositionX,
   selectIsVolumeChanging,
+  selectPrevIsPlaying,
   playPauseVideo,
   setIsVideoPositionChanging,
   setCurrentTime,
@@ -40,6 +41,7 @@ export default function ProgressBar() {
   const isVideoPositionChanging = useSelector(selectIsVideoPositionChanging);
   const isVolumeChanging = useSelector(selectIsVolumeChanging);
   const progressMousePositionX = useSelector(selectProgressMousePositionX);
+  const prevIsPlaying = useSelector(selectPrevIsPlaying);
   const [progress, setProgress] = useState(0);
 
   const outerHeight = getScaledDimension({
@@ -194,6 +196,9 @@ export default function ProgressBar() {
    */
   const mouseUpHandler = () => {
     dispatch(setIsVideoPositionChanging(false));
+    if (prevIsPlaying) {
+      dispatch(playPauseVideo('playing'));
+    }
   };
 
   return (
