@@ -197,6 +197,7 @@ export default function ProgressBar() {
           height: `${height}px`,
           marginLeft: `${margin}px`,
           marginRight: `${margin}px`,
+          width: `${videoWidth - 2 * margin}px`,
         }}
         data-testid='test-progress-bar'
       >
