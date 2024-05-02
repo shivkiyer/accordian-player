@@ -16,7 +16,7 @@ import {
   selectDuration,
   selectCurrentTime,
   selectIsVideoPositionChanging,
-  selectMousePositionX,
+  selectProgressMousePositionX,
   selectIsVolumeChanging,
   playPauseVideo,
   setIsVideoPositionChanging,
@@ -39,7 +39,7 @@ export default function ProgressBar() {
   const duration = useSelector(selectDuration);
   const isVideoPositionChanging = useSelector(selectIsVideoPositionChanging);
   const isVolumeChanging = useSelector(selectIsVolumeChanging);
-  const mousePositionX = useSelector(selectMousePositionX);
+  const progressMousePositionX = useSelector(selectProgressMousePositionX);
   const [progress, setProgress] = useState(0);
 
   const outerHeight = getScaledDimension({
@@ -144,14 +144,19 @@ export default function ProgressBar() {
    */
   useEffect(() => {
     if (!isVolumeChanging) {
-      const videoPosition = calculateVideoPosition(mousePositionX, margin);
-      const newTime = videoPosition * duration;
-      if (newTime) {
-        dispatch(setCurrentTime(newTime));
+      if (progressMousePositionX) {
+        const videoPosition = calculateVideoPosition(
+          progressMousePositionX,
+          margin
+        );
+        const newTime = videoPosition * duration;
+        if (newTime) {
+          dispatch(setCurrentTime(newTime));
+        }
       }
     }
   }, [
-    mousePositionX,
+    progressMousePositionX,
     margin,
     duration,
     isVolumeChanging,

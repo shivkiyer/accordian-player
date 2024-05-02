@@ -24,7 +24,7 @@ import {
   selectVideoWidth,
   selectVolume,
   selectIsVolumeChanging,
-  selectMousePositionX,
+  selectVolumeMousePositionX,
   setVolumeLevel,
   setIsVolumeChanging,
 } from '../../../../app/videoReducer';
@@ -43,7 +43,7 @@ export default function VolumeSlider() {
   const videoWidth = useSelector(selectVideoWidth);
   const volumeLevel = useSelector(selectVolume);
   const isVolumeChanging = useSelector(selectIsVolumeChanging);
-  const mousePositionX = useSelector(selectMousePositionX);
+  const volumeMousePositionX = useSelector(selectVolumeMousePositionX);
   const dispatch = useDispatch();
   const sliderRef = useRef();
 
@@ -166,11 +166,13 @@ export default function VolumeSlider() {
    * Calculate volume level is mouse position is changing
    */
   useEffect(() => {
-    const volLevel = calculateVolumeLevel(mousePositionX);
-    if (volLevel) {
-      dispatch(setVolumeLevel(volLevel));
+    if (volumeMousePositionX) {
+      const volLevel = calculateVolumeLevel(volumeMousePositionX);
+      if (volLevel) {
+        dispatch(setVolumeLevel(volLevel));
+      }
     }
-  }, [mousePositionX, dispatch]);
+  }, [volumeMousePositionX, dispatch]);
 
   return (
     <div

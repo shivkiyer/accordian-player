@@ -16,7 +16,8 @@ import { createSlice } from '@reduxjs/toolkit';
  * isFullScreen {boolean} Indicates whether video playing in full screen mode
  * videoUrl {string} The URL of the video
  * isVideoPositionChanging {boolean} Indicates whether user is moving through video
- * mousePositonX {number} X-positon of the mouse
+ * volumeMousePositonX {number} X-positon of the mouse for volume change
+ * progressMousePositonX {number} X-position of the mouse for progress change
  *
  * Reducers:
  * setDimensions : Setting the width and height of the video player
@@ -26,7 +27,8 @@ import { createSlice } from '@reduxjs/toolkit';
  * setVolumeLevel: Set the volume of the video
  * setIsVolumeChanging: Set the flag whether volume slider is being changed
  * setIsVideoPositionChanging: Set the flag if video position is changing
- * setMousePositionX: Set the X-position of the mouse
+ * setVolumeMousePositionX: Set the X-position of the mouse for volume change
+ * setProgressMousePositionX: Set the X-position of the mouse for progress change
  *
  */
 export const videoSlice = createSlice({
@@ -45,7 +47,8 @@ export const videoSlice = createSlice({
     isFullScreen: false,
     videoUrl: null,
     isVideoPositionChanging: false,
-    mousePositonX: 0,
+    volumeMousePositionX: null,
+    progressMousePositionX: null,
   },
   reducers: {
     /**
@@ -154,11 +157,22 @@ export const videoSlice = createSlice({
       state.isVideoPositionChanging = action.payload;
     },
     /**
-     * Set the X coordinate of the mouse on the screen
+     * Set the X coordinate of the mouse
+     * on the screen for volume change
+     *
      * @param {number} payload X-coordinate of mouse event
      */
-    setMousePositionX: (state, action) => {
-      state.mousePositonX = action.payload;
+    setVolumeMousePositionX: (state, action) => {
+      state.volumeMousePositionX = action.payload;
+    },
+    /**
+     * Set the X coordinate of the mouse
+     * on the screen for progress change
+     *
+     * @param {number} payload X-coordinate of mouse event
+     */
+    setProgressMousePositionX: (state, action) => {
+      state.progressMousePositionX = action.payload;
     },
   },
 });
@@ -175,7 +189,8 @@ export const {
   toggleFullScreen,
   setVideoUrl,
   setIsVideoPositionChanging,
-  setMousePositionX,
+  setVolumeMousePositionX,
+  setProgressMousePositionX,
 } = videoSlice.actions;
 
 export const selectVideoWidth = (state) => state.video.width;
@@ -192,6 +207,9 @@ export const selectIsFullScreen = (state) => state.video.isFullScreen;
 export const selectVideoUrl = (state) => state.video.videoUrl;
 export const selectIsVideoPositionChanging = (state) =>
   state.video.isVideoPositionChanging;
-export const selectMousePositionX = (state) => state.video.mousePositonX;
+export const selectVolumeMousePositionX = (state) =>
+  state.video.volumeMousePositionX;
+export const selectProgressMousePositionX = (state) =>
+  state.video.progressMousePositionX;
 
 export default videoSlice.reducer;

@@ -14,7 +14,8 @@ import {
   setIsVolumeChanging,
   setVideoUrl,
   setIsVideoPositionChanging,
-  setMousePositionX,
+  setVolumeMousePositionX,
+  setProgressMousePositionX,
   selectVideoUrl,
   selectIsVolumeChanging,
   selectIsVideoPositionChanging,
@@ -125,15 +126,20 @@ export default function VideoPlayer({ width, height, url }) {
   const mouseUpHandler = () => {
     if (isVolumeChanging) {
       dispatch(setIsVolumeChanging(false));
+      dispatch(setVolumeMousePositionX(null));
     }
     if (isVideoPositionChanging) {
       dispatch(setIsVideoPositionChanging(false));
+      dispatch(setProgressMousePositionX(null));
     }
   };
 
   const mouseMoveHandler = (event) => {
-    if (isVideoPositionChanging || isVolumeChanging) {
-      dispatch(setMousePositionX(event.clientX));
+    if (isVideoPositionChanging) {
+      dispatch(setProgressMousePositionX(event.clientX));
+    }
+    if (isVolumeChanging) {
+      dispatch(setVolumeMousePositionX(event.clientX));
     }
   }
 
