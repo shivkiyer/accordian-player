@@ -17,6 +17,7 @@ import {
   selectCurrentTime,
   selectIsVideoPositionChanging,
   selectMousePositionX,
+  selectIsVolumeChanging,
   playPauseVideo,
   setIsVideoPositionChanging,
   setCurrentTime,
@@ -37,6 +38,7 @@ export default function ProgressBar() {
   const currentTime = useSelector(selectCurrentTime);
   const duration = useSelector(selectDuration);
   const isVideoPositionChanging = useSelector(selectIsVideoPositionChanging);
+  const isVolumeChanging = useSelector(selectIsVolumeChanging);
   const mousePositionX = useSelector(selectMousePositionX);
   const [progress, setProgress] = useState(0);
 
@@ -140,12 +142,21 @@ export default function ProgressBar() {
    * Update the current time from mouse movement on the screen
    */
   useEffect(() => {
-    const videoPosition = calculateVideoPosition(mousePositionX, margin);
-    const newTime = videoPosition * duration;
-    if (newTime) {
-      dispatch(setCurrentTime(newTime));
+    if (!isVolumeChanging) {
+      const videoPosition = calculateVideoPosition(mousePositionX, margin);
+      const newTime = videoPosition * duration;
+      if (newTime) {
+        dispatch(setCurrentTime(newTime));
+      }
     }
-  }, [mousePositionX, margin, duration, calculateVideoPosition, dispatch]);
+  }, [
+    mousePositionX,
+    margin,
+    duration,
+    isVolumeChanging,
+    calculateVideoPosition,
+    dispatch,
+  ]);
 
   /**
    * Starts tracking video position when mouse is
