@@ -88,6 +88,7 @@ export default function ProgressBar() {
   /**
    * Calculate video position from mouse position on screen
    * @param {number} mousePosition X-coordinate of mouse position
+   * @param {number} sideMargin Left and right margins of progress slider
    * @returns
    */
   const calculateVideoPosition = useCallback((mousePosition, sideMargin) => {
