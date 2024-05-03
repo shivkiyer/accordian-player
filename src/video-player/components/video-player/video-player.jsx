@@ -123,8 +123,9 @@ export default function VideoPlayer({ width, height, url }) {
   };
 
   /**
-   * Release handler for when volume slider is being dragged
-   * but mouse is outside volume slider element.
+   * Release handler for when volume slider
+   * or progress bar is being dragged
+   * but mouse is outside the elements.
    */
   const mouseUpHandler = () => {
     if (isVolumeChanging) {
@@ -140,6 +141,12 @@ export default function VideoPlayer({ width, height, url }) {
     }
   };
 
+  /**
+   * When mouse is moving, if volume or video
+   * position is changing, mouse position is recorded.
+   *
+   * @param {object} event Mouse move event
+   */
   const mouseMoveHandler = (event) => {
     if (isVideoPositionChanging) {
       dispatch(setProgressMousePositionX(event.clientX));

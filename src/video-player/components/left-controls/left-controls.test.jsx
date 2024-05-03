@@ -1,24 +1,27 @@
-import { Provider } from 'react-redux';
 import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { waitFor } from '@testing-library/react';
 
-import videoStore from './../../app/store';
 import wait from '../../common/test-utils/wait';
 
 describe('LeftControls (buttons)', () => {
-  const checkVideoUrlObj = require('./../../common/utils/checkVideoUrl');
-  const mockCheckVideoUrl = jest.spyOn(checkVideoUrlObj, 'default');
+  // Mocking the Video component
+  const mockVideo = () => <div>Video</div>;
+  jest.mock('./../video-player/video/video', () => mockVideo);
 
-  const VideoPlayer = require('../video-player/video-player').default;
+  jest.mock('./../../common/utils/checkVideoUrl', () => {
+    return () => Promise.resolve(null)
+  });
+
+  const AccordionPlayer =
+    require('./../accordion-player/accordion-player').default;
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
   it('should display the left control buttons', async () => {
-    mockCheckVideoUrl.mockReturnValue(null);
-    render(
-      <Provider store={videoStore}>
-        <VideoPlayer width='630' url='some-url' />
-      </Provider>
-    );
+    render(<AccordionPlayer width='630' url='some-url' />);
 
     await waitFor(() => {});
     await wait();
@@ -32,13 +35,7 @@ describe('LeftControls (buttons)', () => {
   });
 
   it('should toggle between play btn and pause btn upon click', async () => {
-    mockCheckVideoUrl.mockReturnValue(null);
-
-    render(
-      <Provider store={videoStore}>
-        <VideoPlayer width='630' url='some-url' />
-      </Provider>
-    );
+    render(<AccordionPlayer width='630' url='some-url' />);
 
     await waitFor(() => {});
 
@@ -66,13 +63,7 @@ describe('LeftControls (buttons)', () => {
   });
 
   it('should toggle volume controls upon hover the volume icon', async () => {
-    mockCheckVideoUrl.mockReturnValue(null);
-
-    render(
-      <Provider store={videoStore}>
-        <VideoPlayer width='630' url='some-url' />
-      </Provider>
-    );
+    render(<AccordionPlayer width='630' url='some-url' />);
 
     await waitFor(() => {});
 
@@ -110,13 +101,7 @@ describe('LeftControls (buttons)', () => {
   });
 
   it('should toggle volume icon to mute and back when volume icon is clicked', async () => {
-    mockCheckVideoUrl.mockReturnValue(null);
-
-    render(
-      <Provider store={videoStore}>
-        <VideoPlayer width='630' url='some-url' />
-      </Provider>
-    );
+    render(<AccordionPlayer width='630' url='some-url' />);
 
     await waitFor(() => {});
 
