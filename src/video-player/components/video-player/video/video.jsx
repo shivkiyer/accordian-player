@@ -66,6 +66,15 @@ export default function Video() {
   };
 
   /**
+   * Updates the video duration when video loads
+   *
+   * @param {object} event Video load event
+   */
+  const loadedDataHandler = (event) => {
+    dispatch(setDuration(event.target.duration));
+  };
+
+  /**
    * Play/pause video by clicking on the video
    */
   const clickHandler = () => {
@@ -82,6 +91,7 @@ export default function Video() {
       className={styles.Video}
       ref={videoRef}
       onTimeUpdate={timeUpdateHandler}
+      onLoadedData={loadedDataHandler}
       onClick={clickHandler}
     >
       <source src={videoUrl} type='video/mp4' />
