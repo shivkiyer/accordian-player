@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import useWindowDimensions from '../../hooks/useWindowDimensions';
@@ -16,11 +16,15 @@ import {
   setIsVideoPositionChanging,
   setVolumeMousePositionX,
   setProgressMousePositionX,
+  toggleFullScreen,
+  setIsButtonFullScreen,
   playPauseVideo,
   selectVideoUrl,
   selectIsVolumeChanging,
   selectIsVideoPositionChanging,
   selectPrevIsPlaying,
+  selectIsFullScreen,
+  selectIsBtnFullScreen,
 } from '../../app/videoReducer';
 import { CONFIG_TEXT_SMALL, CONFIG_TEXT_LARGE } from '../../common/constants';
 
@@ -54,11 +58,14 @@ import { CONFIG_TEXT_SMALL, CONFIG_TEXT_LARGE } from '../../common/constants';
  */
 export default function VideoPlayer({ width, height, url }) {
   const dispatch = useDispatch();
+  const playerRef = useRef();
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const videoUrl = useSelector(selectVideoUrl);
   const isVolumeChanging = useSelector(selectIsVolumeChanging);
   const isVideoPositionChanging = useSelector(selectIsVideoPositionChanging);
   const prevIsPlaying = useSelector(selectPrevIsPlaying);
+  const isFullscreen = useSelector(selectIsFullScreen);
+  const isBtnFullScreen = useSelector(selectIsBtnFullScreen);
   const [baseUrl, setBaseUrl] = useState(null);
   const [errMsg, setErrMsg] = useState(null);
 
@@ -112,6 +119,11 @@ export default function VideoPlayer({ width, height, url }) {
     paddingRight: `${(windowWidth - playerWidth) / 2}px`,
   };
 
+  const fullScreenStyle = {
+    width: window.screen.width,
+    height: window.screen.height,
+  };
+
   const textFont = getScaledDimension({
     smallDim: CONFIG_TEXT_SMALL,
     largeDim: CONFIG_TEXT_LARGE,
@@ -156,12 +168,60 @@ export default function VideoPlayer({ width, height, url }) {
     }
   };
 
+  useEffect(() => {
+    if (isFullscreen) {
+      playerRef.current
+        .requestFullscreen()
+        .then(() => {
+          dispatch(
+            setDimensions({
+              width: window.screen.width,
+              height: window.screen.height,
+            })
+          );
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } else if (isBtnFullScreen) {
+      document
+        .exitFullscreen()
+        .then(() => {
+          dispatch(setDimensions({ width: playerWidth, height: playerHeight }));
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+  }, [isFullscreen, isBtnFullScreen, playerWidth, playerHeight, dispatch]);
+
+  const exitFullscreenHandler = (event) => {
+    if (document.fullscreenElement === null) {
+      dispatch(setIsButtonFullScreen(false));
+      dispatch(toggleFullScreen(false));
+      dispatch(setDimensions({ width: playerWidth, height: playerHeight }));
+    }
+  };
+  document.addEventListener('fullscreenchange', exitFullscreenHandler, false);
+  document.addEventListener(
+    'mozfullscreenchange',
+    exitFullscreenHandler,
+    false
+  );
+  document.addEventListener('MSFullscreenChange', exitFullscreenHandler, false);
+  document.addEventListener(
+    'webkitfullscreenchange',
+    exitFullscreenHandler,
+    false
+  );
+
   return (
     <div
       className={styles.videoPlayer}
-      style={playerStyle}
+      style={isFullscreen ? fullScreenStyle : playerStyle}
       onMouseUp={mouseUpHandler}
       onMouseMove={mouseMoveHandler}
+      ref={playerRef}
     >
       {!(url || baseUrl) && !errMsg && <PlayerConfig />}
       {errMsg && (

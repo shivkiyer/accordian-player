@@ -6,6 +6,7 @@ import smallScreenBtn from '../../../assets/images/small_screen_icon.svg';
 import {
   selectIsFullScreen,
   toggleFullScreen,
+  setIsButtonFullScreen,
 } from '../../../app/videoReducer';
 
 import {
@@ -29,6 +30,7 @@ export default function FullScreenButton() {
    * when full screen button is clicked.
    */
   const clickHandler = () => {
+    dispatch(setIsButtonFullScreen(true));
     dispatch(toggleFullScreen());
   };
 

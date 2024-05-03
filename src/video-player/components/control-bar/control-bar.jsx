@@ -34,6 +34,7 @@ export default function ControlBar() {
 
   const controlBarStyle = {
     height: `${barHeight}px`,
+    width: `${videoWidth}px`,
   };
 
   return (

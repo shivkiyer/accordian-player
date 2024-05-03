@@ -15,6 +15,7 @@ import { createSlice } from '@reduxjs/toolkit';
  * isVolumeMuted {boolean} Indicates whether volume is muted
  * isVolumeChanging {boolean} Indicates whether volume slider is being changed
  * isFullScreen {boolean} Indicates whether video playing in full screen mode
+ * isBtnFullScreen {boolean} User enter/leave fullscreen with control button
  * videoUrl {string} The URL of the video
  * isVideoPositionChanging {boolean} Indicates whether user is moving through video
  * volumeMousePositonX {number} X-positon of the mouse for volume change
@@ -27,6 +28,8 @@ import { createSlice } from '@reduxjs/toolkit';
  * toggleVolumeMute: Mute/unmute volume
  * setVolumeLevel: Set the volume of the video
  * setIsVolumeChanging: Set the flag whether volume slider is being changed
+ * toggleFullScreen: Toggle the full screen status flag
+ * setIsBtnFullScreen: Is user clicking on fullscreen control button
  * setIsVideoPositionChanging: Set the flag if video position is changing
  * setVolumeMousePositionX: Set the X-position of the mouse for volume change
  * setProgressMousePositionX: Set the X-position of the mouse for progress change
@@ -47,6 +50,7 @@ export const videoSlice = createSlice({
     isVolumeMuted: false,
     isVolumeChanging: false,
     isFullScreen: false,
+    isBtnFullScreen: false,
     videoUrl: null,
     isVideoPositionChanging: false,
     volumeMousePositionX: null,
@@ -141,9 +145,23 @@ export const videoSlice = createSlice({
     /**
      * Toggles full screen mode
      *
+     * @param {boolean} payload Fullscreen status (optional)
+     *
      */
-    toggleFullScreen: (state) => {
-      state.isFullScreen = !state.isFullScreen;
+    toggleFullScreen: (state, action) => {
+      if (action.payload === null || action.payload === undefined) {
+        state.isFullScreen = !state.isFullScreen;
+      } else {
+        state.isFullScreen = action.payload;
+      }
+    },
+    /**
+     * Sets flag whether user clicked on fullscreen control button
+     *
+     * @param {boolean} payload Flag
+     */
+    setIsButtonFullScreen: (state, action) => {
+      state.isBtnFullScreen = action.payload;
     },
     /**
      * Sets the URL of the video
@@ -190,6 +208,7 @@ export const {
   setVolumeLevel,
   setIsVolumeChanging,
   toggleFullScreen,
+  setIsButtonFullScreen,
   setVideoUrl,
   setIsVideoPositionChanging,
   setVolumeMousePositionX,
@@ -208,6 +227,7 @@ export const selectIsVolumeMuted = (state) => state.video.isVolumeMuted;
 export const selectVolume = (state) => state.video.volume;
 export const selectIsVolumeChanging = (state) => state.video.isVolumeChanging;
 export const selectIsFullScreen = (state) => state.video.isFullScreen;
+export const selectIsBtnFullScreen = (state) => state.video.isBtnFullScreen;
 export const selectVideoUrl = (state) => state.video.videoUrl;
 export const selectIsVideoPositionChanging = (state) =>
   state.video.isVideoPositionChanging;
