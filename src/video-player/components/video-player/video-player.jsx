@@ -168,6 +168,9 @@ export default function VideoPlayer({ width, height, url }) {
     }
   };
 
+  /**
+   * Fullscreen toggler - user click on fullscreen button
+   */
   useEffect(() => {
     if (isFullscreen) {
       playerRef.current
@@ -195,6 +198,11 @@ export default function VideoPlayer({ width, height, url }) {
     }
   }, [isFullscreen, isBtnFullScreen, playerWidth, playerHeight, dispatch]);
 
+  /**
+   * Fullscreen toggler when user presses Escape
+   * 
+   * @param {object} event fullscreenchange event object 
+   */
   const exitFullscreenHandler = (event) => {
     if (document.fullscreenElement === null) {
       dispatch(setIsButtonFullScreen(false));
