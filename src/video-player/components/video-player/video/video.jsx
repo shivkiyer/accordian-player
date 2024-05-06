@@ -28,8 +28,8 @@ export default function Video() {
   const volumeLevel = useSelector(selectVolume);
   const currentTime = useSelector(selectCurrentTime);
   const isVideoPositionChanging = useSelector(selectIsVideoPositionChanging);
-  const [isMouseInside, setMouseInside] = useState(false);
   const [isMouseMoving, setMouseMoving] = useState(false);
+  const [mouseMoveTimer, setMouseMoveTimer] = useState(null);
 
   /**
    * Handling pause/play from user control action
@@ -84,18 +84,17 @@ export default function Video() {
     dispatch(playPauseVideo());
   };
 
-  /**
-   * Sets isMouseInside flag when mouse enters video
-   */
-  const mouseEnterHandler = () => {
-    setMouseInside(true);
-  };
 
   /**
    * Sets isMouseMoving flag when mouse moves inside video
    */
   const mouseMoveHandler = () => {
     setMouseMoving(true);
+    dispatch(setControlBarVisible(true));
+    clearTimeout(mouseMoveTimer)
+    setMouseMoveTimer(setTimeout(() => {
+      setMouseMoving(false);
+    }, 3000));
   };
 
   /**
@@ -103,18 +102,12 @@ export default function Video() {
    * which all mouse event flags are reset to false
    */
   useEffect(() => {
-    let timer;
-    if (isMouseInside || isMouseMoving) {
-      dispatch(setControlBarVisible(true));
-      timer = setTimeout(() => {
-        setMouseInside(false);
-        setMouseMoving(false);
-        dispatch(setControlBarVisible(false));
-      }, 3000);
+    if (!isMouseMoving) {
+      clearTimeout(mouseMoveTimer)
+      dispatch(setControlBarVisible(false));
     }
+  }, [isMouseMoving, mouseMoveTimer, dispatch]);
 
-    return () => clearInterval(timer);
-  }, [isMouseInside, isMouseMoving, dispatch]);
 
   return (
     <video
@@ -128,7 +121,6 @@ export default function Video() {
       onTimeUpdate={timeUpdateHandler}
       onLoadedData={loadedDataHandler}
       onClick={clickHandler}
-      onMouseEnter={mouseEnterHandler}
       onMouseMove={mouseMoveHandler}
     >
       <source src={videoUrl} type='video/mp4' />
