@@ -1,23 +1,20 @@
-import { Provider } from 'react-redux';
 import { render, screen, act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import videoStore from './../../app/store';
+import ControlBar from '../control-bar/control-bar';
 import wait from '../../common/test-utils/wait';
 
 describe('Right controls (buttons)', () => {
-  const checkVideoUrlObj = require('./../../common/utils/checkVideoUrl');
-  const mockCheckVideoUrl = jest.spyOn(checkVideoUrlObj, 'default');
+  const mockVideoPlayer = (props) => {
+    return <ControlBar />
+  }
+  jest.mock('./../video-player/video-player', () => mockVideoPlayer);
 
-  const VideoPlayer = require('./../video-player/video-player').default;
+  const AccordionPlayer = require('./../accordion-player/accordion-player').default;
 
   it('should have the fullscreen button', async () => {
-    mockCheckVideoUrl.mockReturnValue(null);
-
     render(
-      <Provider store={videoStore}>
-        <VideoPlayer width='630' url='some-url' />
-      </Provider>
+      <AccordionPlayer width='630' url='some-url' />
     );
 
     await waitFor(() => {});
@@ -28,12 +25,8 @@ describe('Right controls (buttons)', () => {
   });
 
   it('should toggle between full screen and small screen icon when clicked', async () => {
-    mockCheckVideoUrl.mockReturnValue(null);
-
     render(
-      <Provider store={videoStore}>
-        <VideoPlayer width='630' url='some-url' />
-      </Provider>
+      <AccordionPlayer width='630' url='some-url' />
     );
 
     await waitFor(() => {});
