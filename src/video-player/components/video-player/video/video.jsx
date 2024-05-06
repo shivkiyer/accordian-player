@@ -84,17 +84,18 @@ export default function Video() {
     dispatch(playPauseVideo());
   };
 
-
   /**
    * Sets isMouseMoving flag when mouse moves inside video
    */
   const mouseMoveHandler = () => {
     setMouseMoving(true);
     dispatch(setControlBarVisible(true));
-    clearTimeout(mouseMoveTimer)
-    setMouseMoveTimer(setTimeout(() => {
-      setMouseMoving(false);
-    }, 3000));
+    clearTimeout(mouseMoveTimer);
+    setMouseMoveTimer(
+      setTimeout(() => {
+        setMouseMoving(false);
+      }, 3000)
+    );
   };
 
   /**
@@ -103,11 +104,10 @@ export default function Video() {
    */
   useEffect(() => {
     if (!isMouseMoving) {
-      clearTimeout(mouseMoveTimer)
+      clearTimeout(mouseMoveTimer);
       dispatch(setControlBarVisible(false));
     }
   }, [isMouseMoving, mouseMoveTimer, dispatch]);
-
 
   return (
     <video
