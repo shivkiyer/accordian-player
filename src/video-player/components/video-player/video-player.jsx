@@ -20,6 +20,7 @@ import {
   setIsButtonFullScreen,
   playPauseVideo,
   selectVideoUrl,
+  selectIsControlBarVisible,
   selectIsVolumeChanging,
   selectIsVideoPositionChanging,
   selectPrevIsPlaying,
@@ -61,6 +62,7 @@ export default function VideoPlayer({ width, height, url }) {
   const playerRef = useRef();
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const videoUrl = useSelector(selectVideoUrl);
+  const isControlBarVisible = useSelector(selectIsControlBarVisible);
   const isVolumeChanging = useSelector(selectIsVolumeChanging);
   const isVideoPositionChanging = useSelector(selectIsVideoPositionChanging);
   const prevIsPlaying = useSelector(selectPrevIsPlaying);
@@ -200,8 +202,8 @@ export default function VideoPlayer({ width, height, url }) {
 
   /**
    * Fullscreen toggler when user presses Escape
-   * 
-   * @param {object} event fullscreenchange event object 
+   *
+   * @param {object} event fullscreenchange event object
    */
   const exitFullscreenHandler = (event) => {
     if (document.fullscreenElement === null) {
@@ -238,7 +240,7 @@ export default function VideoPlayer({ width, height, url }) {
         </p>
       )}
       {baseUrl && <Video />}
-      {baseUrl && <ControlBar />}
+      {baseUrl && isControlBarVisible && <ControlBar />}
     </div>
   );
 }

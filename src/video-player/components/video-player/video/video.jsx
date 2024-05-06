@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import {
@@ -10,6 +10,7 @@ import {
   setCurrentTime,
   setDuration,
   playPauseVideo,
+  setControlBarVisible,
 } from '../../../app/videoReducer';
 import styles from './video.module.scss';
 
@@ -27,6 +28,8 @@ export default function Video() {
   const volumeLevel = useSelector(selectVolume);
   const currentTime = useSelector(selectCurrentTime);
   const isVideoPositionChanging = useSelector(selectIsVideoPositionChanging);
+  const [isMouseInside, setMouseInside] = useState(false);
+  const [isMouseMoving, setMouseMoving] = useState(false);
 
   /**
    * Handling pause/play from user control action
@@ -81,6 +84,38 @@ export default function Video() {
     dispatch(playPauseVideo());
   };
 
+  /**
+   * Sets isMouseInside flag when mouse enters video
+   */
+  const mouseEnterHandler = () => {
+    setMouseInside(true);
+  };
+
+  /**
+   * Sets isMouseMoving flag when mouse moves inside video
+   */
+  const mouseMoveHandler = () => {
+    setMouseMoving(true);
+  };
+
+  /**
+   * Starts 3s timer after displaying control bar after
+   * which all mouse event flags are reset to false
+   */
+  useEffect(() => {
+    let timer;
+    if (isMouseInside || isMouseMoving) {
+      dispatch(setControlBarVisible(true));
+      timer = setTimeout(() => {
+        setMouseInside(false);
+        setMouseMoving(false);
+        dispatch(setControlBarVisible(false));
+      }, 3000);
+    }
+
+    return () => clearInterval(timer);
+  }, [isMouseInside, isMouseMoving, dispatch]);
+
   return (
     <video
       nocontrols='true'
@@ -93,6 +128,8 @@ export default function Video() {
       onTimeUpdate={timeUpdateHandler}
       onLoadedData={loadedDataHandler}
       onClick={clickHandler}
+      onMouseEnter={mouseEnterHandler}
+      onMouseMove={mouseMoveHandler}
     >
       <source src={videoUrl} type='video/mp4' />
       Your browser does not support the video tag.

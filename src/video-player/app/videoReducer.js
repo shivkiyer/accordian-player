@@ -11,6 +11,7 @@ import { createSlice } from '@reduxjs/toolkit';
  * prevIsPlaying {boolean} Stores video playing status
  * currentTime {number} Current time position in seconds of the video
  * duration {number} Duration in seconds of the video
+ * isControlBarVisible {boolean} Indicates whether the control bar is visible
  * isVolumeSliderVisible {boolean} Indicates whether volume is being controlled
  * isVolumeMuted {boolean} Indicates whether volume is muted
  * isVolumeChanging {boolean} Indicates whether volume slider is being changed
@@ -24,6 +25,7 @@ import { createSlice } from '@reduxjs/toolkit';
  * Reducers:
  * setDimensions : Setting the width and height of the video player
  * playPauseVideo: Toggling play/pause status of the video
+ * setControlBarVisible: Change visibility of control bar
  * setVolumeSlider: Toggle visible status of volume slider
  * toggleVolumeMute: Mute/unmute volume
  * setVolumeLevel: Set the volume of the video
@@ -46,6 +48,7 @@ export const videoSlice = createSlice({
     prevIsPlaying: false,
     currentTime: 0,
     duration: 0,
+    isControlBarVisible: false,
     isVolumeSliderVisible: false,
     isVolumeMuted: false,
     isVolumeChanging: false,
@@ -97,6 +100,18 @@ export const videoSlice = createSlice({
      */
     setDuration: (state, action) => {
       state.duration = action.payload;
+    },
+    /**
+     * Change the visibility status of the control bar
+     *
+     * @param {boolean} payload
+     */
+    setControlBarVisible: (state, action) => {
+      if (action.payload === null || action.payload === undefined) {
+        state.isControlBarVisible = !state.isControlBarVisible;
+      } else {
+        state.isControlBarVisible = action.payload;
+      }
     },
     /**
      * Sets visibility of volume slider
@@ -203,6 +218,7 @@ export const {
   playPauseVideo,
   setCurrentTime,
   setDuration,
+  setControlBarVisible,
   setVolumeSlider,
   toggleVolumeMute,
   setVolumeLevel,
@@ -221,6 +237,8 @@ export const selectIsPlaying = (state) => state.video.isPlaying;
 export const selectPrevIsPlaying = (state) => state.video.prevIsPlaying;
 export const selectCurrentTime = (state) => state.video.currentTime;
 export const selectDuration = (state) => state.video.duration;
+export const selectIsControlBarVisible = (state) =>
+  state.video.isControlBarVisible;
 export const selectIsVolumeSliderVisible = (state) =>
   state.video.isVolumeSliderVisible;
 export const selectIsVolumeMuted = (state) => state.video.isVolumeMuted;
