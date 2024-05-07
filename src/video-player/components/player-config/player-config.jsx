@@ -70,11 +70,17 @@ export default function PlayerConfig() {
     setIsCheckingUrl(true);
     const url = event.target.value;
 
-    const urlResult = await checkVideoUrl(url);
-    if (!urlResult) {
-      dispatch(setVideoUrl(url));
-    } else {
-      setErrMsg(urlResult);
+    try {
+      const urlResult = await checkVideoUrl(url);
+      if (urlResult.errMsg === null) {
+        if (typeof urlResult.data === 'string') {
+          dispatch(setVideoUrl(urlResult.data));
+        } else {
+          dispatch(setVideoUrl(urlResult.data['introVideo']['url']));
+        }
+      }
+    } catch (e) {
+      setErrMsg(e.errMsg);
     }
     setIsCheckingUrl(false);
   };
