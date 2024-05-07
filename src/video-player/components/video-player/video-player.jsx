@@ -87,13 +87,15 @@ export default function VideoPlayer({ width, height, url }) {
           setBaseUrl(null);
         }
       } else {
-        const urlResult = await checkVideoUrl(urlSetting);
-        if (!urlResult) {
-          setBaseUrl(urlSetting);
-          dispatch(setVideoUrl(urlSetting));
-        } else {
+        try {
+          const urlResult = await checkVideoUrl(urlSetting);
+          if (urlResult.errMsg === null) {
+            setBaseUrl(urlSetting);
+            dispatch(setVideoUrl(urlSetting));
+          }
+        } catch (e) {
           setBaseUrl(null);
-          setErrMsg(urlResult);
+          setErrMsg(e.errMsg);
         }
       }
     };

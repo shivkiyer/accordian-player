@@ -1,4 +1,6 @@
-import { render, waitFor, screen } from '@testing-library/react';
+import { render, waitFor, screen, act, fireEvent } from '@testing-library/react';
+
+import wait from '../../common/test-utils/wait';
 
 /**
  * Test for creation of control bar
@@ -8,16 +10,25 @@ describe('ControlBar', () => {
   const checkVideoUrlObj = require('./../../common/utils/checkVideoUrl');
   const mockCheckVideoUrl = jest.spyOn(checkVideoUrlObj, 'default');
 
-  const VideoPlayer = require('../video-player/video-player').default;
   const AccordionPlayer =
     require('./../accordion-player/accordion-player').default;
 
   it('should produce a control bar of 64px height if video is 630px wide (design)', async () => {
     // Url checking method will not return error message
-    mockCheckVideoUrl.mockReturnValue(null);
+    mockCheckVideoUrl.mockReturnValue(
+      Promise.resolve({ errMsg: null, data: 'some-url' })
+    );
     render(<AccordionPlayer width='630' url='some-url' />);
 
     await waitFor(() => {});
+
+    // Control bar will show only when mouse enters video
+    const videoEl = await screen.findByTestId('test-video');
+    act(() => {
+      fireEvent.mouseMove(videoEl)
+    });
+
+    await wait();
 
     const controlBar = await screen.findByTestId('test-control-bar');
     expect(controlBar).toBeInTheDocument();
@@ -26,7 +37,9 @@ describe('ControlBar', () => {
 
   it('should not produce a control bar if video url is not a url', async () => {
     // Url checking method will return error message
-    mockCheckVideoUrl.mockReturnValue('Not a url');
+    mockCheckVideoUrl.mockReturnValue(
+      Promise.reject({ errMsg: 'Not a url', data: null })
+    );
     render(<AccordionPlayer width='630' url='some-url' />);
 
     await waitFor(() => {});
@@ -41,8 +54,11 @@ describe('ControlBar', () => {
   it('should not produce a control bar if video url cannot be fetched', async () => {
     // Url checking method will return error message
     mockCheckVideoUrl.mockReturnValue(
-      new Promise((reject) => {
-        setTimeout(() => reject('Cannot be fetched'), 300);
+      new Promise((resolve, reject) => {
+        setTimeout(
+          () => reject({ errMsg: 'Cannot be fetched', data: null }),
+          300
+        );
       })
     );
     render(<AccordionPlayer width='630' url='some-url' />);

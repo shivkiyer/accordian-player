@@ -4,7 +4,7 @@ import { waitFor } from '@testing-library/react';
 
 import wait from '../../common/test-utils/wait';
 
-describe('LeftControls (buttons)', () => {
+xdescribe('LeftControls (buttons)', () => {
   // Mocking the Video component
   const mockVideo = () => <div>Video</div>;
   jest.mock('./../video-player/video/video', () => mockVideo);

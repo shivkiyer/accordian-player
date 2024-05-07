@@ -122,6 +122,7 @@ export default function Video() {
       onLoadedData={loadedDataHandler}
       onClick={clickHandler}
       onMouseMove={mouseMoveHandler}
+      data-testid='test-video'
     >
       <source src={videoUrl} type='video/mp4' />
       Your browser does not support the video tag.

@@ -1,4 +1,6 @@
-import { render, waitFor, screen } from '@testing-library/react';
+import { render, waitFor, screen, act, fireEvent } from '@testing-library/react';
+
+import wait from '../../common/test-utils/wait';
 
 /**
  * Test for the Progress Bar to be
@@ -7,7 +9,11 @@ import { render, waitFor, screen } from '@testing-library/react';
  */
 describe('ProgressBar', () => {
   jest.mock('./../../common/utils/checkVideoUrl', () => {
-    return () => Promise.resolve(null);
+    return () =>
+      Promise.resolve({
+        errMsg: null,
+        data: 'some-url',
+      });
   });
 
   const AccordionPlayer =
@@ -17,6 +23,14 @@ describe('ProgressBar', () => {
     render(<AccordionPlayer width='630' url='some-url' />);
 
     await waitFor(() => {});
+
+    // Control bar will show only when mouse enters video
+    const videoEl = await screen.findByTestId('test-video');
+    act(() => {
+      fireEvent.mouseMove(videoEl)
+    });
+
+    await wait();
 
     const progressBarEl = await screen.findByTestId('test-progress-bar');
     expect(progressBarEl).toBeInTheDocument();

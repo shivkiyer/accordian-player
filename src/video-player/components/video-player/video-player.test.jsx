@@ -26,7 +26,9 @@ describe('VideoPlayer', () => {
   });
 
   it('should prompt user for video URL and then start with video', async () => {
-    mockCheckVideoUrl.mockReturnValue(null);
+    mockCheckVideoUrl.mockReturnValue(
+      Promise.resolve({ errMsg: null, data: 'some-url' })
+    );
 
     render(<AccordionPlayer />);
 
@@ -41,6 +43,13 @@ describe('VideoPlayer', () => {
     });
 
     await waitFor(() => {});
+
+    // Control bar will show only when mouse enters video
+    const videoEl = await screen.findByTestId('test-video');
+    act(() => {
+      userEvent.hover(videoEl);
+    });
+
     await wait();
 
     const fullScreenBtn = await screen.findByAltText('fullscreen');
