@@ -6,6 +6,7 @@ import {
   selectVideoWidth,
   selectVideoHeight,
   setVideoUrl,
+  setBackgroundImageUrl,
 } from '../../app/videoReducer';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import getScaledDimension from '../../common/utils/getScaledDimension';
@@ -77,6 +78,9 @@ export default function PlayerConfig() {
           dispatch(setVideoUrl(urlResult.data));
         } else {
           dispatch(setVideoUrl(urlResult.data['introVideo']['url']));
+          dispatch(
+            setBackgroundImageUrl(urlResult.data['introVideo']['image'])
+          );
         }
       }
     } catch (e) {

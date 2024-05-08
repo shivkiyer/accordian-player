@@ -1,14 +1,24 @@
+import { useSelector } from 'react-redux';
+
 import styles from './loader-spinner.module.scss';
+import { selectVideoHeight } from '../../../app/videoReducer';
 
 export default function LoaderSpinner() {
+  const videoHeight = useSelector(selectVideoHeight);
+
+  const outerStyle = {
+    height: `${0.5 * videoHeight}px`,
+    width: `${0.5 * videoHeight}px`,
+  };
+
+  const innerStyle = {
+    height: `${0.4 * videoHeight}px`,
+    width: `${0.4 * videoHeight}px`,
+  };
   return (
     <>
-      <div className={styles.backdrop}></div>
-      <div className={styles['lds-ring']}>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
+      <div className={styles['lds-ring']} style={outerStyle}>
+        <div style={innerStyle}></div>
       </div>
     </>
   );

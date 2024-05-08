@@ -7,6 +7,7 @@ import {
   selectVolume,
   selectCurrentTime,
   selectIsVideoPositionChanging,
+  selectBackgroundImageUrl,
   setCurrentTime,
   setDuration,
   playPauseVideo,
@@ -27,6 +28,7 @@ export default function Video() {
   const isPlaying = useSelector(selectIsPlaying);
   const volumeLevel = useSelector(selectVolume);
   const currentTime = useSelector(selectCurrentTime);
+  const backgroundImageUrl = useSelector(selectBackgroundImageUrl);
   const isVideoPositionChanging = useSelector(selectIsVideoPositionChanging);
   const [isMouseMoving, setMouseMoving] = useState(false);
   const [mouseMoveTimer, setMouseMoveTimer] = useState(null);
@@ -123,6 +125,7 @@ export default function Video() {
       onClick={clickHandler}
       onMouseMove={mouseMoveHandler}
       data-testid='test-video'
+      poster={backgroundImageUrl}
     >
       <source src={videoUrl} type='video/mp4' />
       Your browser does not support the video tag.

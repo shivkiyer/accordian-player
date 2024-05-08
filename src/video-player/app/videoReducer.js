@@ -21,6 +21,7 @@ import { createSlice } from '@reduxjs/toolkit';
  * isVideoPositionChanging {boolean} Indicates whether user is moving through video
  * volumeMousePositonX {number} X-positon of the mouse for volume change
  * progressMousePositonX {number} X-position of the mouse for progress change
+ * backgroundImageUrl {string} - A background image before video loads
  *
  * Reducers:
  * setDimensions : Setting the width and height of the video player
@@ -35,6 +36,7 @@ import { createSlice } from '@reduxjs/toolkit';
  * setIsVideoPositionChanging: Set the flag if video position is changing
  * setVolumeMousePositionX: Set the X-position of the mouse for volume change
  * setProgressMousePositionX: Set the X-position of the mouse for progress change
+ * setBackgroundImageUrl: Set the Url of the background image
  *
  */
 export const videoSlice = createSlice({
@@ -58,6 +60,7 @@ export const videoSlice = createSlice({
     isVideoPositionChanging: false,
     volumeMousePositionX: null,
     progressMousePositionX: null,
+    backgroundImageUrl: null,
   },
   reducers: {
     /**
@@ -210,6 +213,13 @@ export const videoSlice = createSlice({
     setProgressMousePositionX: (state, action) => {
       state.progressMousePositionX = action.payload;
     },
+    /**
+     * Set the url of the background image
+     * @param {string} payload Url of background image
+     */
+    setBackgroundImageUrl: (state, action) => {
+      state.backgroundImageUrl = action.payload;
+    },
   },
 });
 
@@ -229,6 +239,7 @@ export const {
   setIsVideoPositionChanging,
   setVolumeMousePositionX,
   setProgressMousePositionX,
+  setBackgroundImageUrl,
 } = videoSlice.actions;
 
 export const selectVideoWidth = (state) => state.video.width;
@@ -253,5 +264,7 @@ export const selectVolumeMousePositionX = (state) =>
   state.video.volumeMousePositionX;
 export const selectProgressMousePositionX = (state) =>
   state.video.progressMousePositionX;
+export const selectBackgroundImageUrl = (state) =>
+  state.video.backgroundImageUrl;
 
 export default videoSlice.reducer;
