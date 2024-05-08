@@ -1,6 +1,9 @@
-import { render, waitFor, screen, act, fireEvent } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import { render, waitFor, screen } from '@testing-library/react';
 
-import wait from '../../common/test-utils/wait';
+import videoStore from './../../app/store';
+import videoReducer from '../../app/videoReducer';
 
 /**
  * Test for the Progress Bar to be
@@ -16,21 +19,23 @@ describe('ProgressBar', () => {
       });
   });
 
-  const AccordionPlayer =
-    require('./../accordion-player/accordion-player').default;
+  const updatedState = JSON.parse(JSON.stringify(videoStore.getState()));
+  updatedState.video.isControlBarVisible = true;
+  const updatedStore = configureStore({
+    reducer: { video: videoReducer },
+    preloadedState: updatedState,
+  });
+
+  const VideoPlayer = require('./../video-player/video-player').default;
 
   it('should be placed at the top of the control bar', async () => {
-    render(<AccordionPlayer width='630' url='some-url' />);
+    render(
+      <Provider store={updatedStore}>
+        <VideoPlayer width='630' url='some-url' />
+      </Provider>
+    );
 
     await waitFor(() => {});
-
-    // Control bar will show only when mouse enters video
-    const videoEl = await screen.findByTestId('test-video');
-    act(() => {
-      fireEvent.mouseMove(videoEl)
-    });
-
-    await wait();
 
     const progressBarEl = await screen.findByTestId('test-progress-bar');
     expect(progressBarEl).toBeInTheDocument();

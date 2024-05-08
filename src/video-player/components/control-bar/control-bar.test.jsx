@@ -1,6 +1,4 @@
-import { render, waitFor, screen, act, fireEvent } from '@testing-library/react';
-
-import wait from '../../common/test-utils/wait';
+import { render, waitFor, screen, fireEvent } from '@testing-library/react';
 
 /**
  * Test for creation of control bar
@@ -24,15 +22,14 @@ describe('ControlBar', () => {
 
     // Control bar will show only when mouse enters video
     const videoEl = await screen.findByTestId('test-video');
-    act(() => {
-      fireEvent.mouseMove(videoEl)
+
+    await waitFor(() => {
+      fireEvent.mouseEnter(videoEl);
+      fireEvent.mouseMove(videoEl);
+      const controlBar = screen.getByTestId('test-control-bar');
+      expect(controlBar).toBeInTheDocument();
+      expect(controlBar).toHaveStyle('height: 64px');
     });
-
-    await wait();
-
-    const controlBar = await screen.findByTestId('test-control-bar');
-    expect(controlBar).toBeInTheDocument();
-    expect(controlBar).toHaveStyle('height: 64px');
   });
 
   it('should not produce a control bar if video url is not a url', async () => {
