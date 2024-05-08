@@ -9,48 +9,56 @@ import checkVideoPlayable from './checkVideoPlayable';
  * @returns {string or null} If URL is valid, null is returned or error string is returned
  *
  */
-const checkVideoUrl = async (urlInput) => {
-  let url;
-  try {
-    url = new URL(urlInput);
-  } catch (e) {
-    return {
-      errMsg: 'Please enter (copy/paste) a valid URL',
-      data: null,
-    };
-  }
-  if (url) {
+const checkVideoUrl = (urlInput) => {
+  const result = new Promise(async (resolve, reject) => {
+    let url;
     try {
-      const result = await fetch(url, { method: 'GET' });
-      if (result && result.headers) {
-        if (result.headers.get('content-type') === 'text/plain') {
-          if (result.ok) {
-            const csvText = await result.text();
-            const videoSpecs = readCsv(csvText);
-            return {
+      url = new URL(urlInput);
+    } catch (e) {
+      reject({
+        errMsg: 'Please enter (copy/paste) a valid URL',
+        data: null,
+      });
+    }
+    if (url) {
+      try {
+        const result = await fetch(url, { method: 'GET' });
+        if (result && result.headers) {
+          if (result.headers.get('content-type') === 'text/plain') {
+            if (result.ok) {
+              const csvText = await result.text();
+              const videoSpecs = readCsv(csvText);
+              resolve({
+                errMsg: null,
+                data: videoSpecs,
+              });
+            }
+          } else if (result.headers.get('content-type') === 'video/mp4') {
+            resolve({
               errMsg: null,
-              data: videoSpecs,
-            };
+              data: urlInput,
+            });
           }
-        } else if (result.headers.get('content-type') === 'video/mp4') {
-          return {
-            errMsg: null,
-            data: urlInput,
-          };
+        }
+        if (!result.ok) {
+          reject({
+            errMsg:
+              'Link entered was not accessible. Please ensure it opens in a browser window.',
+            data: null,
+          });
+        }
+      } catch (e) {
+        try {
+          const playStatus = await checkVideoPlayable(urlInput);
+          resolve(playStatus);
+        } catch (urlErr) {
+          reject(urlErr);
         }
       }
-      if (!result.ok) {
-        return {
-          errMsg:
-            'Link entered was not accessible. Please ensure it opens in a browser window.',
-          data: null,
-        };
-      }
-    } catch (e) {
-      const playStatus = await checkVideoPlayable(urlInput);
-      return playStatus;
     }
-  }
+  });
+
+  return result;
 };
 
 export default checkVideoUrl;
