@@ -77,6 +77,9 @@ export default function Video() {
    */
   const loadedDataHandler = (event) => {
     dispatch(setDuration(event.target.duration));
+    // TO CHECK
+    // This may be removed if videos should not autoplay
+    dispatch(playPauseVideo('playing'));
   };
 
   /**
