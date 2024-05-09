@@ -136,6 +136,7 @@ export default function readCsv(data) {
           shortVideos.push(lineContents[j].trim());
         }
         break;
+      default:
     }
   }
   for (let i = 0; i < segmentTitles.length; i++) {
@@ -144,6 +145,24 @@ export default function readCsv(data) {
       longVideoUrl: longVideos[i],
       shortVideoUrl: shortVideos[i],
     });
+  }
+  let videoSequence = [];
+  if ('introVideo' in videoSpecs) {
+    videoSequence.push('introVideo');
+  }
+  if ('selectInfo' in videoSpecs) {
+    videoSequence.push('selectInfo');
+  }
+  if ('videoOptions' in videoSpecs) {
+    for (let i = 0; i < videoSpecs['videoOptions'].length; i++) {
+      videoSequence.push(`videoOptions_${i}`);
+    }
+  }
+  if ('endscreenInfo' in videoSpecs) {
+    videoSequence.push('endscreenInfo');
+  }
+  if (videoSequence.length > 1) {
+    videoSpecs['videoSequence'] = videoSequence;
   }
   return videoSpecs;
 }

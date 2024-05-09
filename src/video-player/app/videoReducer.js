@@ -22,6 +22,8 @@ import { createSlice } from '@reduxjs/toolkit';
  * volumeMousePositonX {number} X-positon of the mouse for volume change
  * progressMousePositonX {number} X-position of the mouse for progress change
  * backgroundImageUrl {string} - A background image before video loads
+ * videoData {object} - Contents of config.csv file
+ * currentVideoLabel {string} - Label of current video
  *
  * Reducers:
  * setDimensions : Setting the width and height of the video player
@@ -37,6 +39,8 @@ import { createSlice } from '@reduxjs/toolkit';
  * setVolumeMousePositionX: Set the X-position of the mouse for volume change
  * setProgressMousePositionX: Set the X-position of the mouse for progress change
  * setBackgroundImageUrl: Set the Url of the background image
+ * setVideoData: Set the video config data
+ * setCurrentVideoLabel: Set the label of the current video
  *
  */
 export const videoSlice = createSlice({
@@ -61,6 +65,8 @@ export const videoSlice = createSlice({
     volumeMousePositionX: null,
     progressMousePositionX: null,
     backgroundImageUrl: null,
+    videoData: null,
+    currentVideoLabel: null,
   },
   reducers: {
     /**
@@ -220,6 +226,20 @@ export const videoSlice = createSlice({
     setBackgroundImageUrl: (state, action) => {
       state.backgroundImageUrl = action.payload;
     },
+    /**
+     * Sets the video data from config file
+     * @param {object} payload Contents of config.csv file
+     */
+    setVideoData: (state, action) => {
+      state.videoData = action.payload;
+    },
+    /**
+     * Set the label of the current video being played
+     * @param {string} payload Label of current video
+     */
+    setCurrentVideoLabel: (state, action) => {
+      state.currentVideoLabel = action.payload;
+    },
   },
 });
 
@@ -240,6 +260,8 @@ export const {
   setVolumeMousePositionX,
   setProgressMousePositionX,
   setBackgroundImageUrl,
+  setVideoData,
+  setCurrentVideoLabel,
 } = videoSlice.actions;
 
 export const selectVideoWidth = (state) => state.video.width;
@@ -266,5 +288,7 @@ export const selectProgressMousePositionX = (state) =>
   state.video.progressMousePositionX;
 export const selectBackgroundImageUrl = (state) =>
   state.video.backgroundImageUrl;
+export const selectVideoData = (state) => state.video.videoData;
+export const selectCurrentVideoLabel = (state) => state.video.currentVideoLabel;
 
 export default videoSlice.reducer;

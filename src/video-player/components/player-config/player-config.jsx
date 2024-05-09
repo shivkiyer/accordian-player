@@ -7,6 +7,8 @@ import {
   selectVideoHeight,
   setVideoUrl,
   setBackgroundImageUrl,
+  setVideoData,
+  setCurrentVideoLabel,
 } from '../../app/videoReducer';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import getScaledDimension from '../../common/utils/getScaledDimension';
@@ -77,10 +79,17 @@ export default function PlayerConfig() {
         if (typeof urlResult.data === 'string') {
           dispatch(setVideoUrl(urlResult.data));
         } else {
-          dispatch(setVideoUrl(urlResult.data['introVideo']['url']));
+          const videoData = urlResult.data;
+          dispatch(setCurrentVideoLabel(videoData['videoSequence'][0]));
           dispatch(
-            setBackgroundImageUrl(urlResult.data['introVideo']['image'])
+            setVideoUrl(videoData[videoData['videoSequence'][0]]['url'])
           );
+          dispatch(
+            setBackgroundImageUrl(
+              videoData[videoData['videoSequence'][0]]['image']
+            )
+          );
+          dispatch(setVideoData(videoData));
         }
       }
     } catch (e) {

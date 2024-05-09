@@ -8,10 +8,14 @@ import {
   selectCurrentTime,
   selectIsVideoPositionChanging,
   selectBackgroundImageUrl,
+  selectVideoData,
+  selectCurrentVideoLabel,
   setCurrentTime,
   setDuration,
   playPauseVideo,
   setControlBarVisible,
+  setCurrentVideoLabel,
+  setVideoUrl,
 } from '../../../app/videoReducer';
 import styles from './video.module.scss';
 
@@ -30,6 +34,8 @@ export default function Video() {
   const currentTime = useSelector(selectCurrentTime);
   const backgroundImageUrl = useSelector(selectBackgroundImageUrl);
   const isVideoPositionChanging = useSelector(selectIsVideoPositionChanging);
+  const videoData = useSelector(selectVideoData);
+  const currentVideoLabel = useSelector(selectCurrentVideoLabel);
   const [isMouseMoving, setMouseMoving] = useState(false);
   const [mouseMoveTimer, setMouseMoveTimer] = useState(null);
 
@@ -104,6 +110,39 @@ export default function Video() {
   };
 
   /**
+   * Video end handler
+   * Plays next video in the sequence
+   */
+  const endHandler = () => {
+    dispatch(playPauseVideo('paused'));
+    videoRef.current.pause();
+    dispatch(setControlBarVisible(false));
+    if (videoData !== null && currentVideoLabel !== null) {
+      const videoIndex = videoData['videoSequence'].indexOf(currentVideoLabel);
+      if (videoIndex > -1) {
+        const nextVideoIndex = videoIndex + 1;
+        const nextVideoLabel = videoData['videoSequence'][nextVideoIndex];
+        dispatch(setCurrentVideoLabel(nextVideoLabel));
+        let nextVideoUrl = null;
+        if (nextVideoLabel.includes('_')) {
+          const videoLabelParts = nextVideoLabel.split('_');
+          if (videoLabelParts.length === 2) {
+            nextVideoUrl =
+              videoData[videoLabelParts[0]][parseInt(videoLabelParts[1])][
+                'longVideoUrl'
+              ];
+          }
+        } else {
+          nextVideoUrl = videoData[nextVideoLabel]['url'];
+        }
+        if (nextVideoUrl !== null) {
+          dispatch(setVideoUrl(nextVideoUrl));
+        }
+      }
+    }
+  };
+
+  /**
    * Starts 3s timer after displaying control bar after
    * which all mouse event flags are reset to false
    */
@@ -113,6 +152,13 @@ export default function Video() {
       dispatch(setControlBarVisible(false));
     }
   }, [isMouseMoving, mouseMoveTimer, dispatch]);
+
+  /**
+   * Load new video when video Url changes
+   */
+  useEffect(() => {
+    videoRef.current.load();
+  }, [videoUrl]);
 
   return (
     <video
@@ -125,6 +171,7 @@ export default function Video() {
       ref={videoRef}
       onTimeUpdate={timeUpdateHandler}
       onLoadedData={loadedDataHandler}
+      onEnded={endHandler}
       onClick={clickHandler}
       onMouseMove={mouseMoveHandler}
       data-testid='test-video'
