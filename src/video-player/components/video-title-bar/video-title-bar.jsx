@@ -7,6 +7,7 @@ import styles from './video-title-bar.module.scss';
 import {
   selectVideoWidth,
   selectIsVolumeSliderVisible,
+  selectCurrentVideoName,
 } from '../../app/videoReducer';
 import getScaledDimension from '../../common/utils/getScaledDimension';
 import {
@@ -45,6 +46,7 @@ export default function VideoTitleBar() {
   const progressRef = useRef();
   const videoWidth = useSelector(selectVideoWidth);
   const isVolumeSliderVisible = useSelector(selectIsVolumeSliderVisible);
+  const currentVideoName = useSelector(selectCurrentVideoName);
 
   const barHeight = getScaledDimension({
     smallDim: TITLE_BAR_HEIGHT_SMALL,
@@ -157,8 +159,7 @@ export default function VideoTitleBar() {
     maxWidth: `${maxWidth}px`,
   };
 
-  const videoTitle =
-    'Some really long text for a video just to check the truncation at the end with three dots';
+  const videoTitle = currentVideoName ? currentVideoName : '';
 
   return (
     <div className={styles.VideoTitleBar} style={style}>

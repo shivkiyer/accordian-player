@@ -24,6 +24,7 @@ import { createSlice } from '@reduxjs/toolkit';
  * backgroundImageUrl {string} - A background image before video loads
  * videoData {object} - Contents of config.csv file
  * currentVideoLabel {string} - Label of current video
+ * currentVideoName {string} - Name of current video
  *
  * Reducers:
  * setDimensions : Setting the width and height of the video player
@@ -41,6 +42,7 @@ import { createSlice } from '@reduxjs/toolkit';
  * setBackgroundImageUrl: Set the Url of the background image
  * setVideoData: Set the video config data
  * setCurrentVideoLabel: Set the label of the current video
+ * setCurrentVideoName: Sets the name of the current video
  *
  */
 export const videoSlice = createSlice({
@@ -67,6 +69,7 @@ export const videoSlice = createSlice({
     backgroundImageUrl: null,
     videoData: null,
     currentVideoLabel: null,
+    currentVideoName: null,
   },
   reducers: {
     /**
@@ -240,6 +243,13 @@ export const videoSlice = createSlice({
     setCurrentVideoLabel: (state, action) => {
       state.currentVideoLabel = action.payload;
     },
+    /**
+     * Sets the name of the current video
+     * @param {string} payload Name of current video
+     */
+    setCurrentVideoName: (state, action) => {
+      state.currentVideoName = action.payload;
+    },
   },
 });
 
@@ -262,6 +272,7 @@ export const {
   setBackgroundImageUrl,
   setVideoData,
   setCurrentVideoLabel,
+  setCurrentVideoName,
 } = videoSlice.actions;
 
 export const selectVideoWidth = (state) => state.video.width;
@@ -290,5 +301,6 @@ export const selectBackgroundImageUrl = (state) =>
   state.video.backgroundImageUrl;
 export const selectVideoData = (state) => state.video.videoData;
 export const selectCurrentVideoLabel = (state) => state.video.currentVideoLabel;
+export const selectCurrentVideoName = (state) => state.video.currentVideoName;
 
 export default videoSlice.reducer;

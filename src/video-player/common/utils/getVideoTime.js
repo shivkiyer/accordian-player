@@ -15,6 +15,6 @@ export default function getVideoTime(rawTimeSeconds) {
 
     return date.toISOString().substring(15, 19);
   } else {
-    return 0;
+    return '0:00';
   }
 }

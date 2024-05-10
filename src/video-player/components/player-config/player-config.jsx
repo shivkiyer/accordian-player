@@ -9,6 +9,7 @@ import {
   setBackgroundImageUrl,
   setVideoData,
   setCurrentVideoLabel,
+  setCurrentVideoName,
 } from '../../app/videoReducer';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import getScaledDimension from '../../common/utils/getScaledDimension';
@@ -87,6 +88,11 @@ export default function PlayerConfig() {
           dispatch(
             setBackgroundImageUrl(
               videoData[videoData['videoSequence'][0]]['image']
+            )
+          );
+          dispatch(
+            setCurrentVideoName(
+              videoData[videoData['videoSequence'][0]]['title']
             )
           );
           dispatch(setVideoData(videoData));

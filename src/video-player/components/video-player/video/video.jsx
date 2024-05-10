@@ -16,6 +16,7 @@ import {
   setControlBarVisible,
   setCurrentVideoLabel,
   setVideoUrl,
+  setCurrentVideoName,
 } from '../../../app/videoReducer';
 import styles from './video.module.scss';
 
@@ -116,7 +117,6 @@ export default function Video() {
   const endHandler = () => {
     dispatch(playPauseVideo('paused'));
     videoRef.current.pause();
-    dispatch(setControlBarVisible(false));
     if (videoData !== null && currentVideoLabel !== null) {
       const videoIndex = videoData['videoSequence'].indexOf(currentVideoLabel);
       if (videoIndex > -1) {
@@ -124,6 +124,7 @@ export default function Video() {
         const nextVideoLabel = videoData['videoSequence'][nextVideoIndex];
         dispatch(setCurrentVideoLabel(nextVideoLabel));
         let nextVideoUrl = null;
+        let nextVideoName = null;
         if (nextVideoLabel.includes('_')) {
           const videoLabelParts = nextVideoLabel.split('_');
           if (videoLabelParts.length === 2) {
@@ -131,12 +132,18 @@ export default function Video() {
               videoData[videoLabelParts[0]][parseInt(videoLabelParts[1])][
                 'longVideoUrl'
               ];
+            nextVideoName =
+              videoData[videoLabelParts[0]][parseInt(videoLabelParts[1])][
+                'name'
+              ];
           }
         } else {
           nextVideoUrl = videoData[nextVideoLabel]['url'];
+          nextVideoName = videoData[nextVideoLabel]['title'];
         }
         if (nextVideoUrl !== null) {
           dispatch(setVideoUrl(nextVideoUrl));
+          dispatch(setCurrentVideoName(nextVideoName));
         }
       }
     }
