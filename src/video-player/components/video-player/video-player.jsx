@@ -16,6 +16,7 @@ import {
   setIsVideoPositionChanging,
   setVolumeMousePositionX,
   setProgressMousePositionX,
+  setControlBarVisible,
   toggleFullScreen,
   setIsButtonFullScreen,
   playPauseVideo,
@@ -70,6 +71,8 @@ export default function VideoPlayer({ width, height, url }) {
   const isBtnFullScreen = useSelector(selectIsBtnFullScreen);
   const [baseUrl, setBaseUrl] = useState(null);
   const [errMsg, setErrMsg] = useState(null);
+  const [mouseMoveTimerEnd1, setMouseMoveTimerEnd1] = useState(false);
+  const [mouseMoveTimerEnd2, setMouseMoveTimerEnd2] = useState(true);
 
   /**
    * If video player has an input URL,
@@ -137,6 +140,35 @@ export default function VideoPlayer({ width, height, url }) {
     paddingTop: `${playerHeight / 2 - textFont}px`,
     fontSize: `${textFont}px`,
   };
+
+  /**
+   * Setting display of control bar when user moves mouse
+   * Sets timers that roll over when mouse is moving
+   */
+  const controlBarVisibilityHandler = () => {
+    if (!mouseMoveTimerEnd1) {
+      dispatch(setControlBarVisible(true));
+      setTimeout(() => {
+        setMouseMoveTimerEnd1(true);
+      }, 2000);
+    } else if (!mouseMoveTimerEnd2) {
+      dispatch(setControlBarVisible(true));
+      setTimeout(() => {
+        setMouseMoveTimerEnd2(true);
+      }, 2000);
+    }
+  };
+
+  /**
+   * Hides control bar when both timers end
+   */
+  useEffect(() => {
+    if (mouseMoveTimerEnd1 && mouseMoveTimerEnd2) {
+      dispatch(setControlBarVisible(false));
+      setMouseMoveTimerEnd1(false);
+      setMouseMoveTimerEnd2(false);
+    }
+  }, [mouseMoveTimerEnd1, mouseMoveTimerEnd2, dispatch]);
 
   /**
    * Release handler for when volume slider
@@ -241,7 +273,7 @@ export default function VideoPlayer({ width, height, url }) {
           {errMsg}
         </p>
       )}
-      {baseUrl && <Video />}
+      {baseUrl && <Video mouseMoveHandler={controlBarVisibilityHandler} />}
       {baseUrl && isControlBarVisible && <ControlBar />}
     </div>
   );

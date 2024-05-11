@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import {
@@ -13,7 +13,6 @@ import {
   setCurrentTime,
   setDuration,
   playPauseVideo,
-  setControlBarVisible,
   setCurrentVideoLabel,
   setVideoUrl,
   setCurrentVideoName,
@@ -26,7 +25,7 @@ import styles from './video.module.scss';
  * @returns {ReactNode} video element with controls
  *
  */
-export default function Video() {
+export default function Video({mouseMoveHandler}) {
   const videoRef = useRef();
   const dispatch = useDispatch();
   const videoUrl = useSelector(selectVideoUrl);
@@ -37,8 +36,6 @@ export default function Video() {
   const isVideoPositionChanging = useSelector(selectIsVideoPositionChanging);
   const videoData = useSelector(selectVideoData);
   const currentVideoLabel = useSelector(selectCurrentVideoLabel);
-  const [isMouseMoving, setMouseMoving] = useState(false);
-  const [mouseMoveTimer, setMouseMoveTimer] = useState(null);
 
   /**
    * Handling pause/play from user control action
@@ -97,20 +94,6 @@ export default function Video() {
   };
 
   /**
-   * Sets isMouseMoving flag when mouse moves inside video
-   */
-  const mouseMoveHandler = () => {
-    setMouseMoving(true);
-    dispatch(setControlBarVisible(true));
-    clearTimeout(mouseMoveTimer);
-    setMouseMoveTimer(
-      setTimeout(() => {
-        setMouseMoving(false);
-      }, 3000)
-    );
-  };
-
-  /**
    * Video end handler
    * Plays next video in the sequence
    */
@@ -148,17 +131,6 @@ export default function Video() {
       }
     }
   };
-
-  /**
-   * Starts 3s timer after displaying control bar after
-   * which all mouse event flags are reset to false
-   */
-  useEffect(() => {
-    if (!isMouseMoving) {
-      clearTimeout(mouseMoveTimer);
-      dispatch(setControlBarVisible(false));
-    }
-  }, [isMouseMoving, mouseMoveTimer, dispatch]);
 
   /**
    * Load new video when video Url changes

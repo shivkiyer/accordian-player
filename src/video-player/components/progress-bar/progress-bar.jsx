@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useCallback } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import styles from './progress-bar.module.scss';
@@ -42,7 +42,6 @@ export default function ProgressBar() {
   const isVolumeChanging = useSelector(selectIsVolumeChanging);
   const progressMousePositionX = useSelector(selectProgressMousePositionX);
   const prevIsPlaying = useSelector(selectPrevIsPlaying);
-  const [progress, setProgress] = useState(0);
 
   const outerHeight = getScaledDimension({
     smallDim: PROGRESS_BAR_CONTAINER_HEIGHT_SMALL,
@@ -78,14 +77,6 @@ export default function ProgressBar() {
     }
     return videoProgress;
   };
-
-  /**
-   * Calculate and set new progress bar width when
-   * currentTime or duration of video changes
-   */
-  useEffect(() => {
-    setProgress(calcProgressWidth(currentTime, duration));
-  }, [currentTime, duration]);
 
   /**
    * Calculate video position from mouse position on screen
@@ -225,7 +216,7 @@ export default function ProgressBar() {
       >
         <div
           className={styles.ProgressBarComplete}
-          style={{ width: `${progress}%` }}
+          style={{ width: `${calcProgressWidth(currentTime, duration)}%` }}
         ></div>
       </div>
     </div>
