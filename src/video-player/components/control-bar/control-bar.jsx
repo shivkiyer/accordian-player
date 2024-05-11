@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import styles from './control-bar.module.scss';
 import getScaledDimension from '../../common/utils/getScaledDimension';
@@ -7,7 +7,7 @@ import {
   CONTROL_BAR_HEIGHT_SMALL,
 } from '../../common/constants';
 import ProgressBar from '../progress-bar/progress-bar';
-import { selectVideoWidth } from '../../app/videoReducer';
+import { selectVideoWidth, setControlBarVisible } from '../../app/videoReducer';
 import LeftControls from '../left-controls/left-controls';
 import RightControls from '../right-controls/right-controls';
 import VideoTitleBar from '../video-title-bar/video-title-bar';
@@ -24,6 +24,7 @@ import VideoTitleBar from '../video-title-bar/video-title-bar';
  * <ControlBar />
  */
 export default function ControlBar() {
+  const dispatch = useDispatch();
   const videoWidth = useSelector(selectVideoWidth);
 
   const barHeight = getScaledDimension({
@@ -37,10 +38,20 @@ export default function ControlBar() {
     width: `${videoWidth}px`,
   };
 
+  /**
+   * Sets the control bar to be visible
+   * when mouse is in or moving in it
+   */
+  const controlBarVisibilityHandler = () => {
+    dispatch(setControlBarVisible(true));
+  };
+
   return (
     <div
       className={styles.ControlBar}
       style={controlBarStyle}
+      onMouseEnter={controlBarVisibilityHandler}
+      onMouseMove={controlBarVisibilityHandler}
       data-testid='test-control-bar'
     >
       <ProgressBar />

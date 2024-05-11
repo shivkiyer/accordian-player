@@ -150,12 +150,12 @@ export default function VideoPlayer({ width, height, url }) {
       dispatch(setControlBarVisible(true));
       setTimeout(() => {
         setMouseMoveTimerEnd1(true);
-      }, 2000);
+      }, 4000);
     } else if (!mouseMoveTimerEnd2) {
       dispatch(setControlBarVisible(true));
       setTimeout(() => {
         setMouseMoveTimerEnd2(true);
-      }, 2000);
+      }, 4000);
     }
   };
 
