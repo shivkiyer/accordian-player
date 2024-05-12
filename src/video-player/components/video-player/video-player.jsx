@@ -22,6 +22,7 @@ import {
   playPauseVideo,
   selectVideoUrl,
   selectIsControlBarVisible,
+  selectIsControlBarActive,
   selectIsVolumeChanging,
   selectIsVideoPositionChanging,
   selectPrevIsPlaying,
@@ -64,6 +65,7 @@ export default function VideoPlayer({ width, height, url }) {
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const videoUrl = useSelector(selectVideoUrl);
   const isControlBarVisible = useSelector(selectIsControlBarVisible);
+  const isControlBarActive = useSelector(selectIsControlBarActive);
   const isVolumeChanging = useSelector(selectIsVolumeChanging);
   const isVideoPositionChanging = useSelector(selectIsVideoPositionChanging);
   const prevIsPlaying = useSelector(selectPrevIsPlaying);
@@ -274,7 +276,7 @@ export default function VideoPlayer({ width, height, url }) {
         </p>
       )}
       {baseUrl && <Video mouseMoveHandler={controlBarVisibilityHandler} />}
-      {baseUrl && isControlBarVisible && <ControlBar />}
+      {baseUrl && (isControlBarVisible || isControlBarActive) && <ControlBar />}
     </div>
   );
 }

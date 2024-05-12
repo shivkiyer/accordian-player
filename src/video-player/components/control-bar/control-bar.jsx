@@ -7,7 +7,11 @@ import {
   CONTROL_BAR_HEIGHT_SMALL,
 } from '../../common/constants';
 import ProgressBar from '../progress-bar/progress-bar';
-import { selectVideoWidth, setControlBarVisible } from '../../app/videoReducer';
+import {
+  selectVideoWidth,
+  setControlBarVisible,
+  setControlBarActive,
+} from '../../app/videoReducer';
 import LeftControls from '../left-controls/left-controls';
 import RightControls from '../right-controls/right-controls';
 import VideoTitleBar from '../video-title-bar/video-title-bar';
@@ -43,7 +47,14 @@ export default function ControlBar() {
    * when mouse is in or moving in it
    */
   const controlBarVisibilityHandler = () => {
-    dispatch(setControlBarVisible(true));
+    dispatch(setControlBarActive(true));
+  };
+
+  /**
+   * Resets the active flag of the control bar
+   */
+  const mouseLeaveHander = () => {
+    dispatch(setControlBarActive(false));
   };
 
   return (
@@ -52,6 +63,7 @@ export default function ControlBar() {
       style={controlBarStyle}
       onMouseEnter={controlBarVisibilityHandler}
       onMouseMove={controlBarVisibilityHandler}
+      onMouseLeave={mouseLeaveHander}
       data-testid='test-control-bar'
     >
       <ProgressBar />

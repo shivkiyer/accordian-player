@@ -57,6 +57,7 @@ export const videoSlice = createSlice({
     currentTime: 0,
     duration: 0,
     isControlBarVisible: false,
+    isControlBarActive: false,
     isVolumeSliderVisible: false,
     isVolumeMuted: false,
     isVolumeChanging: false,
@@ -123,6 +124,18 @@ export const videoSlice = createSlice({
         state.isControlBarVisible = !state.isControlBarVisible;
       } else {
         state.isControlBarVisible = action.payload;
+      }
+    },
+    /**
+     * Sets the control bar as actively used by user
+     *
+     * @param {boolean} payload
+     */
+    setControlBarActive: (state, action) => {
+      if (action.payload === null || action.payload === undefined) {
+        state.isControlBarActive = !state.isControlBarActive;
+      } else {
+        state.isControlBarActive = action.payload;
       }
     },
     /**
@@ -259,6 +272,7 @@ export const {
   setCurrentTime,
   setDuration,
   setControlBarVisible,
+  setControlBarActive,
   setVolumeSlider,
   toggleVolumeMute,
   setVolumeLevel,
@@ -283,6 +297,8 @@ export const selectCurrentTime = (state) => state.video.currentTime;
 export const selectDuration = (state) => state.video.duration;
 export const selectIsControlBarVisible = (state) =>
   state.video.isControlBarVisible;
+export const selectIsControlBarActive = (state) =>
+  state.video.isControlBarActive;
 export const selectIsVolumeSliderVisible = (state) =>
   state.video.isVolumeSliderVisible;
 export const selectIsVolumeMuted = (state) => state.video.isVolumeMuted;
