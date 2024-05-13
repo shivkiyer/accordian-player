@@ -6,7 +6,7 @@ import checkVideoPlayable from './checkVideoPlayable';
  *
  * @param {string} urlInput URL
  *
- * @returns {string or null} If URL is valid, null is returned or error string is returned
+ * @returns {Promise} Video data or video URL is returned, or error message
  *
  */
 const checkVideoUrl = (urlInput) => {

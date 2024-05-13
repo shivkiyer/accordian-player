@@ -20,6 +20,10 @@ import {
   toggleFullScreen,
   setIsButtonFullScreen,
   playPauseVideo,
+  setCurrentVideoLabel,
+  setBackgroundImageUrl,
+  setCurrentVideoName,
+  setVideoData,
   selectVideoUrl,
   selectIsControlBarVisible,
   selectIsControlBarActive,
@@ -78,31 +82,46 @@ export default function VideoPlayer({ width, height, url }) {
   const [mouseMoveTimerEnd2, setMouseMoveTimerEnd2] = useState(true);
 
   /**
-   * If video player has an input URL,
-   * this will be the only one used.
-   * Otherwise, the user will be asked for the
-   * URL in PlayerConfig and the input field
-   * will disappear after user enters the URL.
+   * Video player will play the dynamic videoUrl
+   * if it is updated, or will try to fetch data
+   * from the input URL.
    */
   useEffect(() => {
     const fetchUrl = async (urlSetting, urlInput) => {
-      if (!urlSetting) {
-        if (urlInput) {
-          setBaseUrl(urlInput);
-        } else {
-          setBaseUrl(null);
-        }
-      } else {
+      if (urlInput) {
+        setBaseUrl(urlInput);
+      } else if (urlSetting) {
         try {
           const urlResult = await checkVideoUrl(urlSetting);
           if (urlResult.errMsg === null) {
-            setBaseUrl(urlSetting);
-            dispatch(setVideoUrl(urlSetting));
+            if (typeof urlResult.data === 'string') {
+              dispatch(setVideoUrl(urlResult.data));
+              setBaseUrl(urlResult.data);
+            } else {
+              const videoData = urlResult.data;
+              dispatch(setCurrentVideoLabel(videoData['videoSequence'][0]));
+              dispatch(
+                setVideoUrl(videoData[videoData['videoSequence'][0]]['url'])
+              );
+              setBaseUrl(videoData[videoData['videoSequence'][0]]['url']);
+              dispatch(
+                setBackgroundImageUrl(
+                  videoData[videoData['videoSequence'][0]]['image']
+                )
+              );
+              dispatch(
+                setCurrentVideoName(
+                  videoData[videoData['videoSequence'][0]]['title']
+                )
+              );
+              dispatch(setVideoData(videoData));
+            }
           }
         } catch (e) {
-          setBaseUrl(null);
           setErrMsg(e.errMsg);
         }
+      } else {
+        setBaseUrl(null);
       }
     };
 
