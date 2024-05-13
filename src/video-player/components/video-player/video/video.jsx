@@ -17,7 +17,11 @@ import {
   setVideoUrl,
   setCurrentVideoName,
 } from '../../../app/videoReducer';
-import { loadVideo } from '../../../common/utils/videoActions';
+import {
+  loadVideo,
+  playVideo,
+  pauseVideo,
+} from '../../../common/utils/videoActions';
 import styles from './video.module.scss';
 
 /**
@@ -43,9 +47,9 @@ export default function Video({ mouseMoveHandler }) {
    */
   useEffect(() => {
     if (isPlaying && videoRef.current.paused) {
-      videoRef.current.play();
+      playVideo(videoRef.current);
     } else if (!isPlaying && !videoRef.current.paused) {
-      videoRef.current.pause();
+      pauseVideo(videoRef.current);
     }
   }, [isPlaying]);
 
@@ -100,7 +104,7 @@ export default function Video({ mouseMoveHandler }) {
    */
   const endHandler = () => {
     dispatch(playPauseVideo('paused'));
-    videoRef.current.pause();
+    pauseVideo(videoRef.current);
     if (videoData !== null && currentVideoLabel !== null) {
       const videoIndex = videoData['videoSequence'].indexOf(currentVideoLabel);
       if (videoIndex > -1) {

@@ -29,6 +29,7 @@ import {
   selectIsFullScreen,
   selectIsBtnFullScreen,
 } from '../../app/videoReducer';
+import { goFullscreen, exitFullscreen } from '../../common/utils/videoActions';
 import { CONFIG_TEXT_SMALL, CONFIG_TEXT_LARGE } from '../../common/constants';
 
 /**
@@ -211,8 +212,7 @@ export default function VideoPlayer({ width, height, url }) {
    */
   useEffect(() => {
     if (isFullscreen) {
-      playerRef.current
-        .requestFullscreen()
+      goFullscreen(playerRef.current)
         .then(() => {
           dispatch(
             setDimensions({
@@ -225,8 +225,7 @@ export default function VideoPlayer({ width, height, url }) {
           console.log(e);
         });
     } else if (isBtnFullScreen) {
-      document
-        .exitFullscreen()
+      exitFullscreen(document)
         .then(() => {
           dispatch(setDimensions({ width: playerWidth, height: playerHeight }));
         })

@@ -9,9 +9,12 @@ import videoReducer from '../../app/videoReducer';
 import wait from '../../common/test-utils/wait';
 
 describe('LeftControls (buttons)', () => {
-  // Mocking the Video component
-  const mockVideo = () => <div>Video</div>;
-  jest.mock('./../video-player/video/video', () => mockVideo);
+  jest.mock('./../../common/utils/videoActions', () => {
+    return {
+      loadVideo: jest.fn(),
+      playVideo: jest.fn(),
+    };
+  });
 
   jest.mock('./../../common/utils/checkVideoUrl', () => {
     return () => Promise.resolve({ errMsg: null, data: 'some-url' });

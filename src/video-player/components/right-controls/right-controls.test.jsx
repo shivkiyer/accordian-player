@@ -1,20 +1,44 @@
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
 import { render, screen, act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import ControlBar from '../control-bar/control-bar';
 import wait from '../../common/test-utils/wait';
+import videoReducer from '../../app/videoReducer';
+import videoStore from './../../app/store';
 
 describe('Right controls (buttons)', () => {
-  const mockVideoPlayer = (props) => {
-    return <ControlBar />
-  }
-  jest.mock('./../video-player/video-player', () => mockVideoPlayer);
+  jest.mock('./../../common/utils/checkVideoUrl', () => {
+    return () =>
+      Promise.resolve({
+        errMsg: null,
+        data: 'some-url',
+      });
+  });
 
-  const AccordionPlayer = require('./../accordion-player/accordion-player').default;
+  const mockPromise = () => Promise.resolve();
+  jest.mock('./../../common/utils/videoActions', () => {
+    return {
+      loadVideo: jest.fn(),
+      goFullscreen: mockPromise,
+      exitFullscreen: mockPromise,
+    };
+  });
+
+  const updatedState = JSON.parse(JSON.stringify(videoStore.getState()));
+  updatedState.video.isControlBarVisible = true;
+  const updatedStore = configureStore({
+    reducer: { video: videoReducer },
+    preloadedState: updatedState,
+  });
+
+  const VideoPlayer = require('./../video-player/video-player').default;
 
   it('should have the fullscreen button', async () => {
     render(
-      <AccordionPlayer width='630' url='some-url' />
+      <Provider store={updatedStore}>
+        <VideoPlayer width='630' url='some-url' />
+      </Provider>
     );
 
     await waitFor(() => {});
@@ -26,7 +50,9 @@ describe('Right controls (buttons)', () => {
 
   it('should toggle between full screen and small screen icon when clicked', async () => {
     render(
-      <AccordionPlayer width='630' url='some-url' />
+      <Provider store={updatedStore}>
+        <VideoPlayer width='630' url='some-url' />
+      </Provider>
     );
 
     await waitFor(() => {});
