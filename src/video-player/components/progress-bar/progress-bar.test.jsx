@@ -19,6 +19,12 @@ describe('ProgressBar', () => {
       });
   });
 
+  jest.mock('./../../common/utils/videoActions', () => {
+    return {
+      loadVideo: jest.fn(),
+    };
+  });
+
   const updatedState = JSON.parse(JSON.stringify(videoStore.getState()));
   updatedState.video.isControlBarVisible = true;
   const updatedStore = configureStore({

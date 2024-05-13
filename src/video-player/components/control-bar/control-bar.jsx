@@ -9,7 +9,6 @@ import {
 import ProgressBar from '../progress-bar/progress-bar';
 import {
   selectVideoWidth,
-  setControlBarVisible,
   setControlBarActive,
 } from '../../app/videoReducer';
 import LeftControls from '../left-controls/left-controls';

@@ -8,6 +8,12 @@ describe('ControlBar', () => {
   const checkVideoUrlObj = require('./../../common/utils/checkVideoUrl');
   const mockCheckVideoUrl = jest.spyOn(checkVideoUrlObj, 'default');
 
+  jest.mock('./../../common/utils/videoActions', () => {
+    return {
+      loadVideo: jest.fn(),
+    };
+  });
+
   const AccordionPlayer =
     require('./../accordion-player/accordion-player').default;
 

@@ -9,6 +9,12 @@ describe('VideoTitleBar', () => {
   const checkVideoUrlObj = require('./../../common/utils/checkVideoUrl');
   const mockCheckVideoUrl = jest.spyOn(checkVideoUrlObj, 'default');
 
+  jest.mock('./../../common/utils/videoActions', () => {
+    return {
+      loadVideo: jest.fn(),
+    };
+  });
+
   const VideoPlayer = require('./../video-player/video-player').default;
 
   let updatedState = JSON.parse(JSON.stringify(videoStore.getState()));

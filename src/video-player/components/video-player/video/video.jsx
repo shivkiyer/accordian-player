@@ -17,6 +17,7 @@ import {
   setVideoUrl,
   setCurrentVideoName,
 } from '../../../app/videoReducer';
+import { loadVideo } from '../../../common/utils/videoActions';
 import styles from './video.module.scss';
 
 /**
@@ -25,7 +26,7 @@ import styles from './video.module.scss';
  * @returns {ReactNode} video element with controls
  *
  */
-export default function Video({mouseMoveHandler}) {
+export default function Video({ mouseMoveHandler }) {
   const videoRef = useRef();
   const dispatch = useDispatch();
   const videoUrl = useSelector(selectVideoUrl);
@@ -136,7 +137,7 @@ export default function Video({mouseMoveHandler}) {
    * Load new video when video Url changes
    */
   useEffect(() => {
-    videoRef.current.load();
+    loadVideo(videoRef.current);
   }, [videoUrl]);
 
   return (
