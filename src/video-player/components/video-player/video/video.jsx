@@ -22,6 +22,7 @@ import {
   playVideo,
   pauseVideo,
 } from '../../../common/utils/videoActions';
+import getNextVideoData from '../../../common/utils/getNextVideoData';
 import styles from './video.module.scss';
 
 /**
@@ -105,34 +106,12 @@ export default function Video({ mouseMoveHandler }) {
   const endHandler = () => {
     dispatch(playPauseVideo('paused'));
     pauseVideo(videoRef.current);
-    if (videoData !== null && currentVideoLabel !== null) {
-      const videoIndex = videoData['videoSequence'].indexOf(currentVideoLabel);
-      if (videoIndex > -1) {
-        const nextVideoIndex = videoIndex + 1;
-        const nextVideoLabel = videoData['videoSequence'][nextVideoIndex];
-        dispatch(setCurrentVideoLabel(nextVideoLabel));
-        let nextVideoUrl = null;
-        let nextVideoName = null;
-        if (nextVideoLabel.includes('_')) {
-          const videoLabelParts = nextVideoLabel.split('_');
-          if (videoLabelParts.length === 2) {
-            nextVideoUrl =
-              videoData[videoLabelParts[0]][parseInt(videoLabelParts[1])][
-                'longVideoUrl'
-              ];
-            nextVideoName =
-              videoData[videoLabelParts[0]][parseInt(videoLabelParts[1])][
-                'name'
-              ];
-          }
-        } else {
-          nextVideoUrl = videoData[nextVideoLabel]['url'];
-          nextVideoName = videoData[nextVideoLabel]['title'];
-        }
-        if (nextVideoUrl !== null) {
-          dispatch(setVideoUrl(nextVideoUrl));
-          dispatch(setCurrentVideoName(nextVideoName));
-        }
+    if (currentVideoLabel !== null) {
+      const nextVideoData = getNextVideoData(videoData, currentVideoLabel);
+      if (nextVideoData !== null) {
+        dispatch(setCurrentVideoLabel(nextVideoData.label));
+        dispatch(setVideoUrl(nextVideoData.url));
+        dispatch(setCurrentVideoName(nextVideoData.name));
       }
     }
   };
