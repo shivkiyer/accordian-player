@@ -86,7 +86,7 @@ export default function Video({ mouseMoveHandler }) {
    */
   const loadedDataHandler = (event) => {
     dispatch(setDuration(event.target.duration));
-    if (currentVideoLabel !== 'introVideo') {
+    if (currentVideoLabel !== null && currentVideoLabel !== 'introVideo') {
       dispatch(playPauseVideo('playing'));
     }
   };
