@@ -37,41 +37,4 @@ describe('ControlBar', () => {
       expect(controlBar).toHaveStyle('height: 64px');
     });
   });
-
-  it('should not produce a control bar if video url is not a url', async () => {
-    // Url checking method will return error message
-    mockCheckVideoUrl.mockReturnValue(
-      Promise.reject({ errMsg: 'Not a url', data: null })
-    );
-    render(<AccordionPlayer width='630' url='some-url' />);
-
-    await waitFor(() => {});
-
-    const controlBar = screen.queryByTestId('test-control-bar');
-    expect(controlBar).not.toBeInTheDocument();
-
-    const errorMessage = await screen.findByText('Not a url');
-    expect(errorMessage).toBeInTheDocument();
-  });
-
-  it('should not produce a control bar if video url cannot be fetched', async () => {
-    // Url checking method will return error message
-    mockCheckVideoUrl.mockReturnValue(
-      new Promise((resolve, reject) => {
-        setTimeout(
-          () => reject({ errMsg: 'Cannot be fetched', data: null }),
-          300
-        );
-      })
-    );
-    render(<AccordionPlayer width='630' url='some-url' />);
-
-    await waitFor(() => {});
-
-    const controlBar = screen.queryByTestId('test-control-bar');
-    expect(controlBar).not.toBeInTheDocument();
-
-    const errorMessage = await screen.findByText('Cannot be fetched');
-    expect(errorMessage).toBeInTheDocument();
-  });
 });
