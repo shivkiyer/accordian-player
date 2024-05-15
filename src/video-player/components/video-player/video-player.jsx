@@ -9,6 +9,7 @@ import styles from './video-player.module.scss';
 import ControlBar from '../control-bar/control-bar';
 import PlayerConfig from '../player-config/player-config';
 import Video from './video/video';
+import SelectionPanel from '../selection-panel/selection-panel';
 import {
   setDimensions,
   setIsVolumeChanging,
@@ -32,6 +33,7 @@ import {
   selectPrevIsPlaying,
   selectIsFullScreen,
   selectIsBtnFullScreen,
+  selectCurrentVideoLabel,
 } from '../../app/videoReducer';
 import { goFullscreen, exitFullscreen } from '../../common/utils/videoActions';
 import { CONFIG_TEXT_SMALL, CONFIG_TEXT_LARGE } from '../../common/constants';
@@ -76,6 +78,7 @@ export default function VideoPlayer({ width, height, url }) {
   const prevIsPlaying = useSelector(selectPrevIsPlaying);
   const isFullscreen = useSelector(selectIsFullScreen);
   const isBtnFullScreen = useSelector(selectIsBtnFullScreen);
+  const currentVideoLabel = useSelector(selectCurrentVideoLabel);
   const [baseUrl, setBaseUrl] = useState(null);
   const [errMsg, setErrMsg] = useState(null);
   const [mouseMoveTimerEnd1, setMouseMoveTimerEnd1] = useState(false);
@@ -293,6 +296,7 @@ export default function VideoPlayer({ width, height, url }) {
           {errMsg}
         </p>
       )}
+      {currentVideoLabel === 'selectInfo' && <SelectionPanel />}
       {baseUrl && <Video mouseMoveHandler={controlBarVisibilityHandler} />}
       {baseUrl && (isControlBarVisible || isControlBarActive) && <ControlBar />}
     </div>
