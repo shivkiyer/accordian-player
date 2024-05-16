@@ -15,10 +15,24 @@ import {
   SELECT_TABLE_FONT_SMALL,
   SELECT_TABLE_TITLE_LEFT_PADDING_LARGE,
   SELECT_TABLE_TITLE_LEFT_PADDING_SMALL,
+  SELECT_TABLE_RADIO_BTN_LARGE,
+  SELECT_TABLE_RADIO_BTN_SMALL,
 } from '../../../../common/constants';
 import styles from './selection-table-row.module.scss';
+import radioBtnOff from './../../../../assets/images/radio_btn_off.svg';
+import radioBtnOn from './../../../../assets/images/radio_btn_on.svg';
 
-export default function SelectionTableRow({ title }) {
+/**
+ * Generates a row of the selection table from which
+ * the user can choose videos to customize playlist
+ *
+ * @param {string} title Name of video
+ * @param {number} row Index of option in video data collection
+ * @param {object} data Video option data
+ *
+ * @returns {ReactNode} Row containing video title and buttons for selection
+ */
+export default function SelectionTableRow({ title, row, data }) {
   const videoWidth = useSelector(selectVideoWidth);
 
   let selectPanelSideMargin = getScaledDimension({
@@ -61,6 +75,12 @@ export default function SelectionTableRow({ title }) {
     videoWidth,
   });
 
+  const radioBtnSize = getScaledDimension({
+    smallDim: SELECT_TABLE_RADIO_BTN_SMALL,
+    largeDim: SELECT_TABLE_RADIO_BTN_LARGE,
+    videoWidth,
+  });
+
   const rowStyle = {
     fontSize: `${textFont}px`,
   };
@@ -95,6 +115,7 @@ export default function SelectionTableRow({ title }) {
     marginRight: `${columnMargin}px`,
     color: 'white',
     fontWeight: 'bold',
+    backgroundColor: '#a19f9f',
   };
 
   const choiceHeadingStyle = {
@@ -116,6 +137,15 @@ export default function SelectionTableRow({ title }) {
   const notInterestedHeadingStyle = {
     ...choiceHeadingStyle,
     backgroundColor: '#292929',
+  };
+
+  const radioBtnStyle = {
+    height: `${radioBtnSize}px`,
+    width: `${radioBtnSize}px`,
+  };
+
+  const radioBtnColStyle = {
+    ...colStyle,
   };
 
   const titleRow = (
@@ -140,5 +170,45 @@ export default function SelectionTableRow({ title }) {
     </div>
   );
 
-  return title ? titleRow : null;
+  let dataRow = null;
+  if (data !== null && data !== undefined) {
+    dataRow = (
+      <div style={rowStyle}>
+        <div className={styles.TableColumn} style={titleStyle}>
+          {data[row]['name']}
+        </div>
+        <div className={styles.ChoiceColumns}>
+          <div className={styles.TableColumn} style={radioBtnColStyle}>
+            <img
+              className={styles.ChoiceButton}
+              style={radioBtnStyle}
+              src={radioBtnOff}
+              alt='radio-btn'
+            />
+          </div>
+          <div className={styles.TableColumn} style={radioBtnColStyle}>
+            <img
+              className={styles.ChoiceButton}
+              style={radioBtnStyle}
+              src={radioBtnOn}
+              alt='radio-btn'
+            />
+          </div>
+          <div
+            className={styles.TableColumn}
+            style={{ ...radioBtnColStyle, marginRight: '0px' }}
+          >
+            <img
+              className={styles.ChoiceButton}
+              style={radioBtnStyle}
+              src={radioBtnOff}
+              alt='radio-btn'
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return title ? titleRow : dataRow;
 }

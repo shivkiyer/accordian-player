@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 
 import SelectionTableRow from './selection-table-row/selection-table-row';
-import { selectVideoWidth } from '../../../app/videoReducer';
+import { selectVideoWidth, selectVideoData } from '../../../app/videoReducer';
 import {
   SELECT_TABLE_TOP_MARGIN_LARGE,
   SELECT_TABLE_TOP_MARGIN_SMALL,
@@ -11,8 +11,14 @@ import {
 import getScaledDimension from '../../../common/utils/getScaledDimension';
 import styles from './selection-table.module.scss';
 
+/**
+ * Generates table for user to choose videos
+ *
+ * @returns {ReactNode} Table with heading and video options
+ */
 export default function SelectionTable() {
   const videoWidth = useSelector(selectVideoWidth);
+  const videoData = useSelector(selectVideoData);
 
   const tableTopMargin = getScaledDimension({
     smallDim: SELECT_TABLE_TOP_MARGIN_SMALL,
@@ -29,14 +35,19 @@ export default function SelectionTable() {
   const tableStyle = {
     marginTop: `${tableTopMargin}px`,
     paddingTop: `${tablePadding}px`,
-    paddingBottom: `${tablePadding}px`,
     paddingLeft: `${tablePadding}px`,
     paddingRight: `${tablePadding}px`,
   };
 
+  const videoOptions = videoData['videoOptions'];
+
   return (
     <div className={styles.Table} style={tableStyle}>
       <SelectionTableRow title='true' />
+      {videoOptions &&
+        videoOptions.map((_, opIndex) => (
+          <SelectionTableRow key={opIndex} row={opIndex} data={videoOptions} />
+        ))}
     </div>
   );
 }

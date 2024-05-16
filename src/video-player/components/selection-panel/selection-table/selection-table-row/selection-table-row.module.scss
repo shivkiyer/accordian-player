@@ -1,9 +1,20 @@
 .TableColumn {
   display: inline-block;
-  background-color: #a19f9f;
+  background-color: #e6e6e6;
+  overflow: hidden !important;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .ChoiceColumns {
   float: right;
   text-align: center;
+
+  .TableColumn {
+    cursor: pointer;
+  }
+}
+
+.ChoiceButton {
+  display: inline-block;
 }
