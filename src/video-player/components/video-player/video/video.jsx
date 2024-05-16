@@ -16,6 +16,7 @@ import {
   setCurrentVideoLabel,
   setVideoUrl,
   setCurrentVideoName,
+  setSelectPanelVisible,
 } from '../../../app/videoReducer';
 import {
   loadVideo,
@@ -23,6 +24,8 @@ import {
   pauseVideo,
 } from '../../../common/utils/videoActions';
 import getNextVideoData from '../../../common/utils/getNextVideoData';
+import getSelectPanelVisible from '../../../common/utils/getSelectPanelVisible';
+import checkVideoLoops from '../../../common/utils/checkVideoLoops';
 import styles from './video.module.scss';
 
 /**
@@ -72,12 +75,28 @@ export default function Video({ mouseMoveHandler }) {
 
   /**
    * Updates progress bar on video
+   * Displays user selection and action
+   * items according to play time
    *
    * @param {object} event Time update event object
    */
   const timeUpdateHandler = (event) => {
     dispatch(setCurrentTime(event.target.currentTime));
     dispatch(setDuration(event.target.duration));
+    const selectPanelVisibility = getSelectPanelVisible(
+      event.target.currentTime,
+      currentVideoLabel,
+      videoData
+    );
+    dispatch(setSelectPanelVisible(selectPanelVisibility));
+    const loopTime = checkVideoLoops(
+      event.target.currentTime,
+      currentVideoLabel,
+      videoData
+    );
+    if (loopTime !== null) {
+      videoRef.current.currentTime = loopTime;
+    }
   };
 
   /**

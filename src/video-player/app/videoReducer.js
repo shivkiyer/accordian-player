@@ -25,6 +25,7 @@ import { createSlice } from '@reduxjs/toolkit';
  * videoData {object} - Contents of config.csv file
  * currentVideoLabel {string} - Label of current video
  * currentVideoName {string} - Name of current video
+ * isSelectPanelVisible {boolean} - Visibility of user select panel
  *
  * Reducers:
  * setDimensions : Setting the width and height of the video player
@@ -43,6 +44,7 @@ import { createSlice } from '@reduxjs/toolkit';
  * setVideoData: Set the video config data
  * setCurrentVideoLabel: Set the label of the current video
  * setCurrentVideoName: Sets the name of the current video
+ * setSelectPanelVisible : Sets the visibility of the user select panel
  *
  */
 export const videoSlice = createSlice({
@@ -71,6 +73,7 @@ export const videoSlice = createSlice({
     videoData: null,
     currentVideoLabel: null,
     currentVideoName: null,
+    isSelectPanelVisible: false,
   },
   reducers: {
     /**
@@ -263,6 +266,18 @@ export const videoSlice = createSlice({
     setCurrentVideoName: (state, action) => {
       state.currentVideoName = action.payload;
     },
+    /**
+     * Sets the visibility of the user select panel
+     *
+     * @param {boolean} action
+     */
+    setSelectPanelVisible: (state, action) => {
+      if (action.payload === null || action.payload === undefined) {
+        state.isSelectPanelVisible = !state.isSelectPanelVisible;
+      } else {
+        state.isSelectPanelVisible = action.payload;
+      }
+    },
   },
 });
 
@@ -287,6 +302,7 @@ export const {
   setVideoData,
   setCurrentVideoLabel,
   setCurrentVideoName,
+  setSelectPanelVisible,
 } = videoSlice.actions;
 
 export const selectVideoWidth = (state) => state.video.width;
@@ -318,5 +334,7 @@ export const selectBackgroundImageUrl = (state) =>
 export const selectVideoData = (state) => state.video.videoData;
 export const selectCurrentVideoLabel = (state) => state.video.currentVideoLabel;
 export const selectCurrentVideoName = (state) => state.video.currentVideoName;
+export const selectIsSelectPanelVisible = (state) =>
+  state.video.isSelectPanelVisible;
 
 export default videoSlice.reducer;

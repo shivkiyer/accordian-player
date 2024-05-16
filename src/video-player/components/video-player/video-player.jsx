@@ -33,7 +33,7 @@ import {
   selectPrevIsPlaying,
   selectIsFullScreen,
   selectIsBtnFullScreen,
-  selectCurrentVideoLabel,
+  selectIsSelectPanelVisible,
 } from '../../app/videoReducer';
 import { goFullscreen, exitFullscreen } from '../../common/utils/videoActions';
 import { CONFIG_TEXT_SMALL, CONFIG_TEXT_LARGE } from '../../common/constants';
@@ -78,7 +78,7 @@ export default function VideoPlayer({ width, height, url }) {
   const prevIsPlaying = useSelector(selectPrevIsPlaying);
   const isFullscreen = useSelector(selectIsFullScreen);
   const isBtnFullScreen = useSelector(selectIsBtnFullScreen);
-  const currentVideoLabel = useSelector(selectCurrentVideoLabel);
+  const isSelectPanelVisible = useSelector(selectIsSelectPanelVisible);
   const [baseUrl, setBaseUrl] = useState(null);
   const [errMsg, setErrMsg] = useState(null);
   const [mouseMoveTimerEnd1, setMouseMoveTimerEnd1] = useState(false);
@@ -296,7 +296,7 @@ export default function VideoPlayer({ width, height, url }) {
           {errMsg}
         </p>
       )}
-      {currentVideoLabel === 'selectInfo' && <SelectionPanel />}
+      {isSelectPanelVisible && <SelectionPanel />}
       {baseUrl && <Video mouseMoveHandler={controlBarVisibilityHandler} />}
       {baseUrl && (isControlBarVisible || isControlBarActive) && <ControlBar />}
     </div>
