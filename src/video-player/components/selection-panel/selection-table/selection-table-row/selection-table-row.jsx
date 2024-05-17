@@ -1,6 +1,10 @@
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { selectVideoWidth } from '../../../../app/videoReducer';
+import {
+  selectVideoWidth,
+  selectUserSelection,
+  setUserSelection,
+} from '../../../../app/videoReducer';
 import getScaledDimension from '../../../../common/utils/getScaledDimension';
 import {
   SELECT_PANEL_ROW_HEIGHT_LARGE,
@@ -33,7 +37,9 @@ import radioBtnOn from './../../../../assets/images/radio_btn_on.svg';
  * @returns {ReactNode} Row containing video title and buttons for selection
  */
 export default function SelectionTableRow({ title, row, data }) {
+  const dispatch = useDispatch();
   const videoWidth = useSelector(selectVideoWidth);
+  const userSelection = useSelector(selectUserSelection);
 
   let selectPanelSideMargin = getScaledDimension({
     smallDim: SELECT_PANEL_SIDE_MARGIN_SMALL,
@@ -170,6 +176,48 @@ export default function SelectionTableRow({ title, row, data }) {
     </div>
   );
 
+  /**
+   * Setting user choice on long video
+   */
+  const longChoiceHandler = () => {
+    const selected = userSelection.slice();
+    selected[row] = 'long';
+    dispatch(setUserSelection(selected));
+  };
+
+  /**
+   * Setting user choice on short video
+   */
+  const shortChoiceHandler = () => {
+    const selected = userSelection.slice();
+    selected[row] = 'short';
+    dispatch(setUserSelection(selected));
+  };
+
+  /**
+   * Setting user choice on not interested
+   */
+  const noChoiceHandler = () => {
+    const selected = userSelection.slice();
+    selected[row] = 'no';
+    dispatch(setUserSelection(selected));
+  };
+
+  let videoChoice = null;
+  switch (userSelection[row]) {
+    case 'long':
+      videoChoice = 'long';
+      break;
+    case 'short':
+      videoChoice = 'short';
+      break;
+    case 'no':
+      videoChoice = 'no';
+      break;
+    default:
+      videoChoice = null;
+  }
+
   let dataRow = null;
   if (data !== null && data !== undefined) {
     dataRow = (
@@ -178,30 +226,39 @@ export default function SelectionTableRow({ title, row, data }) {
           {data[row]['name']}
         </div>
         <div className={styles.ChoiceColumns}>
-          <div className={styles.TableColumn} style={radioBtnColStyle}>
+          <div
+            className={styles.TableColumn}
+            style={radioBtnColStyle}
+            onClick={longChoiceHandler}
+          >
             <img
               className={styles.ChoiceButton}
               style={radioBtnStyle}
-              src={radioBtnOff}
+              src={videoChoice === 'long' ? radioBtnOn : radioBtnOff}
               alt='radio-btn'
             />
           </div>
-          <div className={styles.TableColumn} style={radioBtnColStyle}>
+          <div
+            className={styles.TableColumn}
+            style={radioBtnColStyle}
+            onClick={shortChoiceHandler}
+          >
             <img
               className={styles.ChoiceButton}
               style={radioBtnStyle}
-              src={radioBtnOn}
+              src={videoChoice === 'short' ? radioBtnOn : radioBtnOff}
               alt='radio-btn'
             />
           </div>
           <div
             className={styles.TableColumn}
             style={{ ...radioBtnColStyle, marginRight: '0px' }}
+            onClick={noChoiceHandler}
           >
             <img
               className={styles.ChoiceButton}
               style={radioBtnStyle}
-              src={radioBtnOff}
+              src={videoChoice === 'no' ? radioBtnOn : radioBtnOff}
               alt='radio-btn'
             />
           </div>

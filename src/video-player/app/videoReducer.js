@@ -26,6 +26,7 @@ import { createSlice } from '@reduxjs/toolkit';
  * currentVideoLabel {string} - Label of current video
  * currentVideoName {string} - Name of current video
  * isSelectPanelVisible {boolean} - Visibility of user select panel
+ * userSelection: {Array} - User choice on video options
  *
  * Reducers:
  * setDimensions : Setting the width and height of the video player
@@ -45,6 +46,7 @@ import { createSlice } from '@reduxjs/toolkit';
  * setCurrentVideoLabel: Set the label of the current video
  * setCurrentVideoName: Sets the name of the current video
  * setSelectPanelVisible : Sets the visibility of the user select panel
+ * setUserSelection: Sets the user video selection array
  *
  */
 export const videoSlice = createSlice({
@@ -74,6 +76,7 @@ export const videoSlice = createSlice({
     currentVideoLabel: null,
     currentVideoName: null,
     isSelectPanelVisible: false,
+    userSelection: null,
   },
   reducers: {
     /**
@@ -251,6 +254,14 @@ export const videoSlice = createSlice({
      */
     setVideoData: (state, action) => {
       state.videoData = action.payload;
+      if (
+        action.payload['videoOptions'] !== null &&
+        action.payload['videoOptions'] !== undefined
+      ) {
+        state.userSelection = Array(action.payload['videoOptions'].length).fill(
+          null
+        );
+      }
     },
     /**
      * Set the label of the current video being played
@@ -278,6 +289,14 @@ export const videoSlice = createSlice({
         state.isSelectPanelVisible = action.payload;
       }
     },
+    /**
+     * Sets the user video selection array
+     *
+     * @param {Array} action User choice on video option
+     */
+    setUserSelection: (state, action) => {
+      state.userSelection = action.payload;
+    },
   },
 });
 
@@ -303,6 +322,7 @@ export const {
   setCurrentVideoLabel,
   setCurrentVideoName,
   setSelectPanelVisible,
+  setUserSelection,
 } = videoSlice.actions;
 
 export const selectVideoWidth = (state) => state.video.width;
@@ -336,5 +356,6 @@ export const selectCurrentVideoLabel = (state) => state.video.currentVideoLabel;
 export const selectCurrentVideoName = (state) => state.video.currentVideoName;
 export const selectIsSelectPanelVisible = (state) =>
   state.video.isSelectPanelVisible;
+export const selectUserSelection = (state) => state.video.userSelection;
 
 export default videoSlice.reducer;
