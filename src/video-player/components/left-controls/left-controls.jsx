@@ -1,6 +1,10 @@
 import { useSelector } from 'react-redux';
 
-import { selectIsPlaying, selectVideoWidth } from '../../app/videoReducer';
+import {
+  selectIsPlaying,
+  selectVideoWidth,
+  selectCurrentVideoLabel,
+} from '../../app/videoReducer';
 import getScaledDimension from '../../common/utils/getScaledDimension';
 import {
   LEFT_BUTTONS_HEIGHT_LARGE,
@@ -27,6 +31,7 @@ import VolumeControls from './volume-controls/volume-controls';
 export default function LeftControls() {
   const videoWidth = useSelector(selectVideoWidth);
   const isVideoPlaying = useSelector(selectIsPlaying);
+  const currentVideoLabel = useSelector(selectCurrentVideoLabel);
 
   const elHeight = getScaledDimension({
     smallDim: LEFT_BUTTONS_HEIGHT_SMALL,
@@ -44,9 +49,11 @@ export default function LeftControls() {
     marginLeft: `${elLeftMargin}px`,
   };
 
+  const isSelectVideo = currentVideoLabel === 'selectInfo';
+
   return (
     <div className={styles.LeftButtons} style={elStyle}>
-      {isVideoPlaying ? <PauseButton /> : <PlayButton />}
+      {isSelectVideo ? null : isVideoPlaying ? <PauseButton /> : <PlayButton />}
       <RewindButton />
       <VolumeControls />
     </div>

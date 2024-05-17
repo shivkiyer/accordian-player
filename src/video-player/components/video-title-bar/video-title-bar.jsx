@@ -8,6 +8,7 @@ import {
   selectVideoWidth,
   selectIsVolumeSliderVisible,
   selectCurrentVideoName,
+  selectCurrentVideoLabel,
 } from '../../app/videoReducer';
 import getScaledDimension from '../../common/utils/getScaledDimension';
 import {
@@ -47,6 +48,7 @@ export default function VideoTitleBar() {
   const videoWidth = useSelector(selectVideoWidth);
   const isVolumeSliderVisible = useSelector(selectIsVolumeSliderVisible);
   const currentVideoName = useSelector(selectCurrentVideoName);
+  const currentVideoLabel = useSelector(selectCurrentVideoLabel);
 
   const barHeight = getScaledDimension({
     smallDim: TITLE_BAR_HEIGHT_SMALL,
@@ -161,10 +163,12 @@ export default function VideoTitleBar() {
 
   const videoTitle = currentVideoName ? currentVideoName : '';
 
-  return (
+  const isSelectVideo = currentVideoLabel === 'selectInfo';
+
+  return !isSelectVideo ? (
     <div className={styles.VideoTitleBar} style={style}>
       <VideoTitle title={videoTitle} width={maxTitleWidth} />
       <VideoProgress ref={progressRef} />
     </div>
-  );
+  ) : null;
 }

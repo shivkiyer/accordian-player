@@ -19,6 +19,7 @@ import {
   selectProgressMousePositionX,
   selectIsVolumeChanging,
   selectPrevIsPlaying,
+  selectCurrentVideoLabel,
   playPauseVideo,
   setIsVideoPositionChanging,
   setCurrentTime,
@@ -42,6 +43,7 @@ export default function ProgressBar() {
   const isVolumeChanging = useSelector(selectIsVolumeChanging);
   const progressMousePositionX = useSelector(selectProgressMousePositionX);
   const prevIsPlaying = useSelector(selectPrevIsPlaying);
+  const currentVideoLabel = useSelector(selectCurrentVideoLabel);
 
   const outerHeight = getScaledDimension({
     smallDim: PROGRESS_BAR_CONTAINER_HEIGHT_SMALL,
@@ -192,6 +194,8 @@ export default function ProgressBar() {
     }
   };
 
+  const isSelectVideo = currentVideoLabel === 'selectInfo';
+
   return (
     <div
       className={styles.ProgressBarContainer}
@@ -202,6 +206,7 @@ export default function ProgressBar() {
       style={{
         height: `${height}px`,
         paddingTop: `${outerHeight - height}px`,
+        visibility: isSelectVideo ? 'hidden' : 'visible',
       }}
     >
       <div
