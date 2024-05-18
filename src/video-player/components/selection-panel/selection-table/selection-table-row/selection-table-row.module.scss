@@ -6,6 +6,16 @@
   text-overflow: ellipsis;
 }
 
+.TitleColumn {
+  text-transform: uppercase;
+}
+
+.TitleHeadingCell {
+  color: white;
+  font-weight: bold;
+  background-color: #a19f9f;
+}
+
 .ChoiceColumns {
   float: right;
   text-align: center;
@@ -13,6 +23,23 @@
   .TableColumn {
     cursor: pointer;
   }
+}
+
+.ChoiceHeading {
+  font-weight: bold;
+  color: white;
+}
+
+.VeryInterestedCell {
+  background-color: #2d9600;
+}
+
+.InterestedCell {
+  background-color: #18330c;
+}
+
+.NotInterestedCell {
+  background-color: #4a4a4a;
 }
 
 .ChoiceButton {

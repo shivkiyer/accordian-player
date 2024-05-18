@@ -105,7 +105,6 @@ export default function SelectionTableRow({ title, row, data }) {
       5 * columnMargin -
       1
     }px`,
-    textTransform: 'uppercase',
     paddingLeft: `${textLeftPadding}px`,
     ...basicColStyle,
   };
@@ -119,30 +118,6 @@ export default function SelectionTableRow({ title, row, data }) {
   const titleHeadingStyle = {
     ...titleStyle,
     marginRight: `${columnMargin}px`,
-    color: 'white',
-    fontWeight: 'bold',
-    backgroundColor: '#a19f9f',
-  };
-
-  const choiceHeadingStyle = {
-    ...colStyle,
-    fontWeight: 'bold',
-    color: 'white',
-  };
-
-  const veryInterestedHeadingStyle = {
-    ...choiceHeadingStyle,
-    backgroundColor: '#2d9600',
-  };
-
-  const interestedHeadingStyle = {
-    ...choiceHeadingStyle,
-    backgroundColor: '#18330c',
-  };
-
-  const notInterestedHeadingStyle = {
-    ...choiceHeadingStyle,
-    backgroundColor: '#292929',
   };
 
   const radioBtnStyle = {
@@ -150,25 +125,30 @@ export default function SelectionTableRow({ title, row, data }) {
     width: `${radioBtnSize}px`,
   };
 
-  const radioBtnColStyle = {
-    ...colStyle,
-  };
-
   const titleRow = (
     <div style={rowStyle}>
-      <div className={styles.TableColumn} style={titleHeadingStyle}>
+      <div
+        className={`${styles.TableColumn} ${styles.TitleColumn} ${styles.TitleHeadingCell}`}
+        style={titleHeadingStyle}
+      >
         <span>Video Segment Title</span>
       </div>
-      <div className={styles.ChoiceColumns}>
-        <div className={styles.TableColumn} style={veryInterestedHeadingStyle}>
+      <div className={`${styles.ChoiceColumns} ${styles.ChoiceHeading}`}>
+        <div
+          className={`${styles.TableColumn} ${styles.VeryInterestedCell}`}
+          style={colStyle}
+        >
           <span>very interested</span>
         </div>
-        <div className={styles.TableColumn} style={interestedHeadingStyle}>
+        <div
+          className={`${styles.TableColumn} ${styles.InterestedCell}`}
+          style={colStyle}
+        >
           <span>interested</span>
         </div>
         <div
-          className={styles.TableColumn}
-          style={{ ...notInterestedHeadingStyle, marginRight: '0px' }}
+          className={`${styles.TableColumn} ${styles.NotInterestedCell}`}
+          style={{ ...colStyle, marginRight: '0px' }}
         >
           <span>not interested</span>
         </div>
@@ -222,13 +202,20 @@ export default function SelectionTableRow({ title, row, data }) {
   if (data !== null && data !== undefined) {
     dataRow = (
       <div style={rowStyle}>
-        <div className={styles.TableColumn} style={titleStyle}>
+        <div
+          className={`${styles.TableColumn} ${styles.TitleColumn}`}
+          style={titleStyle}
+        >
           {data[row]['name']}
         </div>
         <div className={styles.ChoiceColumns}>
           <div
-            className={styles.TableColumn}
-            style={radioBtnColStyle}
+            className={
+              videoChoice === 'long'
+                ? `${styles.TableColumn} ${styles.VeryInterestedCell}`
+                : styles.TableColumn
+            }
+            style={colStyle}
             onClick={longChoiceHandler}
           >
             <img
@@ -239,8 +226,12 @@ export default function SelectionTableRow({ title, row, data }) {
             />
           </div>
           <div
-            className={styles.TableColumn}
-            style={radioBtnColStyle}
+            className={
+              videoChoice === 'short'
+                ? `${styles.TableColumn} ${styles.InterestedCell}`
+                : styles.TableColumn
+            }
+            style={colStyle}
             onClick={shortChoiceHandler}
           >
             <img
@@ -251,8 +242,12 @@ export default function SelectionTableRow({ title, row, data }) {
             />
           </div>
           <div
-            className={styles.TableColumn}
-            style={{ ...radioBtnColStyle, marginRight: '0px' }}
+            className={
+              videoChoice === 'no'
+                ? `${styles.TableColumn} ${styles.NotInterestedCell}`
+                : styles.TableColumn
+            }
+            style={{ ...colStyle, marginRight: '0px' }}
             onClick={noChoiceHandler}
           >
             <img
