@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux';
 
 import SelectionTable from './selection-table/selection-table';
+import ContinueButton from './continue-button/continue-button';
 import {
   SELECT_PANEL_HEADING_HEIGHT_LARGE,
   SELECT_PANEL_HEADING_HEIGHT_SMALL,
@@ -97,12 +98,15 @@ export default function SelectionPanel() {
   };
 
   return (
-    <div className={styles.SelectionPanel} style={selectPanelStyle}>
-      <h1 className={styles.SelectionPanelHeading} style={headingStyle}>
-        {videoData['selectInfo']['selectText']}
-      </h1>
+    <>
+      <div className={styles.SelectionPanel} style={selectPanelStyle}>
+        <h1 className={styles.SelectionPanelHeading} style={headingStyle}>
+          {videoData['selectInfo']['selectText']}
+        </h1>
 
-      <SelectionTable />
-    </div>
+        <SelectionTable />
+      </div>
+      <ContinueButton />
+    </>
   );
 }
