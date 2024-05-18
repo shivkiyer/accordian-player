@@ -10,6 +10,7 @@ import {
   selectBackgroundImageUrl,
   selectVideoData,
   selectCurrentVideoLabel,
+  selectUserSelection,
   setCurrentTime,
   setDuration,
   playPauseVideo,
@@ -45,6 +46,7 @@ export default function Video({ mouseMoveHandler }) {
   const isVideoPositionChanging = useSelector(selectIsVideoPositionChanging);
   const videoData = useSelector(selectVideoData);
   const currentVideoLabel = useSelector(selectCurrentVideoLabel);
+  const userSelection = useSelector(selectUserSelection);
 
   /**
    * Handling pause/play from user control action
@@ -126,7 +128,11 @@ export default function Video({ mouseMoveHandler }) {
     dispatch(playPauseVideo('paused'));
     pauseVideo(videoRef.current);
     if (currentVideoLabel !== null) {
-      const nextVideoData = getNextVideoData(videoData, currentVideoLabel);
+      const nextVideoData = getNextVideoData(
+        videoData,
+        currentVideoLabel,
+        userSelection
+      );
       if (nextVideoData !== null) {
         dispatch(setCurrentVideoLabel(nextVideoData.label));
         dispatch(setVideoUrl(nextVideoData.url));

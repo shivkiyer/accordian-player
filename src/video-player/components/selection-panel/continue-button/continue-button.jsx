@@ -1,8 +1,14 @@
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import {
   selectVideoWidth,
   selectUserSelection,
+  selectVideoData,
+  selectCurrentVideoLabel,
+  setCurrentVideoLabel,
+  setVideoUrl,
+  setCurrentVideoName,
+  playPauseVideo,
 } from '../../../app/videoReducer';
 import {
   CONTINUE_BTN_WIDTH_LARGE,
@@ -13,12 +19,16 @@ import {
   CONTINUE_BTN_SPACE_BELOW_LARGE,
 } from '../../../common/constants';
 import getScaledDimension from '../../../common/utils/getScaledDimension';
+import getNextVideoData from '../../../common/utils/getNextVideoData';
 import continueBtn from './../../../assets/images/continue_button.svg';
 import styles from './continue-button.module.scss';
 
 export default function ContinueButton() {
+  const dispatch = useDispatch();
   const videoWidth = useSelector(selectVideoWidth);
   const userSelection = useSelector(selectUserSelection);
+  const videoData = useSelector(selectVideoData);
+  const currentVideoLabel = useSelector(selectCurrentVideoLabel);
 
   const btnWidth = getScaledDimension({
     smallDim: CONTINUE_BTN_WIDTH_SMALL,
@@ -52,7 +62,22 @@ export default function ContinueButton() {
     left: `${btnLeftSpace}px`,
   };
 
-  const continueHandler = () => {};
+  /**
+   * Continue with the user choice videos
+   */
+  const continueHandler = () => {
+    const nextVideoData = getNextVideoData(
+      videoData,
+      currentVideoLabel,
+      userSelection
+    );
+    if (nextVideoData !== null) {
+      dispatch(setCurrentVideoLabel(nextVideoData.label));
+      dispatch(setVideoUrl(nextVideoData.url));
+      dispatch(setCurrentVideoName(nextVideoData.name));
+      dispatch(playPauseVideo('paused'));
+    }
+  };
 
   return (
     <div
