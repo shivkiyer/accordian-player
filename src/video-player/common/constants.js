@@ -91,8 +91,6 @@ export const VOLUME_HANDLE_WIDTH_SMALL = 12;
 
 // Right controls
 
-export const RIGHT_CONTROL_BTNS_LEFT_MARGIN_LARGE = 24;
-export const RIGHT_CONTROL_BTNS_LEFT_MARGIN_SMALL = 15.75;
 export const RIGHT_CONTROL_BTNS_RIGHT_MARGIN_LARGE = 36;
 export const RIGHT_CONTROL_BTNS_RIGHT_MARGIN_SMALL = 23.625;
 
@@ -169,3 +167,16 @@ export const CONTINUE_BTN_HEIGHT_SMALL = 39.375;
 
 export const CONTINUE_BTN_SPACE_BELOW_LARGE = 18;
 export const CONTINUE_BTN_SPACE_BELOW_SMALL = 11.8125;
+
+// Video selection buttons
+
+export const VIDEO_BTN_HEIGHT_LARGE = 30;
+export const VIDEO_BTN_HEIGHT_SMALL = 20;
+
+export const VIDEO_BTN_MARGIN_LARGE = 12;
+export const VIDEO_BTN_MARGIN_SMALL = 7.875;
+
+export const LONG_VIDEO_WIDTH_LARGE = 30;
+export const LONG_VIDEO_WIDTH_SMALL = 20;
+export const SHORT_VIDEO_WIDTH_LARGE = 16;
+export const SHORT_VIDEO_WIDTH_SMALL = 11;

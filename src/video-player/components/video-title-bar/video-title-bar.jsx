@@ -9,6 +9,7 @@ import {
   selectIsVolumeSliderVisible,
   selectCurrentVideoName,
   selectCurrentVideoLabel,
+  selectUserSelection,
 } from '../../app/videoReducer';
 import getScaledDimension from '../../common/utils/getScaledDimension';
 import {
@@ -28,14 +29,18 @@ import {
   LEFT_BUTTONS_WIDTH_SMALL,
   LEFT_BUTTON_LEFT_MARGIN_LARGE,
   LEFT_BUTTON_LEFT_MARGIN_SMALL,
-  RIGHT_CONTROL_BTNS_LEFT_MARGIN_LARGE,
-  RIGHT_CONTROL_BTNS_LEFT_MARGIN_SMALL,
   RIGHT_CONTROL_BTNS_RIGHT_MARGIN_LARGE,
   RIGHT_CONTROL_BTNS_RIGHT_MARGIN_SMALL,
   VOLUME_SLIDER_WIDTH_LARGE,
   VOLUME_SLIDER_WIDTH_SMALL,
   TIME_LEFT_DEFAULT_WIDTH_LARGE,
   TIME_LEFT_DEFAULT_WIDTH_SMALL,
+  LONG_VIDEO_WIDTH_LARGE,
+  LONG_VIDEO_WIDTH_SMALL,
+  SHORT_VIDEO_WIDTH_LARGE,
+  SHORT_VIDEO_WIDTH_SMALL,
+  VIDEO_BTN_MARGIN_LARGE,
+  VIDEO_BTN_MARGIN_SMALL,
 } from '../../common/constants';
 
 /**
@@ -49,6 +54,7 @@ export default function VideoTitleBar() {
   const isVolumeSliderVisible = useSelector(selectIsVolumeSliderVisible);
   const currentVideoName = useSelector(selectCurrentVideoName);
   const currentVideoLabel = useSelector(selectCurrentVideoLabel);
+  const userSelection = useSelector(selectUserSelection);
 
   const barHeight = getScaledDimension({
     smallDim: TITLE_BAR_HEIGHT_SMALL,
@@ -104,12 +110,6 @@ export default function VideoTitleBar() {
     videoWidth,
   });
 
-  const rightControlsLeftMargin = getScaledDimension({
-    smallDim: RIGHT_CONTROL_BTNS_LEFT_MARGIN_SMALL,
-    largeDim: RIGHT_CONTROL_BTNS_LEFT_MARGIN_LARGE,
-    videoWidth,
-  });
-
   const rightControlsRightMargin = getScaledDimension({
     smallDim: RIGHT_CONTROL_BTNS_RIGHT_MARGIN_SMALL,
     largeDim: RIGHT_CONTROL_BTNS_RIGHT_MARGIN_LARGE,
@@ -135,9 +135,37 @@ export default function VideoTitleBar() {
     totalElWidth += volumeSliderWidth; // volume slider
   }
   totalElWidth += leftControlBtnLeftMargin / 2; // left margin for title bar
-  totalElWidth += rightControlsLeftMargin; // left margin for right control button
   totalElWidth += leftControlBtnLeftMargin + controlBtnWidth; // fullscreen button
   totalElWidth += rightControlsRightMargin; // right margin for right controls button
+
+  if (currentVideoLabel.includes('videoOptions')) {
+    const noOfLongVideos = userSelection.filter((el) => el === 'long').length;
+    const noOfShortVideos = userSelection.filter((el) => el === 'short').length;
+
+    let selectorWidthLarge = 0;
+    let selectorWidthSmall = 0;
+
+    selectorWidthLarge += noOfLongVideos * LONG_VIDEO_WIDTH_LARGE;
+    selectorWidthSmall += noOfLongVideos * LONG_VIDEO_WIDTH_SMALL;
+    selectorWidthLarge += noOfShortVideos * SHORT_VIDEO_WIDTH_LARGE;
+    selectorWidthSmall += noOfShortVideos * SHORT_VIDEO_WIDTH_SMALL;
+
+    selectorWidthLarge +=
+      (noOfLongVideos + noOfShortVideos) * VIDEO_BTN_MARGIN_LARGE;
+    selectorWidthSmall +=
+      (noOfLongVideos + noOfShortVideos) * VIDEO_BTN_MARGIN_SMALL;
+
+    selectorWidthLarge += VIDEO_BTN_MARGIN_LARGE;
+    selectorWidthSmall += VIDEO_BTN_MARGIN_SMALL;
+
+    const selectorWidth = getScaledDimension({
+      smallDim: selectorWidthSmall,
+      largeDim: selectorWidthLarge,
+      videoWidth,
+    });
+
+    totalElWidth += selectorWidth;
+  }
 
   let progressWidth = 0;
   if (progressRef.current) {
