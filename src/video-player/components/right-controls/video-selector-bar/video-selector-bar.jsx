@@ -1,8 +1,14 @@
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import {
   selectVideoWidth,
   selectUserSelection,
+  selectCurrentVideoLabel,
+  selectVideoData,
+  playPauseVideo,
+  setCurrentVideoLabel,
+  setVideoUrl,
+  setCurrentVideoName,
 } from '../../../app/videoReducer';
 import {
   VIDEO_BTN_HEIGHT_LARGE,
@@ -27,8 +33,11 @@ import styles from './video-selector-bar.module.scss';
  * @returns {ReactNode} Container with icons
  */
 export default function VideoSelectorBar() {
+  const dispatch = useDispatch();
   const videoWidth = useSelector(selectVideoWidth);
   const userSelection = useSelector(selectUserSelection);
+  const currentVideoLabel = useSelector(selectCurrentVideoLabel);
+  const videoData = useSelector(selectVideoData);
 
   const btnHeight = getScaledDimension({
     smallDim: VIDEO_BTN_HEIGHT_SMALL,
@@ -81,7 +90,32 @@ export default function VideoSelectorBar() {
     width: `${shortBtnWidth}px`,
   };
 
+  let videoIndex = null;
+  if (currentVideoLabel.includes('videoOptions')) {
+    videoIndex = parseInt(currentVideoLabel.split('_')[1]);
+  }
+
+  const clickHandler = (iconIndex, isLong) => {
+    if (iconIndex !== videoIndex) {
+      const nextVideo = videoData['videoOptions'][iconIndex];
+      const nextVideoLabel = `videoOptions_${iconIndex}`;
+      const nextVideoName = nextVideo['name'];
+      const nextVideoUrl = isLong
+        ? nextVideo['longVideoUrl']
+        : nextVideo['shortVideoUrl'];
+      dispatch(playPauseVideo('paused'));
+      dispatch(setCurrentVideoLabel(nextVideoLabel));
+      dispatch(setCurrentVideoName(nextVideoName));
+      dispatch(setVideoUrl(nextVideoUrl));
+    }
+  };
+
   const buttonList = userSelection.map((item, index) => {
+    let activeBtnStyle = {};
+    if (videoIndex === index) {
+      activeBtnStyle.opacity = '0.5';
+    }
+
     switch (item) {
       case 'long':
         return (
@@ -89,7 +123,8 @@ export default function VideoSelectorBar() {
             src={longClipBtn}
             alt='long-icon'
             key={index}
-            style={longBtnStyle}
+            style={{ ...longBtnStyle, ...activeBtnStyle }}
+            onClick={() => clickHandler(index, true)}
           />
         );
       case 'short':
@@ -98,7 +133,8 @@ export default function VideoSelectorBar() {
             src={shortClipBtn}
             alt='short-icon'
             key={index}
-            style={shortBtnStyle}
+            style={{ ...shortBtnStyle, ...activeBtnStyle }}
+            onClick={() => clickHandler(index, false)}
           />
         );
       default:
