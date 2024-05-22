@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/selection-panel/selection-panel.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/selection-panel/selection-panel.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { useSelector } from 'react-redux';
+
+import SelectionTable from './selection-table/selection-table';
+import ContinueButton from './continue-button/continue-button';
+import {
+  SELECT_PANEL_HEADING_HEIGHT_LARGE,
+  SELECT_PANEL_HEADING_HEIGHT_SMALL,
+  SELECT_PANEL_SIDE_MARGIN_LARGE,
+  SELECT_PANEL_SIDE_MARGIN_SMALL,
+  SELECT_PANEL_HEADING_FONT_LARGE,
+  SELECT_PANEL_HEADING_FONT_SMALL,
+  SELECT_TABLE_TOP_MARGIN_LARGE,
+  SELECT_TABLE_TOP_MARGIN_SMALL,
+  SELECT_TABLE_PADDING_LARGE,
+  SELECT_TABLE_PADDING_SMALL,
+  SELECT_PANEL_ROW_HEIGHT_LARGE,
+  SELECT_PANEL_ROW_HEIGHT_SMALL,
+  SELECT_PANEL_ROW_MARGIN_LARGE,
+  SELECT_PANEL_ROW_MARGIN_SMALL,
+  CONTROL_BAR_HEIGHT_LARGE,
+  CONTROL_BAR_HEIGHT_SMALL,
+} from '../../common/constants';
+import {
+  selectVideoWidth,
+  selectVideoHeight,
+  selectVideoData,
+} from './../../app/videoReducer';
+import getScaledDimension from './../../common/utils/getScaledDimension';
+import styles from './selection-panel.module.scss';
+
+/**
+ * Returns a panel for user to select videos
+ *
+ * @returns {ReactNode} Custom heading text and table contents
+ */
+export default function SelectionPanel() {
+  const videoWidth = useSelector(selectVideoWidth);
+  const videoHeight = useSelector(selectVideoHeight);
+  const videoData = useSelector(selectVideoData);
+
+  const selectPanelHeadingHeight = getScaledDimension({
+    smallDim: SELECT_PANEL_HEADING_HEIGHT_SMALL,
+    largeDim: SELECT_PANEL_HEADING_HEIGHT_LARGE,
+    videoWidth,
+  });
+
+  const selectPanelHeadingFont = getScaledDimension({
+    smallDim: SELECT_PANEL_HEADING_FONT_SMALL,
+    largeDim: SELECT_PANEL_HEADING_FONT_LARGE,
+    videoWidth,
+  });
+
+  let selectPanelSideMargin = getScaledDimension({
+    smallDim: SELECT_PANEL_SIDE_MARGIN_SMALL,
+    largeDim: SELECT_PANEL_SIDE_MARGIN_LARGE,
+    videoWidth,
+  });
+
+  if (videoWidth &lt; 1000) {
+    selectPanelSideMargin = selectPanelSideMargin / 2;
+  }
+
+  const largeSpace =
+    SELECT_PANEL_HEADING_HEIGHT_LARGE +
+    SELECT_TABLE_TOP_MARGIN_LARGE +
+    SELECT_TABLE_PADDING_LARGE +
+    videoData['videoOptions'].length *
+      (SELECT_PANEL_ROW_HEIGHT_LARGE + SELECT_PANEL_ROW_MARGIN_LARGE) +
+    CONTROL_BAR_HEIGHT_LARGE;
+
+  const smallSpace =
+    SELECT_PANEL_HEADING_HEIGHT_SMALL +
+    SELECT_TABLE_TOP_MARGIN_SMALL +
+    SELECT_TABLE_PADDING_SMALL +
+    videoData['videoOptions'].length *
+      (SELECT_PANEL_ROW_HEIGHT_SMALL + SELECT_PANEL_ROW_MARGIN_SMALL) +
+    CONTROL_BAR_HEIGHT_SMALL;
+
+  const scaledSpace = getScaledDimension({
+    smallDim: smallSpace,
+    largeDim: largeSpace,
+    videoWidth,
+  });
+
+  const selectPanelStyle = {
+    marginLeft: `${selectPanelSideMargin}px`,
+    marginRight: `${selectPanelSideMargin}px`,
+    marginTop: `${(videoHeight - scaledSpace) / 2}px`,
+    width: `${videoWidth - 2 * selectPanelSideMargin}px`,
+  };
+
+  const headingStyle = {
+    paddingTop: `${(selectPanelHeadingHeight - selectPanelHeadingFont) / 2}px`,
+    paddingBottom: `${
+      (selectPanelHeadingHeight - selectPanelHeadingFont) / 2
+    }px`,
+    fontSize: `${selectPanelHeadingFont}px`,
+  };
+
+  return (
+    &lt;>
+      &lt;div className={styles.SelectionPanel} style={selectPanelStyle}>
+        &lt;h1 className={styles.SelectionPanelHeading} style={headingStyle}>
+          {videoData['selectInfo']['selectText']}
+        &lt;/h1>
+
+        &lt;SelectionTable />
+      &lt;/div>
+      &lt;ContinueButton />
+    &lt;/>
+  );
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="module.html#.exports">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#checkVideoUrl">checkVideoUrl</a></li><li><a href="global.html#exitFullscreen">exitFullscreen</a></li><li><a href="global.html#getWindowDimensions">getWindowDimensions</a></li><li><a href="global.html#goFullscreen">goFullscreen</a></li><li><a href="global.html#loadVideo">loadVideo</a></li><li><a href="global.html#pauseVideo">pauseVideo</a></li><li><a href="global.html#playVideo">playVideo</a></li><li><a href="global.html#videoSlice">videoSlice</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed May 22 2024 20:24:43 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

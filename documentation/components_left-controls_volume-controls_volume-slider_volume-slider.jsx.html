@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/left-controls/volume-controls/volume-slider/volume-slider.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/left-controls/volume-controls/volume-slider/volume-slider.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { useEffect, useRef, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+
+import volumeRail from './../../../../assets/images/volume_rail.svg';
+import volumeHandle from './../../../../assets/images/volume_handle.svg';
+import {
+  VOLUME_SLIDER_HEIGHT_LARGE,
+  VOLUME_SLIDER_HEIGHT_SMALL,
+  VOLUME_SLIDER_WIDTH_LARGE,
+  VOLUME_SLIDER_WIDTH_SMALL,
+  VOLUME_RAIL_HEIGHT_LARGE,
+  VOLUME_RAIL_HEIGHT_SMALL,
+  VOLUME_RAIL_WIDTH_LARGE,
+  VOLUME_RAIL_WIDTH_SMALL,
+  VOLUME_HANDLE_HEIGHT_LARGE,
+  VOLUME_HANDLE_HEIGHT_SMALL,
+  VOLUME_HANDLE_WIDTH_LARGE,
+  VOLUME_HANDLE_WIDTH_SMALL,
+  LEFT_BUTTONS_HEIGHT_LARGE,
+  LEFT_BUTTONS_HEIGHT_SMALL,
+} from '../../../../common/constants';
+import getScaledDimension from '../../../../common/utils/getScaledDimension';
+import {
+  selectVideoWidth,
+  selectVolume,
+  selectIsVolumeChanging,
+  selectVolumeMousePositionX,
+  setVolumeLevel,
+  setIsVolumeChanging,
+} from '../../../../app/videoReducer';
+import styles from './volume-slider.module.scss';
+
+/**
+ * Volume adjustment slider
+ *
+ * @returns {ReactNode} A slider for adjusting video volume
+ *
+ * @example
+ * &lt;VolumeSlider className='VolumeControls' />
+ *
+ */
+export default function VolumeSlider() {
+  const videoWidth = useSelector(selectVideoWidth);
+  const volumeLevel = useSelector(selectVolume);
+  const isVolumeChanging = useSelector(selectIsVolumeChanging);
+  const volumeMousePositionX = useSelector(selectVolumeMousePositionX);
+  const dispatch = useDispatch();
+  const sliderRef = useRef();
+
+  const volumeRailWidth = getScaledDimension({
+    smallDim: VOLUME_RAIL_WIDTH_SMALL,
+    largeDim: VOLUME_RAIL_WIDTH_LARGE,
+    videoWidth,
+  });
+  const volumeRailHeight = getScaledDimension({
+    smallDim: VOLUME_RAIL_HEIGHT_SMALL,
+    largeDim: VOLUME_RAIL_HEIGHT_LARGE,
+    videoWidth,
+  });
+  const totalHeight = getScaledDimension({
+    smallDim: LEFT_BUTTONS_HEIGHT_SMALL,
+    largeDim: LEFT_BUTTONS_HEIGHT_LARGE,
+    videoWidth,
+  });
+  const volumeRailMarginTop = totalHeight / 2.0 - volumeRailHeight / 2.0;
+
+  const volumeHandleWidth = getScaledDimension({
+    smallDim: VOLUME_HANDLE_WIDTH_SMALL,
+    largeDim: VOLUME_HANDLE_WIDTH_LARGE,
+    videoWidth,
+  });
+  const volumeHandleHeight = getScaledDimension({
+    smallDim: VOLUME_HANDLE_HEIGHT_SMALL,
+    largeDim: VOLUME_HANDLE_HEIGHT_LARGE,
+    videoWidth,
+  });
+  const volumeHandleTopPosition = totalHeight / 2.0 - volumeHandleHeight / 2.0;
+
+  const darkHandleWidth = volumeLevel * volumeRailWidth;
+  const volumeHandleLeftPosition = darkHandleWidth - volumeHandleWidth / 2.0;
+
+  const volWidth = getScaledDimension({
+    smallDim: VOLUME_SLIDER_WIDTH_SMALL,
+    largeDim: VOLUME_SLIDER_WIDTH_LARGE,
+    videoWidth,
+  });
+
+  const volHeight = getScaledDimension({
+    smallDim: VOLUME_SLIDER_HEIGHT_SMALL,
+    largeDim: VOLUME_SLIDER_HEIGHT_LARGE,
+    videoWidth,
+  });
+
+  /**
+   * Calculate volume level from X positon of mouse
+   * @param {number} mousePosition X-coordinate of mouse on screen
+   * @returns Volume level between 0 and 1
+   */
+  const calculateVolumeLevel = useCallback((mousePosition) => {
+    const { x: xMin, width } = sliderRef.current.getBoundingClientRect();
+    let volPos = mousePosition - xMin;
+    if (volPos &lt; 0) {
+      volPos = 0;
+    }
+    if (volPos > width) {
+      volPos = width;
+    }
+    let volLevel;
+    if (width > 0) {
+      volLevel = volPos / width;
+    } else {
+      volLevel = null;
+    }
+    return volLevel;
+  }, []);
+
+  /**
+   * Convert mouse position on slider to volume level
+   *
+   * @param {object} mouseEvent
+   * @returns {number} Volume level between 0 and 1
+   */
+  const detectVolume = (mouseEvent) => {
+    const { clientX } = mouseEvent;
+    return calculateVolumeLevel(clientX);
+  };
+
+  /**
+   * Starts tracking volume change when mouse is
+   * pressed in volume slider element
+   *
+   * @param {object} event
+   */
+  const mouseDownHandler = (event) => {
+    dispatch(setIsVolumeChanging(true));
+    const newVolume = detectVolume(event);
+    if (newVolume) {
+      dispatch(setVolumeLevel(newVolume));
+    }
+  };
+
+  /**
+   * Tracks volume change as mouse is moved
+   * in volume slider element
+   *
+   * @param {object} event
+   */
+  const mouseMoveHandler = (event) => {
+    if (isVolumeChanging) {
+      const varyingVolume = detectVolume(event);
+      if (varyingVolume) {
+        dispatch(setVolumeLevel(varyingVolume));
+      }
+    }
+  };
+
+  /**
+   * Ends volume change when mouse button
+   * is released in volume slider.
+   */
+  const mouseUpHandler = () => {
+    dispatch(setIsVolumeChanging(false));
+  };
+
+  /**
+   * Calculate volume level is mouse position is changing
+   */
+  useEffect(() => {
+    if (volumeMousePositionX) {
+      const volLevel = calculateVolumeLevel(volumeMousePositionX);
+      if (volLevel) {
+        dispatch(setVolumeLevel(volLevel));
+      }
+    }
+  }, [volumeMousePositionX, calculateVolumeLevel, dispatch]);
+
+  return (
+    &lt;div
+      style={{ width: `${volWidth}px`, height: `${volHeight}px` }}
+      onMouseDown={mouseDownHandler}
+      onMouseMove={mouseMoveHandler}
+      onMouseUp={mouseUpHandler}
+    >
+      &lt;img
+        ref={sliderRef}
+        src={volumeRail}
+        alt='volume-rail-default'
+        className={`${styles.VolumeRail} ${styles.VolumeRailLight}`}
+        style={{
+          width: `${volumeRailWidth}px`,
+          height: `${volumeRailHeight}px`,
+          top: `${volumeRailMarginTop}px`,
+        }}
+        draggable='false'
+      />
+      &lt;img
+        src={volumeRail}
+        alt='volume-rail'
+        className={`${styles.VolumeRail} ${styles.VolumeRailDark}`}
+        style={{
+          width: `${darkHandleWidth}px`,
+          height: `${volumeRailHeight}px`,
+          top: `${volumeRailMarginTop}px`,
+        }}
+        draggable='false'
+      />
+      &lt;img
+        src={volumeHandle}
+        alt='volume-handle'
+        className={`${styles.VolumeHandle}`}
+        style={{
+          width: `${volumeHandleWidth}px`,
+          height: `${volumeHandleHeight}px`,
+          top: `${volumeHandleTopPosition}px`,
+          left: `${volumeHandleLeftPosition}px`,
+        }}
+        draggable='false'
+      />
+    &lt;/div>
+  );
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="module.html#.exports">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#checkVideoUrl">checkVideoUrl</a></li><li><a href="global.html#exitFullscreen">exitFullscreen</a></li><li><a href="global.html#getWindowDimensions">getWindowDimensions</a></li><li><a href="global.html#goFullscreen">goFullscreen</a></li><li><a href="global.html#loadVideo">loadVideo</a></li><li><a href="global.html#pauseVideo">pauseVideo</a></li><li><a href="global.html#playVideo">playVideo</a></li><li><a href="global.html#videoSlice">videoSlice</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed May 22 2024 20:24:43 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

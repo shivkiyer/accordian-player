@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/right-controls/video-selector-bar/video-selector-bar.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/right-controls/video-selector-bar/video-selector-bar.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { useSelector, useDispatch } from 'react-redux';
+
+import {
+  selectVideoWidth,
+  selectUserSelection,
+  selectCurrentVideoLabel,
+  selectVideoData,
+  playPauseVideo,
+  setCurrentVideoLabel,
+  setVideoUrl,
+  setCurrentVideoName,
+} from '../../../app/videoReducer';
+import {
+  VIDEO_BTN_HEIGHT_LARGE,
+  VIDEO_BTN_HEIGHT_SMALL,
+  LONG_VIDEO_WIDTH_LARGE,
+  LONG_VIDEO_WIDTH_SMALL,
+  SHORT_VIDEO_WIDTH_LARGE,
+  SHORT_VIDEO_WIDTH_SMALL,
+  LEFT_BUTTONS_HEIGHT_LARGE,
+  LEFT_BUTTONS_HEIGHT_SMALL,
+  VIDEO_BTN_MARGIN_LARGE,
+  VIDEO_BTN_MARGIN_SMALL,
+} from '../../../common/constants';
+import getScaledDimension from '../../../common/utils/getScaledDimension';
+import longClipBtn from './../../../assets/images/full_film_icon.svg';
+import shortClipBtn from './../../../assets/images/half_film_icon.svg';
+import styles from './video-selector-bar.module.scss';
+
+/**
+ * Selector with film icons for choosing video options
+ *
+ * @returns {ReactNode} Container with icons
+ */
+export default function VideoSelectorBar() {
+  const dispatch = useDispatch();
+  const videoWidth = useSelector(selectVideoWidth);
+  const userSelection = useSelector(selectUserSelection);
+  const currentVideoLabel = useSelector(selectCurrentVideoLabel);
+  const videoData = useSelector(selectVideoData);
+
+  const btnHeight = getScaledDimension({
+    smallDim: VIDEO_BTN_HEIGHT_SMALL,
+    largeDim: VIDEO_BTN_HEIGHT_LARGE,
+    videoWidth,
+  });
+
+  const btnMargin = getScaledDimension({
+    smallDim: VIDEO_BTN_MARGIN_SMALL,
+    largeDim: VIDEO_BTN_MARGIN_LARGE,
+    videoWidth,
+  });
+
+  const longBtnWidth = getScaledDimension({
+    smallDim: LONG_VIDEO_WIDTH_SMALL,
+    largeDim: LONG_VIDEO_WIDTH_LARGE,
+    videoWidth,
+  });
+
+  const shortBtnWidth = getScaledDimension({
+    smallDim: SHORT_VIDEO_WIDTH_SMALL,
+    largeDim: SHORT_VIDEO_WIDTH_LARGE,
+    videoWidth,
+  });
+
+  const btnContainerHeight = getScaledDimension({
+    smallDim: LEFT_BUTTONS_HEIGHT_SMALL,
+    largeDim: LEFT_BUTTONS_HEIGHT_LARGE,
+    videoWidth,
+  });
+
+  const videoSelectorStyle = {
+    paddingLeft: `${btnMargin}px`,
+  };
+
+  const btnStyle = {
+    height: `${btnHeight}px`,
+    paddingTop: `${(btnContainerHeight - btnHeight) / 2}px`,
+    paddingBottom: `${(btnContainerHeight - btnHeight) / 2}px`,
+    paddingRight: `${btnMargin}px`,
+  };
+
+  const longBtnStyle = {
+    ...btnStyle,
+    width: `${longBtnWidth}px`,
+  };
+
+  const shortBtnStyle = {
+    ...btnStyle,
+    width: `${shortBtnWidth}px`,
+  };
+
+  let videoIndex = null;
+  if (currentVideoLabel.includes('videoOptions')) {
+    videoIndex = parseInt(currentVideoLabel.split('_')[1]);
+  }
+
+  const clickHandler = (iconIndex, isLong) => {
+    if (iconIndex !== videoIndex) {
+      const nextVideo = videoData['videoOptions'][iconIndex];
+      const nextVideoLabel = `videoOptions_${iconIndex}`;
+      const nextVideoName = nextVideo['name'];
+      const nextVideoUrl = isLong
+        ? nextVideo['longVideoUrl']
+        : nextVideo['shortVideoUrl'];
+      dispatch(playPauseVideo('paused'));
+      dispatch(setCurrentVideoLabel(nextVideoLabel));
+      dispatch(setCurrentVideoName(nextVideoName));
+      dispatch(setVideoUrl(nextVideoUrl));
+    }
+  };
+
+  const buttonList = userSelection.map((item, index) => {
+    let activeBtnStyle = {};
+    if (videoIndex === index) {
+      activeBtnStyle.opacity = '0.5';
+    }
+
+    switch (item) {
+      case 'long':
+        return (
+          &lt;img
+            src={longClipBtn}
+            alt='long-icon'
+            key={index}
+            style={{ ...longBtnStyle, ...activeBtnStyle }}
+            onClick={() => clickHandler(index, true)}
+          />
+        );
+      case 'short':
+        return (
+          &lt;img
+            src={shortClipBtn}
+            alt='short-icon'
+            key={index}
+            style={{ ...shortBtnStyle, ...activeBtnStyle }}
+            onClick={() => clickHandler(index, false)}
+          />
+        );
+      default:
+        return null;
+    }
+  });
+
+  return (
+    &lt;div className={styles.VideoSelectorBar} style={videoSelectorStyle}>
+      {buttonList}
+    &lt;/div>
+  );
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="module.html#.exports">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#checkVideoUrl">checkVideoUrl</a></li><li><a href="global.html#exitFullscreen">exitFullscreen</a></li><li><a href="global.html#getWindowDimensions">getWindowDimensions</a></li><li><a href="global.html#goFullscreen">goFullscreen</a></li><li><a href="global.html#loadVideo">loadVideo</a></li><li><a href="global.html#pauseVideo">pauseVideo</a></li><li><a href="global.html#playVideo">playVideo</a></li><li><a href="global.html#videoSlice">videoSlice</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed May 22 2024 20:24:43 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

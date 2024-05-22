@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/selection-panel/selection-table/selection-table-row/selection-table-row.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/selection-panel/selection-table/selection-table-row/selection-table-row.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { useSelector, useDispatch } from 'react-redux';
+
+import {
+  selectVideoWidth,
+  selectUserSelection,
+  setUserSelection,
+} from '../../../../app/videoReducer';
+import getScaledDimension from '../../../../common/utils/getScaledDimension';
+import {
+  SELECT_PANEL_ROW_HEIGHT_LARGE,
+  SELECT_PANEL_ROW_HEIGHT_SMALL,
+  SELECT_PANEL_COLUMN_WIDTH_LARGE,
+  SELECT_PANEL_COLUMN_WIDTH_SMALL,
+  SELECT_PANEL_COLUMN_MARGIN_LARGE,
+  SELECT_PANEL_COLUMN_MARGIN_SMALL,
+  SELECT_PANEL_SIDE_MARGIN_LARGE,
+  SELECT_PANEL_SIDE_MARGIN_SMALL,
+  SELECT_TABLE_FONT_LARGE,
+  SELECT_TABLE_FONT_SMALL,
+  SELECT_TABLE_TITLE_LEFT_PADDING_LARGE,
+  SELECT_TABLE_TITLE_LEFT_PADDING_SMALL,
+  SELECT_TABLE_RADIO_BTN_LARGE,
+  SELECT_TABLE_RADIO_BTN_SMALL,
+} from '../../../../common/constants';
+import styles from './selection-table-row.module.scss';
+import radioBtnOff from './../../../../assets/images/radio_btn_off.svg';
+import radioBtnOn from './../../../../assets/images/radio_btn_on.svg';
+
+/**
+ * Generates a row of the selection table from which
+ * the user can choose videos to customize playlist
+ *
+ * @param {string} title Name of video
+ * @param {number} row Index of option in video data collection
+ * @param {object} data Video option data
+ *
+ * @returns {ReactNode} Row containing video title and buttons for selection
+ */
+export default function SelectionTableRow({ title, row, data }) {
+  const dispatch = useDispatch();
+  const videoWidth = useSelector(selectVideoWidth);
+  const userSelection = useSelector(selectUserSelection);
+
+  let selectPanelSideMargin = getScaledDimension({
+    smallDim: SELECT_PANEL_SIDE_MARGIN_SMALL,
+    largeDim: SELECT_PANEL_SIDE_MARGIN_LARGE,
+    videoWidth,
+  });
+
+  if (videoWidth &lt; 1000) {
+    selectPanelSideMargin = selectPanelSideMargin / 2;
+  }
+
+  const rowHeight = getScaledDimension({
+    smallDim: SELECT_PANEL_ROW_HEIGHT_SMALL,
+    largeDim: SELECT_PANEL_ROW_HEIGHT_LARGE,
+    videoWidth,
+  });
+
+  const columnWidth = getScaledDimension({
+    smallDim: SELECT_PANEL_COLUMN_WIDTH_SMALL,
+    largeDim: SELECT_PANEL_COLUMN_WIDTH_LARGE,
+    videoWidth,
+  });
+
+  const columnMargin = getScaledDimension({
+    smallDim: SELECT_PANEL_COLUMN_MARGIN_SMALL,
+    largeDim: SELECT_PANEL_COLUMN_MARGIN_LARGE,
+    videoWidth,
+  });
+
+  const textFont = getScaledDimension({
+    smallDim: SELECT_TABLE_FONT_SMALL,
+    largeDim: SELECT_TABLE_FONT_LARGE,
+    videoWidth,
+  });
+
+  const textLeftPadding = getScaledDimension({
+    smallDim: SELECT_TABLE_TITLE_LEFT_PADDING_SMALL,
+    largeDim: SELECT_TABLE_TITLE_LEFT_PADDING_LARGE,
+    videoWidth,
+  });
+
+  const radioBtnSize = getScaledDimension({
+    smallDim: SELECT_TABLE_RADIO_BTN_SMALL,
+    largeDim: SELECT_TABLE_RADIO_BTN_LARGE,
+    videoWidth,
+  });
+
+  const rowStyle = {
+    fontSize: `${textFont}px`,
+  };
+
+  const basicColStyle = {
+    paddingTop: `${(rowHeight - textFont) / 2}px`,
+    paddingBottom: `${(rowHeight - textFont) / 2}px`,
+  };
+
+  const titleStyle = {
+    width: `${
+      videoWidth -
+      3 * columnWidth -
+      2 * selectPanelSideMargin -
+      textLeftPadding -
+      5 * columnMargin -
+      1
+    }px`,
+    paddingLeft: `${textLeftPadding}px`,
+    ...basicColStyle,
+  };
+
+  const colStyle = {
+    width: `${columnWidth}px`,
+    marginRight: `${columnMargin}px`,
+    ...basicColStyle,
+  };
+
+  const titleHeadingStyle = {
+    ...titleStyle,
+    marginRight: `${columnMargin}px`,
+  };
+
+  const radioBtnStyle = {
+    height: `${radioBtnSize}px`,
+    width: `${radioBtnSize}px`,
+  };
+
+  const titleRow = (
+    &lt;div style={rowStyle}>
+      &lt;div
+        className={`${styles.TableColumn} ${styles.TitleColumn} ${styles.TitleHeadingCell}`}
+        style={titleHeadingStyle}
+      >
+        &lt;span>Video Segment Title&lt;/span>
+      &lt;/div>
+      &lt;div className={`${styles.ChoiceColumns} ${styles.ChoiceHeading}`}>
+        &lt;div
+          className={`${styles.TableColumn} ${styles.VeryInterestedCell}`}
+          style={colStyle}
+        >
+          &lt;span>very interested&lt;/span>
+        &lt;/div>
+        &lt;div
+          className={`${styles.TableColumn} ${styles.InterestedCell}`}
+          style={colStyle}
+        >
+          &lt;span>interested&lt;/span>
+        &lt;/div>
+        &lt;div
+          className={`${styles.TableColumn} ${styles.NotInterestedCell}`}
+          style={{ ...colStyle, marginRight: '0px' }}
+        >
+          &lt;span>not interested&lt;/span>
+        &lt;/div>
+      &lt;/div>
+    &lt;/div>
+  );
+
+  /**
+   * Setting user choice on long video
+   */
+  const longChoiceHandler = () => {
+    const selected = userSelection.slice();
+    selected[row] = 'long';
+    dispatch(setUserSelection(selected));
+  };
+
+  /**
+   * Setting user choice on short video
+   */
+  const shortChoiceHandler = () => {
+    const selected = userSelection.slice();
+    selected[row] = 'short';
+    dispatch(setUserSelection(selected));
+  };
+
+  /**
+   * Setting user choice on not interested
+   */
+  const noChoiceHandler = () => {
+    const selected = userSelection.slice();
+    selected[row] = 'no';
+    dispatch(setUserSelection(selected));
+  };
+
+  let videoChoice = null;
+  switch (userSelection[row]) {
+    case 'long':
+      videoChoice = 'long';
+      break;
+    case 'short':
+      videoChoice = 'short';
+      break;
+    case 'no':
+      videoChoice = 'no';
+      break;
+    default:
+      videoChoice = null;
+  }
+
+  let dataRow = null;
+  if (data !== null &amp;&amp; data !== undefined) {
+    dataRow = (
+      &lt;div style={rowStyle}>
+        &lt;div
+          className={`${styles.TableColumn} ${styles.TitleColumn}`}
+          style={titleStyle}
+        >
+          {data[row]['name']}
+        &lt;/div>
+        &lt;div className={styles.ChoiceColumns}>
+          &lt;div
+            className={
+              videoChoice === 'long'
+                ? `${styles.TableColumn} ${styles.VeryInterestedCell}`
+                : styles.TableColumn
+            }
+            style={colStyle}
+            onClick={longChoiceHandler}
+          >
+            &lt;img
+              className={styles.ChoiceButton}
+              style={radioBtnStyle}
+              src={videoChoice === 'long' ? radioBtnOn : radioBtnOff}
+              alt='radio-btn'
+            />
+          &lt;/div>
+          &lt;div
+            className={
+              videoChoice === 'short'
+                ? `${styles.TableColumn} ${styles.InterestedCell}`
+                : styles.TableColumn
+            }
+            style={colStyle}
+            onClick={shortChoiceHandler}
+          >
+            &lt;img
+              className={styles.ChoiceButton}
+              style={radioBtnStyle}
+              src={videoChoice === 'short' ? radioBtnOn : radioBtnOff}
+              alt='radio-btn'
+            />
+          &lt;/div>
+          &lt;div
+            className={
+              videoChoice === 'no'
+                ? `${styles.TableColumn} ${styles.NotInterestedCell}`
+                : styles.TableColumn
+            }
+            style={{ ...colStyle, marginRight: '0px' }}
+            onClick={noChoiceHandler}
+          >
+            &lt;img
+              className={styles.ChoiceButton}
+              style={radioBtnStyle}
+              src={videoChoice === 'no' ? radioBtnOn : radioBtnOff}
+              alt='radio-btn'
+            />
+          &lt;/div>
+        &lt;/div>
+      &lt;/div>
+    );
+  }
+
+  return title ? titleRow : dataRow;
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="module.html#.exports">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#checkVideoUrl">checkVideoUrl</a></li><li><a href="global.html#exitFullscreen">exitFullscreen</a></li><li><a href="global.html#getWindowDimensions">getWindowDimensions</a></li><li><a href="global.html#goFullscreen">goFullscreen</a></li><li><a href="global.html#loadVideo">loadVideo</a></li><li><a href="global.html#pauseVideo">pauseVideo</a></li><li><a href="global.html#playVideo">playVideo</a></li><li><a href="global.html#videoSlice">videoSlice</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed May 22 2024 20:24:43 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

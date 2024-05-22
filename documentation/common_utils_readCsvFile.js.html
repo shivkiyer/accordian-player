@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: common/utils/readCsvFile.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: common/utils/readCsvFile.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import calcTimeFromAfterEffects from './calcTimeFromAfterEffects';
+
+/**
+ * Reads a config.csv file and produces the video specs
+ *
+ * @param {string} data - text content of csv file
+ *
+ * @return {object} Details of videos to be played in app
+ */
+export default function readCsv(data) {
+  const videoSpecs = {
+    videoOptions: [],
+  };
+  const segmentTitles = [];
+  const longVideos = [];
+  const shortVideos = [];
+
+  let startLoopback = 0;
+  let startInteraction;
+  let jumpToTimestamp = 0;
+  let startHotSpot = 0;
+  let jumpToUrl;
+
+  const allTextLines = data.split(/\r\n|\n/);
+  for (let i = 0; i &lt; allTextLines.length; i++) {
+    const lineContents = allTextLines[i].split(',');
+    switch (lineContents[0].trim()) {
+      case 'INTRO_INFO':
+        videoSpecs['introVideo'] = {
+          title: lineContents[2].trim(),
+          url: lineContents[4].trim(),
+          image: lineContents[8].trim(),
+        };
+        if (lineContents[6].trim().length > 0) {
+          videoSpecs['framesPerSecond'] = +lineContents[6].trim();
+        } else {
+          videoSpecs['framesPerSecond'] = 30;
+        }
+        if (lineContents[10].trim().length > 0) {
+          let backGroundColor = lineContents[10].trim();
+          if (backGroundColor[0] !== '#') {
+            backGroundColor = '#' + backGroundColor;
+          }
+          videoSpecs['backgroundColor'] = backGroundColor;
+        }
+        break;
+
+      case 'SELECT_INFO':
+        if (lineContents[6].trim().length > 0) {
+          startInteraction = calcTimeFromAfterEffects(
+            lineContents[6].trim(),
+            videoSpecs['framesPerSecond']
+          );
+        }
+        if (lineContents[8].trim().length > 0) {
+          startLoopback = calcTimeFromAfterEffects(
+            lineContents[8].trim(),
+            videoSpecs['framesPerSecond']
+          );
+        }
+        if (lineContents[10].trim().length > 0) {
+          jumpToTimestamp = calcTimeFromAfterEffects(
+            lineContents[10].trim(),
+            videoSpecs['framesPerSecond']
+          );
+        }
+        videoSpecs['selectInfo'] = {
+          title: lineContents[2].trim(),
+          url: lineContents[4].trim(),
+          startInteraction: startInteraction,
+          startLoopback: startLoopback,
+          jumpToTimestamp: jumpToTimestamp,
+          selectText: lineContents[12].trim(),
+        };
+        break;
+
+      case 'ENDSCREEN_INFO':
+        if (lineContents[6].trim().length > 0) {
+          startLoopback = calcTimeFromAfterEffects(
+            lineContents[6].trim(),
+            videoSpecs['framesPerSecond']
+          );
+        }
+        if (lineContents[8].trim().length > 0) {
+          jumpToTimestamp = calcTimeFromAfterEffects(
+            lineContents[8].trim(),
+            videoSpecs['framesPerSecond']
+          );
+        }
+        if (lineContents[10].trim().length > 0) {
+          startHotSpot = calcTimeFromAfterEffects(
+            lineContents[10].trim(),
+            videoSpecs['framesPerSecond']
+          );
+        }
+        if (lineContents[12].trim().length > 0) {
+          if (lineContents[12].trim().substring(0, 4) !== 'http') {
+            jumpToUrl = 'http://' + lineContents[12].trim();
+          } else {
+            jumpToUrl = lineContents[12].trim();
+          }
+        }
+        videoSpecs['endscreenInfo'] = {
+          title: lineContents[2].trim(),
+          url: lineContents[4].trim(),
+          startLoopback: startLoopback,
+          jumpToTimestamp: jumpToTimestamp,
+          startHotSpot: startHotSpot,
+          jumpToUrl: jumpToUrl,
+        };
+        break;
+
+      case 'SEGMENT_TITLES':
+        for (let j = 1; j &lt; lineContents.length; j++) {
+          if (lineContents[j].trim().length === 0) {
+            break;
+          }
+          segmentTitles.push(lineContents[j].trim());
+        }
+        break;
+
+      case 'SEGMENT_VIDEO_URL_LONG':
+        for (let j = 1; j &lt; lineContents.length; j++) {
+          if (lineContents[j].trim().length === 0) {
+            break;
+          }
+          longVideos.push(lineContents[j].trim());
+        }
+        break;
+
+      case 'SEGMENT_VIDEO_URL_SHORT':
+        for (let j = 1; j &lt; lineContents.length; j++) {
+          if (lineContents[j].trim().length === 0) {
+            break;
+          }
+          shortVideos.push(lineContents[j].trim());
+        }
+        break;
+      default:
+    }
+  }
+  for (let i = 0; i &lt; segmentTitles.length; i++) {
+    videoSpecs['videoOptions'].push({
+      name: segmentTitles[i],
+      longVideoUrl: longVideos[i],
+      shortVideoUrl: shortVideos[i],
+    });
+  }
+  let videoSequence = [];
+  if ('introVideo' in videoSpecs) {
+    videoSequence.push('introVideo');
+  }
+  if ('selectInfo' in videoSpecs) {
+    videoSequence.push('selectInfo');
+  }
+  if ('videoOptions' in videoSpecs) {
+    for (let i = 0; i &lt; videoSpecs['videoOptions'].length; i++) {
+      videoSequence.push(`videoOptions_${i}`);
+    }
+  }
+  if ('endscreenInfo' in videoSpecs) {
+    videoSequence.push('endscreenInfo');
+  }
+  if (videoSequence.length > 1) {
+    videoSpecs['videoSequence'] = videoSequence;
+  }
+  return videoSpecs;
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="module.html#.exports">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#checkVideoUrl">checkVideoUrl</a></li><li><a href="global.html#exitFullscreen">exitFullscreen</a></li><li><a href="global.html#getWindowDimensions">getWindowDimensions</a></li><li><a href="global.html#goFullscreen">goFullscreen</a></li><li><a href="global.html#loadVideo">loadVideo</a></li><li><a href="global.html#pauseVideo">pauseVideo</a></li><li><a href="global.html#playVideo">playVideo</a></li><li><a href="global.html#videoSlice">videoSlice</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed May 22 2024 20:24:43 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

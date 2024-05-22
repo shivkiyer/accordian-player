@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: components/left-controls/play-button/play-button.jsx</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,57 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: components/left-controls/play-button/play-button.jsx</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { useDispatch } from 'react-redux';
 
+import playBtn from './../../../assets/images/play.svg';
+import {
+  PLAY_BTN_HEIGHT_LARGE,
+  PLAY_BTN_HEIGHT_SMALL,
+  PLAY_BTN_WIDTH_LARGE,
+  PLAY_BTN_WIDTH_SMALL,
+} from '../../../common/constants';
+import ControlButton from '../control-button/control-button';
+import { playPauseVideo } from '../../../app/videoReducer';
 
-    <h3> </h3>
+/**
+ * Play control button
+ *
+ * @returns {ReactNode} A control button of type Play
+ *
+ * @example
+ * &lt;PlayButton />
+ *
+ */
+export default function PlayButton() {
+  const dispatch = useDispatch();
+  const playHandler = () => {
+    dispatch(playPauseVideo());
+  };
 
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+  return (
+    &lt;ControlButton
+      btnHeightSmall={PLAY_BTN_HEIGHT_SMALL}
+      btnHeightLarge={PLAY_BTN_HEIGHT_LARGE}
+      btnWidthSmall={PLAY_BTN_WIDTH_SMALL}
+      btnWidthLarge={PLAY_BTN_WIDTH_LARGE}
+      btnImage={playBtn}
+      btnAltText='play'
+      btnClickHandler={playHandler}
+    />
+  );
+}
+</code></pre>
+        </article>
+    </section>
 
 
 

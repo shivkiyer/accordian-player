@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: accordion-player.jsx</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,60 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: accordion-player.jsx</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { Provider } from 'react-redux';
 
+import VideoPlayer from './components/video-player/video-player';
+import videoStore from './app/store';
+import './assets/styles/index.css';
 
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+/**
+ * Root Accordion Player component
+ *
+ * @param {number} width Width of the player in px (optional)
+ * @param {number} height Height of the player in px (optional)
+ * @param {string} url URL of video or config file (optional)
+ * @param {string} name Title of the video
+ *
+ * @returns {ReactNode} The Accordion Video Player
+ *
+ * @example
+ * &lt;AccordionPlayer />
+ *
+ * @example
+ * &lt;AccordionPlayer width='480' />
+ *
+ * @example
+ * &lt;AccordionPlayer height='520' />
+ *
+ * @example
+ * &lt;AccordionPlayer url='http://someurl.com' />
+ *
+ * @example
+ * &lt;AccordionPlayer width='630' url='http://someurl.com' />
+ *
+ *  * @example
+ * &lt;AccordionPlayer width='630' url='http://someurl.com' name='Some name' />
+ *
+ */
+export default function AccordionPlayer({ width, height, url, name }) {
+  return (
+    &lt;Provider store={videoStore}>
+      &lt;VideoPlayer width={width} height={height} url={url} name={name} />
+    &lt;/Provider>
+  );
+}
+</code></pre>
+        </article>
+    </section>
 
 
 

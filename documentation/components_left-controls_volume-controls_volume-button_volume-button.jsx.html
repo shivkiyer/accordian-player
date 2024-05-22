@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: hooks/useWindowDimensions.js</title>
+    <title>JSDoc: Source: components/left-controls/volume-controls/volume-button/volume-button.jsx</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: hooks/useWindowDimensions.js</h1>
+    <h1 class="page-title">Source: components/left-controls/volume-controls/volume-button/volume-button.jsx</h1>
 
     
 
@@ -26,48 +26,40 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { useState, useEffect } from 'react';
+            <pre class="prettyprint source linenums"><code>import volumeBtn from './../../../../assets/images/volume_icon.svg';
+import volumeMuteBtn from './../../../../assets/images/volume_icon_mute.svg';
+import {
+  VOLUME_BTN_HEIGHT_LARGE,
+  VOLUME_BTN_HEIGHT_SMALL,
+  VOLUME_BTN_WIDTH_LARGE,
+  VOLUME_BTN_WIDTH_SMALL,
+} from './../../../../common/constants';
+import ControlButton from './../../control-button/control-button';
 
 /**
- * Returns the innerWidth and innerHeight of the browser window
+ * Volume control icon that toggles volume slider
  *
- * @returns {object} Having properties width and height
+ * @param {boolean} isMute Status of whether video is muted
+ * @param {function} clickHandler Function to toggle volume mute
+ *
+ * @returns {ReactNode} Control button of type Volume control
+ *
+ * @example
+ * &lt;VolumeButton isMute='false' clickhandler={fn} />
  *
  */
-function getWindowDimensions() {
-  const { innerWidth: width, innerHeight: height } = window;
-  return {
-    width,
-    height,
-  };
-}
-
-/**
- * A hook that fetches and returns browser window size
- * when browser is resized.
- *
- * @returns {object} Having properties width and height
- */
-export default function useWindowDimensions() {
-  const [windowDimensions, setWindowDimensions] = useState(
-    getWindowDimensions()
+export default function VolumeButton({ isMute, clickHandler }) {
+  return (
+    &lt;ControlButton
+      btnHeightSmall={VOLUME_BTN_HEIGHT_SMALL}
+      btnHeightLarge={VOLUME_BTN_HEIGHT_LARGE}
+      btnWidthSmall={VOLUME_BTN_WIDTH_SMALL}
+      btnWidthLarge={VOLUME_BTN_WIDTH_LARGE}
+      btnImage={isMute ? volumeMuteBtn : volumeBtn}
+      btnAltText='volume'
+      btnClickHandler={clickHandler}
+    />
   );
-
-  useEffect(() => {
-    /**
-     * Window resize event handler that sets the new
-     * window dimensions to the hook state.
-     */
-    function handleWindowResize() {
-      setWindowDimensions(getWindowDimensions());
-    }
-
-    window.addEventListener('resize', handleWindowResize);
-
-    return () => window.removeEventListener('resize', handleWindowResize);
-  }, []);
-
-  return windowDimensions;
 }
 </code></pre>
         </article>

@@ -3,7 +3,7 @@
  *
  * @param {number} milliseconds Wait time (optional) - default 100 ms
  *
- * @returns
+ * @returns {Promise}
  */
 export default function wait(milliseconds) {
   if (!milliseconds) {

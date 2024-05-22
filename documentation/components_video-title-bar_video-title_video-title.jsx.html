@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: components/video-title-bar/video-title/video-title.jsx</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,43 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: components/video-title-bar/video-title/video-title.jsx</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import styles from './video-title.module.scss';
 
+/**
+ * Title of the video
+ *
+ * @param {string} title Video title
+ * @param {number} width Width of video title container
+ *
+ * @returns {ReactNode} Container with the video title
+ */
+export default function VideoTitle({ title, width }) {
+  const style = {
+    maxWidth: `${width}px`,
+  };
 
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+  return (
+    &lt;div
+      data-testid='test-video-title'
+      className={styles.VideoTitle}
+      style={style}
+    >
+      {title}
+    &lt;/div>
+  );
+}
+</code></pre>
+        </article>
+    </section>
 
 
 

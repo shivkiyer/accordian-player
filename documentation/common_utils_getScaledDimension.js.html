@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: hooks/useWindowDimensions.js</title>
+    <title>JSDoc: Source: common/utils/getScaledDimension.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: hooks/useWindowDimensions.js</h1>
+    <h1 class="page-title">Source: common/utils/getScaledDimension.js</h1>
 
     
 
@@ -26,48 +26,33 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { useState, useEffect } from 'react';
+            <pre class="prettyprint source linenums"><code>import { LOWER_DEVICE_WIDTH, UPPER_DEVICE_WIDTH } from '../constants';
 
 /**
- * Returns the innerWidth and innerHeight of the browser window
+ * Scales dimension of any UI element according to video width
+ * Dimensions scale proportionally between LOWER_DEVICE_WIDTH
+ * and UPPER_DEVICE_WIDTH, and linearly outside this range.
  *
- * @returns {object} Having properties width and height
+ * @param {number} smallDim The dimension for smaller desktop device widths
+ * @param {number} largeDim The dimension for larger desktop device widths
+ * @param {number} videoWidth The current width of the video player
  *
+ * @returns {number} The scaled dimension of the UI element
  */
-function getWindowDimensions() {
-  const { innerWidth: width, innerHeight: height } = window;
-  return {
-    width,
-    height,
-  };
-}
-
-/**
- * A hook that fetches and returns browser window size
- * when browser is resized.
- *
- * @returns {object} Having properties width and height
- */
-export default function useWindowDimensions() {
-  const [windowDimensions, setWindowDimensions] = useState(
-    getWindowDimensions()
-  );
-
-  useEffect(() => {
-    /**
-     * Window resize event handler that sets the new
-     * window dimensions to the hook state.
-     */
-    function handleWindowResize() {
-      setWindowDimensions(getWindowDimensions());
-    }
-
-    window.addEventListener('resize', handleWindowResize);
-
-    return () => window.removeEventListener('resize', handleWindowResize);
-  }, []);
-
-  return windowDimensions;
+export default function getScaledDimension({ smallDim, largeDim, videoWidth }) {
+  let scaledDimension;
+  if (videoWidth >= LOWER_DEVICE_WIDTH &amp;&amp; videoWidth &lt;= UPPER_DEVICE_WIDTH) {
+    scaledDimension =
+      smallDim +
+      (largeDim - smallDim) *
+        ((videoWidth - LOWER_DEVICE_WIDTH) /
+          (UPPER_DEVICE_WIDTH - LOWER_DEVICE_WIDTH));
+  } else if (videoWidth &lt; LOWER_DEVICE_WIDTH) {
+    scaledDimension = smallDim * (videoWidth / LOWER_DEVICE_WIDTH);
+  } else if (videoWidth > UPPER_DEVICE_WIDTH) {
+    scaledDimension = largeDim * (videoWidth / UPPER_DEVICE_WIDTH);
+  }
+  return Number(scaledDimension.toFixed(2));
 }
 </code></pre>
         </article>
