@@ -14,8 +14,7 @@ describe('ControlBar', () => {
     };
   });
 
-  const AccordionPlayer =
-    require('./../accordion-player/accordion-player').default;
+  const AccordionPlayer = require('./../../accordion-player').default;
 
   it('should produce a control bar of 64px height if video is 630px wide (design)', async () => {
     // Url checking method will not return error message

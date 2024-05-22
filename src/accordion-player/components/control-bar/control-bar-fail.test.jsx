@@ -14,8 +14,7 @@ describe('Control bar', () => {
     };
   });
 
-  const AccordionPlayer =
-    require('./../accordion-player/accordion-player').default;
+  const AccordionPlayer = require('./../../accordion-player').default;
 
   it('should not produce a control bar if video url is not a url', async () => {
     // Url checking method will return error message

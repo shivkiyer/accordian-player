@@ -138,7 +138,10 @@ export default function VideoTitleBar() {
   totalElWidth += leftControlBtnLeftMargin + controlBtnWidth; // fullscreen button
   totalElWidth += rightControlsRightMargin; // right margin for right controls button
 
-  if (currentVideoLabel.includes('videoOptions')) {
+  if (
+    currentVideoLabel !== null &&
+    currentVideoLabel.includes('videoOptions')
+  ) {
     const noOfLongVideos = userSelection.filter((el) => el === 'long').length;
     const noOfShortVideos = userSelection.filter((el) => el === 'short').length;
 

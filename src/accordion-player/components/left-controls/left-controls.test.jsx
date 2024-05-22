@@ -28,8 +28,6 @@ describe('LeftControls (buttons)', () => {
   });
 
   const VideoPlayer = require('./../video-player/video-player').default;
-  const AccordionPlayer =
-    require('./../accordion-player/accordion-player').default;
 
   it('should display the left control buttons', async () => {
     render(

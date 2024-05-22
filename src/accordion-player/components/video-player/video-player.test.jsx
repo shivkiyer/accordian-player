@@ -16,8 +16,7 @@ describe('VideoPlayer', () => {
     };
   });
 
-  const AccordionPlayer =
-    require('./../accordion-player/accordion-player').default;
+  const AccordionPlayer = require('./../../accordion-player').default;
 
   it('should be rendered', async () => {
     mockCheckVideoUrl.mockReturnValue(null);

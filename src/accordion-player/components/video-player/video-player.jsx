@@ -47,6 +47,7 @@ import { CONFIG_TEXT_SMALL, CONFIG_TEXT_LARGE } from '../../common/constants';
  * @param {number} width The width of the container (optional)
  * @param {number} height The height of the container (optional)
  * @param {string} url The URL of the video (optional)
+ * @param {string} name Title of the video
  *
  * @returns {ReactNode} A react element with fixed height and width
  *
@@ -66,7 +67,7 @@ import { CONFIG_TEXT_SMALL, CONFIG_TEXT_LARGE } from '../../common/constants';
  * <Video Player />
  *
  */
-export default function VideoPlayer({ width, height, url }) {
+export default function VideoPlayer({ width, height, url, name }) {
   const dispatch = useDispatch();
   const playerRef = useRef();
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
@@ -99,6 +100,7 @@ export default function VideoPlayer({ width, height, url }) {
           if (urlResult.errMsg === null) {
             if (typeof urlResult.data === 'string') {
               dispatch(setVideoUrl(urlResult.data));
+              dispatch(setCurrentVideoName(name));
               setBaseUrl(urlResult.data);
             } else {
               const videoData = urlResult.data;
@@ -129,7 +131,7 @@ export default function VideoPlayer({ width, height, url }) {
     };
 
     fetchUrl(url, videoUrl);
-  }, [url, videoUrl, dispatch]);
+  }, [url, name, videoUrl, dispatch]);
 
   const { playerWidth, playerHeight, marginTop } = getVideoDimensions({
     width,

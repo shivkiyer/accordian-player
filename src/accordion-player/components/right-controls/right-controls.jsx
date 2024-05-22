@@ -34,7 +34,8 @@ export default function RightControls() {
     marginRight: `${rightMargin}px`,
   };
 
-  const isVideoSelectorVisible = currentVideoLabel.includes('videoOptions');
+  const isVideoSelectorVisible =
+    currentVideoLabel !== null && currentVideoLabel.includes('videoOptions');
 
   return (
     <div className={styles.RightControls} style={style}>
