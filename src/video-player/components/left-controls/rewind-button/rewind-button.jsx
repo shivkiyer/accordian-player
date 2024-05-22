@@ -1,3 +1,13 @@
+import { useSelector, useDispatch } from 'react-redux';
+
+import {
+  selectVideoData,
+  setVideoUrl,
+  setCurrentVideoLabel,
+  setCurrentVideoName,
+  playPauseVideo,
+  setUserSelection,
+} from '../../../app/videoReducer';
 import rewindBtn from './../../../assets/images/rewind.svg';
 import {
   REWIND_BTN_HEIGHT_LARGE,
@@ -17,6 +27,20 @@ import ControlButton from '../control-button/control-button';
  *
  */
 export default function RewindButton() {
+  const dispatch = useDispatch();
+  const videoData = useSelector(selectVideoData);
+
+  const rewindHandler = () => {
+    const introVideo = videoData['introVideo'];
+    dispatch(playPauseVideo('paused'));
+    dispatch(setVideoUrl(introVideo['url']));
+    dispatch(setCurrentVideoLabel('introVideo'));
+    dispatch(setCurrentVideoName(introVideo['title']));
+    dispatch(
+      setUserSelection(Array(videoData['videoOptions'].length).fill(null))
+    );
+  };
+
   return (
     <ControlButton
       btnHeightSmall={REWIND_BTN_HEIGHT_SMALL}
@@ -25,6 +49,7 @@ export default function RewindButton() {
       btnWidthLarge={REWIND_BTN_WIDTH_LARGE}
       btnImage={rewindBtn}
       btnAltText='rewind'
+      btnClickHandler={rewindHandler}
     />
   );
 }

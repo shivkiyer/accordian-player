@@ -12,6 +12,7 @@ import {
   selectCurrentVideoLabel,
   selectUserSelection,
   selectReadyForEnding,
+  selectIsLoaded,
   setCurrentTime,
   setDuration,
   playPauseVideo,
@@ -20,6 +21,7 @@ import {
   setCurrentVideoName,
   setSelectPanelVisible,
   setReadyForEnding,
+  setIsLoaded,
 } from '../../../app/videoReducer';
 import {
   loadVideo,
@@ -52,6 +54,7 @@ export default function Video({ mouseMoveHandler }) {
   const currentVideoLabel = useSelector(selectCurrentVideoLabel);
   const userSelection = useSelector(selectUserSelection);
   const isReadyForEnding = useSelector(selectReadyForEnding);
+  const isLoaded = useSelector(selectIsLoaded);
 
   /**
    * Handling pause/play from user control action
@@ -121,7 +124,7 @@ export default function Video({ mouseMoveHandler }) {
    */
   const loadedDataHandler = (event) => {
     dispatch(setDuration(event.target.duration));
-    if (currentVideoLabel !== null && currentVideoLabel !== 'introVideo') {
+    if (isLoaded) {
       dispatch(playPauseVideo('playing'));
     }
   };
@@ -130,6 +133,7 @@ export default function Video({ mouseMoveHandler }) {
    * Play/pause video by clicking on the video
    */
   const clickHandler = () => {
+    dispatch(setIsLoaded(true));
     const actionUrl = getActionUrl(isReadyForEnding, videoData);
     if (actionUrl !== null) {
       window.open(actionUrl);
