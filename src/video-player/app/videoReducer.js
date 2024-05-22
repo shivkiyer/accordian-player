@@ -27,6 +27,7 @@ import { createSlice } from '@reduxjs/toolkit';
  * currentVideoName {string} - Name of current video
  * isSelectPanelVisible {boolean} - Visibility of user select panel
  * userSelection: {Array} - User choice on video options
+ * readyForEnding: {boolean} - Is the video ready for the ending action
  *
  * Reducers:
  * setDimensions : Setting the width and height of the video player
@@ -47,6 +48,7 @@ import { createSlice } from '@reduxjs/toolkit';
  * setCurrentVideoName: Sets the name of the current video
  * setSelectPanelVisible : Sets the visibility of the user select panel
  * setUserSelection: Sets the user video selection array
+ * setReadyForEnding: Sets the ending state of the video collection
  *
  */
 export const videoSlice = createSlice({
@@ -77,6 +79,7 @@ export const videoSlice = createSlice({
     currentVideoName: null,
     isSelectPanelVisible: false,
     userSelection: null,
+    readyForEnding: false,
   },
   reducers: {
     /**
@@ -297,6 +300,14 @@ export const videoSlice = createSlice({
     setUserSelection: (state, action) => {
       state.userSelection = action.payload;
     },
+    /**
+     * Sets the ending state of the video collection
+     *
+     * @param {boolean} payload
+     */
+    setReadyForEnding: (state, action) => {
+      state.readyForEnding = action.payload;
+    },
   },
 });
 
@@ -323,6 +334,7 @@ export const {
   setCurrentVideoName,
   setSelectPanelVisible,
   setUserSelection,
+  setReadyForEnding,
 } = videoSlice.actions;
 
 export const selectVideoWidth = (state) => state.video.width;
@@ -357,5 +369,6 @@ export const selectCurrentVideoName = (state) => state.video.currentVideoName;
 export const selectIsSelectPanelVisible = (state) =>
   state.video.isSelectPanelVisible;
 export const selectUserSelection = (state) => state.video.userSelection;
+export const selectReadyForEnding = (state) => state.video.readyForEnding;
 
 export default videoSlice.reducer;

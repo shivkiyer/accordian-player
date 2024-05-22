@@ -7,9 +7,9 @@
  * @returns {number} Time in seconds to which video position should jump
  */
 export default function checkVideoLoops(currentTime, videoLabel, videoData) {
-  if (videoLabel === 'selectInfo') {
-    if (currentTime >= videoData['selectInfo']['startLoopback'] / 1000) {
-      return videoData['selectInfo']['jumpToTimestamp'] / 1000;
+  if (videoLabel === 'selectInfo' || videoLabel === 'endscreenInfo') {
+    if (currentTime >= videoData[videoLabel]['startLoopback'] / 1000) {
+      return videoData[videoLabel]['jumpToTimestamp'] / 1000;
     }
   }
   return null;

@@ -11,6 +11,7 @@ import {
   selectVideoData,
   selectCurrentVideoLabel,
   selectUserSelection,
+  selectReadyForEnding,
   setCurrentTime,
   setDuration,
   playPauseVideo,
@@ -18,6 +19,7 @@ import {
   setVideoUrl,
   setCurrentVideoName,
   setSelectPanelVisible,
+  setReadyForEnding,
 } from '../../../app/videoReducer';
 import {
   loadVideo,
@@ -27,6 +29,8 @@ import {
 import getNextVideoData from '../../../common/utils/getNextVideoData';
 import getSelectPanelVisible from '../../../common/utils/getSelectPanelVisible';
 import checkVideoLoops from '../../../common/utils/checkVideoLoops';
+import checkForVideoAction from '../../../common/utils/checkForVideoAction';
+import getActionUrl from '../../../common/utils/getActionUrl';
 import styles from './video.module.scss';
 
 /**
@@ -47,6 +51,7 @@ export default function Video({ mouseMoveHandler }) {
   const videoData = useSelector(selectVideoData);
   const currentVideoLabel = useSelector(selectCurrentVideoLabel);
   const userSelection = useSelector(selectUserSelection);
+  const isReadyForEnding = useSelector(selectReadyForEnding);
 
   /**
    * Handling pause/play from user control action
@@ -96,6 +101,14 @@ export default function Video({ mouseMoveHandler }) {
       currentVideoLabel,
       videoData
     );
+    const isVideoEnding = checkForVideoAction(
+      event.target.currentTime,
+      currentVideoLabel,
+      videoData
+    );
+    if (isVideoEnding) {
+      dispatch(setReadyForEnding(true));
+    }
     if (loopTime !== null) {
       videoRef.current.currentTime = loopTime;
     }
@@ -117,6 +130,10 @@ export default function Video({ mouseMoveHandler }) {
    * Play/pause video by clicking on the video
    */
   const clickHandler = () => {
+    const actionUrl = getActionUrl(isReadyForEnding, videoData);
+    if (actionUrl !== null) {
+      window.open(actionUrl);
+    }
     dispatch(playPauseVideo());
   };
 
