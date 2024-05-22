@@ -1,8 +1,8 @@
 import { Provider } from 'react-redux';
 
-import VideoPlayer from '../video-player/video-player';
-import videoStore from './../../app/store';
-import './../../assets/styles/index.css';
+import VideoPlayer from './components/video-player/video-player';
+import videoStore from './app/store';
+import './assets/styles/index.css';
 
 /**
  * Root Accordion Player component

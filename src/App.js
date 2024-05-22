@@ -1,4 +1,4 @@
-import AccordionPlayer from './video-player/components/accordion-player/accordion-player';
+import AccordionPlayer from './accordion-player/accordion-player';
 
 function App() {
   return <AccordionPlayer />;
