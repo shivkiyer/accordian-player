@@ -111,9 +111,9 @@ export default function VideoSelectorBar() {
   };
 
   const buttonList = userSelection.map((item, index) => {
-    let activeBtnStyle = {};
-    if (videoIndex === index) {
-      activeBtnStyle.opacity = '0.5';
+    let inactiveBtnStyle = {};
+    if (videoIndex !== index) {
+      inactiveBtnStyle.opacity = '0.5';
     }
 
     switch (item) {
@@ -123,7 +123,7 @@ export default function VideoSelectorBar() {
             src={longClipBtn}
             alt='long-icon'
             key={index}
-            style={{ ...longBtnStyle, ...activeBtnStyle }}
+            style={{ ...longBtnStyle, ...inactiveBtnStyle }}
             onClick={() => clickHandler(index, true)}
           />
         );
@@ -133,7 +133,7 @@ export default function VideoSelectorBar() {
             src={shortClipBtn}
             alt='short-icon'
             key={index}
-            style={{ ...shortBtnStyle, ...activeBtnStyle }}
+            style={{ ...shortBtnStyle, ...inactiveBtnStyle }}
             onClick={() => clickHandler(index, false)}
           />
         );
