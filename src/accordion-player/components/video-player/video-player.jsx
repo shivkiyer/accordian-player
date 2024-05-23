@@ -148,6 +148,8 @@ export default function VideoPlayer({ width, height, url, name }) {
   }, [playerHeight, playerWidth, dispatch]);
 
   const playerStyle = {
+    width: `${playerWidth}px`,
+    height: `${playerHeight}px`,
     paddingTop: `${marginTop}px`,
     paddingLeft: `${(windowWidth - playerWidth) / 2}px`,
     paddingRight: `${(windowWidth - playerWidth) / 2}px`,
