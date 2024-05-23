@@ -17,6 +17,8 @@ import {
   CONTINUE_BTN_HEIGHT_SMALL,
   CONTINUE_BTN_SPACE_BELOW_SMALL,
   CONTINUE_BTN_SPACE_BELOW_LARGE,
+  SELECT_TEXT_FONT_LARGE,
+  SELECT_TEXT_FONT_SMALL,
 } from '../../../common/constants';
 import getScaledDimension from '../../../common/utils/getScaledDimension';
 import getNextVideoData from '../../../common/utils/getNextVideoData';
@@ -48,18 +50,29 @@ export default function ContinueButton() {
     videoWidth,
   });
 
+  const selectedTextSize = getScaledDimension({
+    smallDim: SELECT_TEXT_FONT_SMALL,
+    largeDim: SELECT_TEXT_FONT_LARGE,
+    videoWidth,
+  });
+
   const btnLeftSpace = (window.innerWidth - btnWidth) / 2;
 
   const disableBtn = userSelection.includes(null);
-  const disabledStyle = {
-    opacity: 0.5,
-  };
+
+  const noOfItems =
+    userSelection.length - userSelection.filter((el) => el === null).length;
 
   const btnStyle = {
     width: `${btnWidth}px`,
     height: `${btnHeight}px`,
     bottom: `${btnSpaceBelow}px`,
     left: `${btnLeftSpace}px`,
+  };
+
+  const selectedTextStyle = {
+    ...btnStyle,
+    fontSize: `${selectedTextSize}px`,
   };
 
   /**
@@ -80,16 +93,18 @@ export default function ContinueButton() {
   };
 
   return (
-    <div
-      className={styles.ContinueButton}
-      style={btnStyle}
-      onClick={continueHandler}
-    >
-      <img
-        src={continueBtn}
-        alt='continue-button'
-        style={disableBtn ? disabledStyle : null}
-      />
+    <div className={styles.ContinueButton} style={btnStyle}>
+      {disableBtn ? (
+        <button className={styles.SelectButton} style={selectedTextStyle}>
+          {noOfItems}/{userSelection.length} Selected
+        </button>
+      ) : (
+        <img
+          src={continueBtn}
+          alt='continue-button'
+          onClick={continueHandler}
+        />
+      )}
     </div>
   );
 }

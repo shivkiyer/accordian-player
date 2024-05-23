@@ -168,6 +168,11 @@ export const CONTINUE_BTN_HEIGHT_SMALL = 39.375;
 export const CONTINUE_BTN_SPACE_BELOW_LARGE = 18;
 export const CONTINUE_BTN_SPACE_BELOW_SMALL = 11.8125;
 
+// Selected video text
+
+export const SELECT_TEXT_FONT_LARGE = 22;
+export const SELECT_TEXT_FONT_SMALL = 14;
+
 // Video selection buttons
 
 export const VIDEO_BTN_HEIGHT_LARGE = 30;
