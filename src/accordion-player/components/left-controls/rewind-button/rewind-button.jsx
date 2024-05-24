@@ -7,6 +7,7 @@ import {
   setCurrentVideoName,
   playPauseVideo,
   setUserSelection,
+  setReadyForEnding,
 } from '../../../app/videoReducer';
 import rewindBtn from './../../../assets/images/rewind.svg';
 import {
@@ -39,6 +40,7 @@ export default function RewindButton() {
     dispatch(
       setUserSelection(Array(videoData['videoOptions'].length).fill(null))
     );
+    dispatch(setReadyForEnding(false));
   };
 
   return (
