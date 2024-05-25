@@ -83,8 +83,6 @@ export default function SelectionPanel() {
   });
 
   const selectPanelStyle = {
-    marginLeft: `${selectPanelSideMargin}px`,
-    marginRight: `${selectPanelSideMargin}px`,
     marginTop: `${(videoHeight - scaledSpace) / 2}px`,
     width: `${videoWidth - 2 * selectPanelSideMargin}px`,
   };

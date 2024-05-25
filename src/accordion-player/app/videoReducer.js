@@ -29,6 +29,7 @@ import { createSlice } from '@reduxjs/toolkit';
  * userSelection: {Array} - User choice on video options
  * readyForEnding: {boolean} - Is the video ready for the ending action
  * isLoaded: {boolean} - Flag to indicate when app is first loaded onto browser
+ * isMobile: {boolean} - Flag to indicate whether device is mobile
  *
  * Reducers:
  * setDimensions : Setting the width and height of the video player
@@ -51,6 +52,7 @@ import { createSlice } from '@reduxjs/toolkit';
  * setUserSelection: Sets the user video selection array
  * setReadyForEnding: Sets the ending state of the video collection
  * setIsLoaded: Sets the initialization flag that is null/false at time of app load
+ * setIsMobile: Sets the flag that device used is a mobile
  *
  */
 export const videoSlice = createSlice({
@@ -83,6 +85,7 @@ export const videoSlice = createSlice({
     userSelection: null,
     readyForEnding: false,
     isLoaded: false,
+    isMobile: false,
   },
   reducers: {
     /**
@@ -319,6 +322,14 @@ export const videoSlice = createSlice({
     setIsLoaded: (state, action) => {
       state.isLoaded = action.payload;
     },
+    /**
+     * Sets the flag that device used is a mobile
+     *
+     * @param {boolean} payload
+     */
+    setIsMobile: (state, action) => {
+      state.isMobile = action.payload;
+    },
   },
 });
 
@@ -347,6 +358,7 @@ export const {
   setUserSelection,
   setReadyForEnding,
   setIsLoaded,
+  setIsMobile,
 } = videoSlice.actions;
 
 export const selectVideoWidth = (state) => state.video.width;
@@ -383,5 +395,6 @@ export const selectIsSelectPanelVisible = (state) =>
 export const selectUserSelection = (state) => state.video.userSelection;
 export const selectReadyForEnding = (state) => state.video.readyForEnding;
 export const selectIsLoaded = (state) => state.video.isLoaded;
+export const selectIsMobile = (state) => state.video.isMobile;
 
 export default videoSlice.reducer;

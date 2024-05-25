@@ -25,6 +25,7 @@ import {
   setBackgroundImageUrl,
   setCurrentVideoName,
   setVideoData,
+  setIsMobile,
   selectVideoUrl,
   selectIsControlBarVisible,
   selectIsControlBarActive,
@@ -36,7 +37,11 @@ import {
   selectIsSelectPanelVisible,
 } from '../../app/videoReducer';
 import { goFullscreen, exitFullscreen } from '../../common/utils/videoActions';
-import { CONFIG_TEXT_SMALL, CONFIG_TEXT_LARGE } from '../../common/constants';
+import {
+  CONFIG_TEXT_SMALL,
+  CONFIG_TEXT_LARGE,
+  MOBILE_DEVICE_WIDTH,
+} from '../../common/constants';
 
 /**
  * Container for the video and user controls that has either
@@ -159,6 +164,20 @@ export default function VideoPlayer({ width, height, url, name }) {
     width: window.screen.width,
     height: window.screen.height,
   };
+
+  /**
+   * Detect on app load whether device is a mobile device
+   */
+  useEffect(() => {
+    if (
+      window.screen.width < MOBILE_DEVICE_WIDTH ||
+      window.screen.height < MOBILE_DEVICE_WIDTH
+    ) {
+      dispatch(setIsMobile(true));
+    } else {
+      dispatch(setIsMobile(false));
+    }
+  }, [dispatch]);
 
   const textFont = getScaledDimension({
     smallDim: CONFIG_TEXT_SMALL,

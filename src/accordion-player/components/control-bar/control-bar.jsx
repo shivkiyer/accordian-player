@@ -2,6 +2,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import styles from './control-bar.module.scss';
 import getScaledDimension from '../../common/utils/getScaledDimension';
+import getFullscreenWidth from '../../common/utils/getFullscreenWidth';
 import {
   CONTROL_BAR_HEIGHT_LARGE,
   CONTROL_BAR_HEIGHT_SMALL,
@@ -9,6 +10,8 @@ import {
 import ProgressBar from '../progress-bar/progress-bar';
 import {
   selectVideoWidth,
+  selectIsMobile,
+  selectIsFullScreen,
   setControlBarActive,
 } from '../../app/videoReducer';
 import LeftControls from '../left-controls/left-controls';
@@ -29,12 +32,32 @@ import VideoTitleBar from '../video-title-bar/video-title-bar';
 export default function ControlBar() {
   const dispatch = useDispatch();
   const videoWidth = useSelector(selectVideoWidth);
+  const isFullscreen = useSelector(selectIsFullScreen);
+  const isMobile = useSelector(selectIsMobile);
 
   const barHeight = getScaledDimension({
     smallDim: CONTROL_BAR_HEIGHT_SMALL,
     largeDim: CONTROL_BAR_HEIGHT_LARGE,
     videoWidth,
   });
+
+  /**
+   * Adjust the width of the control bar in fullscreen mode
+   *
+   * @param {object} barStyle Calculated height and width of control bar
+   *
+   * @returns {object} Modified height and width of control bar
+   */
+  const adjustControlBar = (barStyle) => {
+    const adjustedWidth = getFullscreenWidth(isFullscreen, isMobile);
+    if (adjustedWidth !== null) {
+      return {
+        ...barStyle,
+        width: `${adjustedWidth}px`,
+      }
+    }
+    return barStyle;
+  };
 
   const controlBarStyle = {
     height: `${barHeight}px`,
@@ -56,10 +79,12 @@ export default function ControlBar() {
     dispatch(setControlBarActive(false));
   };
 
+  const newControlBarStyle = adjustControlBar(controlBarStyle);
+
   return (
     <div
       className={styles.ControlBar}
-      style={controlBarStyle}
+      style={newControlBarStyle}
       onMouseEnter={controlBarVisibilityHandler}
       onMouseMove={controlBarVisibilityHandler}
       onMouseLeave={mouseLeaveHander}

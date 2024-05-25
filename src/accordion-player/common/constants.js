@@ -6,6 +6,9 @@ export const VIDEO_PLAYER_ASPECT_RATIO = 0.5625; // 9:16 - height:width
 export const LOWER_DEVICE_WIDTH = 630; // Smaller desktop
 export const UPPER_DEVICE_WIDTH = 1920; // Regular desktop
 
+// Mobile device cut-off
+export const MOBILE_DEVICE_WIDTH = 768; // Large mobile
+
 // Player config panel
 
 export const CONFIG_HEADING_LARGE = 30;

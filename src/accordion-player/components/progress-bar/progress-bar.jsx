@@ -11,6 +11,7 @@ import {
   PROGRESS_BAR_CONTAINER_HEIGHT_SMALL,
 } from '../../common/constants';
 import getScaledDimension from '../../common/utils/getScaledDimension';
+import getFullscreenWidth from '../../common/utils/getFullscreenWidth';
 import {
   selectVideoWidth,
   selectDuration,
@@ -20,6 +21,8 @@ import {
   selectIsVolumeChanging,
   selectPrevIsPlaying,
   selectCurrentVideoLabel,
+  selectIsFullScreen,
+  selectIsMobile,
   playPauseVideo,
   setIsVideoPositionChanging,
   setCurrentTime,
@@ -44,6 +47,8 @@ export default function ProgressBar() {
   const progressMousePositionX = useSelector(selectProgressMousePositionX);
   const prevIsPlaying = useSelector(selectPrevIsPlaying);
   const currentVideoLabel = useSelector(selectCurrentVideoLabel);
+  const isFullscreen = useSelector(selectIsFullScreen);
+  const isMobile = useSelector(selectIsMobile);
 
   const outerHeight = getScaledDimension({
     smallDim: PROGRESS_BAR_CONTAINER_HEIGHT_SMALL,
@@ -196,6 +201,32 @@ export default function ProgressBar() {
 
   const isSelectVideo = currentVideoLabel === 'selectInfo';
 
+  /**
+   * Adjust width of progress slider in mobile fullscreen mode
+   *
+   * @param {object} sliderStyle Calculated style of slider
+   * @param {object} sliderMargin Side margins from control bar
+   * @returns {object} Recalculated style of sidebar
+   */
+  const adjustedProgressBar = (sliderStyle, sliderMargin) => {
+    const adjustedWidth = getFullscreenWidth(isFullscreen, isMobile);
+
+    if (adjustedWidth !== null) {
+      return {
+        ...sliderStyle,
+        width: `${adjustedWidth - 2 * sliderMargin}px`,
+      };
+    }
+    return sliderStyle;
+  };
+
+  const progressSliderStyle = {
+    height: `${height}px`,
+    marginLeft: `${margin}px`,
+    marginRight: `${margin}px`,
+    width: `${videoWidth - 2 * margin}px`,
+  };
+
   return (
     <div
       className={styles.ProgressBarContainer}
@@ -211,12 +242,7 @@ export default function ProgressBar() {
     >
       <div
         className={styles.ProgressBar}
-        style={{
-          height: `${height}px`,
-          marginLeft: `${margin}px`,
-          marginRight: `${margin}px`,
-          width: `${videoWidth - 2 * margin}px`,
-        }}
+        style={adjustedProgressBar(progressSliderStyle, margin)}
         data-testid='test-progress-bar'
       >
         <div
