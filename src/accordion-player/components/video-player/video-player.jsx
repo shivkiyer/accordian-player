@@ -160,9 +160,29 @@ export default function VideoPlayer({ width, height, url, name }) {
     paddingRight: `${(windowWidth - playerWidth) / 2}px`,
   };
 
+  /**
+   * Helper function that returns dimensions of device
+   */
+  const getFullscreenView = () => {
+    const screenWidth = window.screen.width;
+    const screenHeight = window.screen.height;
+    return {
+      width: screenWidth,
+      height: screenHeight,
+    };
+  };
+
+  /**
+   * Updates device dimensions when device is rotated.
+   */
+  window.addEventListener('orientationchange', () => {
+    if (isFullscreen) {
+      dispatch(setDimensions(getFullscreenView()));
+    }
+  });
+
   const fullScreenStyle = {
-    width: window.screen.width,
-    height: window.screen.height,
+    ...getFullscreenView(),
   };
 
   /**
@@ -259,12 +279,8 @@ export default function VideoPlayer({ width, height, url, name }) {
     if (isFullscreen) {
       goFullscreen(playerRef.current)
         .then(() => {
-          dispatch(
-            setDimensions({
-              width: window.screen.width,
-              height: window.screen.height,
-            })
-          );
+          const screenDimensions = getFullscreenView();
+          dispatch(setDimensions(screenDimensions));
         })
         .catch((e) => {
           console.log(e);

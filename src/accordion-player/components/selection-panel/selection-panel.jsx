@@ -24,6 +24,7 @@ import {
   selectVideoWidth,
   selectVideoHeight,
   selectVideoData,
+  selectIsFullScreen,
 } from './../../app/videoReducer';
 import getScaledDimension from './../../common/utils/getScaledDimension';
 import styles from './selection-panel.module.scss';
@@ -37,6 +38,7 @@ export default function SelectionPanel() {
   const videoWidth = useSelector(selectVideoWidth);
   const videoHeight = useSelector(selectVideoHeight);
   const videoData = useSelector(selectVideoData);
+  const isFullscreen = useSelector(selectIsFullScreen);
 
   const selectPanelHeadingHeight = getScaledDimension({
     smallDim: SELECT_PANEL_HEADING_HEIGHT_SMALL,
@@ -82,8 +84,17 @@ export default function SelectionPanel() {
     videoWidth,
   });
 
+  let calcMarginTop = (videoHeight - scaledSpace) / 2;
+  if (isFullscreen) {
+    if (window.screen.height > window.screen.width) {
+      calcMarginTop =
+        ((videoWidth * 9) / 16 - scaledSpace) / 2 +
+        (window.screen.height - (window.screen.width * 9) / 16) / 2;
+    }
+  }
+
   const selectPanelStyle = {
-    marginTop: `${(videoHeight - scaledSpace) / 2}px`,
+    marginTop: `${calcMarginTop}px`,
     width: `${videoWidth - 2 * selectPanelSideMargin}px`,
   };
 

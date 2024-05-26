@@ -4,6 +4,7 @@ import {
   selectIsPlaying,
   selectVideoWidth,
   selectCurrentVideoLabel,
+  selectIsMobile,
 } from '../../app/videoReducer';
 import getScaledDimension from '../../common/utils/getScaledDimension';
 import {
@@ -32,6 +33,7 @@ export default function LeftControls() {
   const videoWidth = useSelector(selectVideoWidth);
   const isVideoPlaying = useSelector(selectIsPlaying);
   const currentVideoLabel = useSelector(selectCurrentVideoLabel);
+  const isMobile = useSelector(selectIsMobile);
 
   const elHeight = getScaledDimension({
     smallDim: LEFT_BUTTONS_HEIGHT_SMALL,
@@ -55,7 +57,7 @@ export default function LeftControls() {
     <div className={styles.LeftButtons} style={elStyle}>
       {isSelectVideo ? null : isVideoPlaying ? <PauseButton /> : <PlayButton />}
       <RewindButton />
-      <VolumeControls />
+      {!isMobile && <VolumeControls />}
     </div>
   );
 }
