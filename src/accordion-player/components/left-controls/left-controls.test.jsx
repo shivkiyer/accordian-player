@@ -9,6 +9,9 @@ import videoReducer from '../../app/videoReducer';
 import wait from '../../common/test-utils/wait';
 
 describe('LeftControls (buttons)', () => {
+  jest.spyOn(window.screen, 'width', 'get').mockReturnValue(1024);
+  jest.spyOn(window.screen, 'height', 'get').mockReturnValue(1024);
+
   jest.mock('./../../common/utils/videoActions', () => {
     return {
       loadVideo: jest.fn(),
