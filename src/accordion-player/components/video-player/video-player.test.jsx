@@ -1,7 +1,10 @@
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
 import { render, screen, act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import wait from '../../common/test-utils/wait';
+import videoReducer from '../../app/videoReducer';
+import getInitStore from './../../common/test-utils/getInitStore';
 
 /**
  * Test for VideoPlayer container
@@ -15,19 +18,48 @@ describe('VideoPlayer', () => {
       loadVideo: jest.fn(),
     };
   });
+  let mockStore;
 
-  const AccordionPlayer = require('./../../accordion-player').default;
+
+  const VideoPlayer = require('./video-player').default;
+
+  beforeEach(() => {
+    const initStore = getInitStore();
+
+    mockStore = configureStore({
+      reducer: { video: videoReducer },
+      preloadedState: initStore,
+    });
+  });
 
   it('should be rendered', async () => {
     mockCheckVideoUrl.mockReturnValue(null);
 
-    const { container } = render(<AccordionPlayer width='300' />);
+    const { container } = render(
+      <Provider store={mockStore}>
+        <VideoPlayer width='300' />
+      </Provider>
+    );
 
-    await waitFor(() => {});
-    await wait();
-
-    const videoPlayer = container.querySelector('.videoPlayer');
+    await waitFor(() => {
+      const videoPlayer = container.querySelector('.videoPlayer');
     expect(videoPlayer).toBeDefined();
+    });
+  });
+
+  it('should load the video if video URL is input', async () => {
+    mockCheckVideoUrl.mockReturnValue(
+      Promise.resolve({ errMsg: null, data: 'some-url' })
+    );
+
+    render(
+      <Provider store={mockStore}>
+        <VideoPlayer url='some-url' />
+      </Provider>
+    );
+
+    const videoEl = await screen.findByTestId('test-video');
+    expect(videoEl).toBeInTheDocument();
   });
 
   it('should prompt user for video URL and then start with video', async () => {
@@ -35,27 +67,24 @@ describe('VideoPlayer', () => {
       Promise.resolve({ errMsg: null, data: 'some-url' })
     );
 
-    render(<AccordionPlayer />);
-
-    await waitFor(() => {});
-    await wait();
+    render(
+      <Provider store={mockStore}>
+        <VideoPlayer />
+      </Provider>
+    );
 
     const videoUrlEl = await screen.findByPlaceholderText('Enter URL here');
     expect(videoUrlEl).toBeInTheDocument();
 
-    await act(async () => {
-      await userEvent.type(videoUrlEl, 'some-url');
+    act(() => {
+      userEvent.type(videoUrlEl, 'some-url');
     });
-
-    await waitFor(() => {});
 
     // Control bar will show only when mouse enters video
     const videoEl = await screen.findByTestId('test-video');
     act(() => {
       userEvent.hover(videoEl);
     });
-
-    await wait();
 
     const fullScreenBtn = await screen.findByAltText('fullscreen');
     expect(fullScreenBtn).toBeInTheDocument();

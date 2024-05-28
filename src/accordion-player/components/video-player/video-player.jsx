@@ -85,7 +85,6 @@ export default function VideoPlayer({ width, height, url, name }) {
   const isFullscreen = useSelector(selectIsFullScreen);
   const isBtnFullScreen = useSelector(selectIsBtnFullScreen);
   const isSelectPanelVisible = useSelector(selectIsSelectPanelVisible);
-  const [baseUrl, setBaseUrl] = useState(null);
   const [errMsg, setErrMsg] = useState(null);
   const [mouseMoveTimerEnd1, setMouseMoveTimerEnd1] = useState(false);
   const [mouseMoveTimerEnd2, setMouseMoveTimerEnd2] = useState(true);
@@ -96,24 +95,20 @@ export default function VideoPlayer({ width, height, url, name }) {
    * from the input URL.
    */
   useEffect(() => {
-    const fetchUrl = async (urlSetting, urlInput) => {
-      if (urlInput) {
-        setBaseUrl(urlInput);
-      } else if (urlSetting) {
+    const fetchUrl = async (urlSetting) => {
+      if (urlSetting) {
         try {
           const urlResult = await checkVideoUrl(urlSetting);
           if (urlResult.errMsg === null) {
             if (typeof urlResult.data === 'string') {
               dispatch(setVideoUrl(urlResult.data));
               dispatch(setCurrentVideoName(name));
-              setBaseUrl(urlResult.data);
             } else {
               const videoData = urlResult.data;
               dispatch(setCurrentVideoLabel(videoData['videoSequence'][0]));
               dispatch(
                 setVideoUrl(videoData[videoData['videoSequence'][0]]['url'])
               );
-              setBaseUrl(videoData[videoData['videoSequence'][0]]['url']);
               dispatch(
                 setBackgroundImageUrl(
                   videoData[videoData['videoSequence'][0]]['image']
@@ -130,13 +125,11 @@ export default function VideoPlayer({ width, height, url, name }) {
         } catch (e) {
           setErrMsg(e.errMsg);
         }
-      } else {
-        setBaseUrl(null);
       }
     };
 
-    fetchUrl(url, videoUrl);
-  }, [url, name, videoUrl, dispatch]);
+    fetchUrl(url);
+  }, [url, name, dispatch]);
 
   const { playerWidth, playerHeight, marginTop } = getVideoDimensions({
     width,
@@ -329,15 +322,15 @@ export default function VideoPlayer({ width, height, url, name }) {
       onMouseMove={mouseMoveHandler}
       ref={playerRef}
     >
-      {!(url || baseUrl) && !errMsg && <PlayerConfig />}
+      {!(url || videoUrl) && !errMsg && <PlayerConfig />}
       {errMsg && (
         <p className='error' style={textStyle}>
           {errMsg}
         </p>
       )}
       {isSelectPanelVisible && <SelectionPanel />}
-      {baseUrl && <Video mouseMoveHandler={controlBarVisibilityHandler} />}
-      {baseUrl && (isControlBarVisible || isControlBarActive) && <ControlBar />}
+      {videoUrl && <Video mouseMoveHandler={controlBarVisibilityHandler} />}
+      {videoUrl && (isControlBarVisible || isControlBarActive) && <ControlBar />}
     </div>
   );
 }
