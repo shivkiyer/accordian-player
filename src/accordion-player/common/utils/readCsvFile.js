@@ -1,4 +1,7 @@
+import checkVideoPlayable from './checkVideoPlayable';
 import calcTimeFromAfterEffects from './calcTimeFromAfterEffects';
+import checkTimeInstant from './checkTimeInstant';
+import { DEFAULT_FRAMES_PER_SECOND } from '../constants';
 
 /**
  * Reads a config.csv file and produces the video specs
@@ -7,7 +10,7 @@ import calcTimeFromAfterEffects from './calcTimeFromAfterEffects';
  *
  * @return {object} Details of videos to be played in app
  */
-export default function readCsv(data) {
+export default async function readCsv(data) {
   const videoSpecs = {
     videoOptions: [],
   };
@@ -26,88 +29,201 @@ export default function readCsv(data) {
     const lineContents = allTextLines[i].split(',');
     switch (lineContents[0].trim()) {
       case 'INTRO_INFO':
-        videoSpecs['introVideo'] = {
-          title: lineContents[2].trim(),
-          url: lineContents[4].trim(),
-          image: lineContents[8].trim(),
-        };
-        if (lineContents[6].trim().length > 0) {
-          videoSpecs['framesPerSecond'] = +lineContents[6].trim();
-        } else {
-          videoSpecs['framesPerSecond'] = 30;
-        }
-        if (lineContents[10].trim().length > 0) {
-          let backGroundColor = lineContents[10].trim();
-          if (backGroundColor[0] !== '#') {
-            backGroundColor = '#' + backGroundColor;
+        try {
+          const verifyUrl = await checkVideoPlayable(lineContents[4].trim());
+          videoSpecs['introVideo'] = {
+            title: lineContents[2].trim(),
+            url: verifyUrl.data,
+            image: lineContents[8].trim(),
+          };
+          if (lineContents[6].trim().length > 0) {
+            videoSpecs['framesPerSecond'] = parseInt(lineContents[6].trim());
+            if (Number.isNaN(videoSpecs['framesPerSecond'])) {
+              throw Object.assign(new Error(), {
+                data: null,
+                errMsg: 'Frames per second must be integer',
+              });
+            }
+          } else {
+            videoSpecs['framesPerSecond'] = DEFAULT_FRAMES_PER_SECOND;
           }
-          videoSpecs['backgroundColor'] = backGroundColor;
+          if (lineContents[10].trim().length > 0) {
+            let backGroundColor = lineContents[10].trim();
+            if (backGroundColor[0] !== '#') {
+              backGroundColor = '#' + backGroundColor;
+            }
+            if (!/^#[0-9A-F]{6}$/i.test(backGroundColor)) {
+              throw Object.assign(new Error(), {
+                data: null,
+                errMsg: 'Background color is invalid',
+              });
+            }
+            videoSpecs['backgroundColor'] = backGroundColor;
+          }
+        } catch (e) {
+          if (e.errMsg === 'Video cannot be played') {
+            throw Object.assign(new Error(), {
+              data: null,
+              errMsg: 'Introduction video cannot be played.',
+            });
+          }
+          throw Object.assign(new Error(), e);
         }
         break;
 
       case 'SELECT_INFO':
-        if (lineContents[6].trim().length > 0) {
-          startInteraction = calcTimeFromAfterEffects(
-            lineContents[6].trim(),
-            videoSpecs['framesPerSecond']
-          );
+        try {
+          const verifyUrl = await checkVideoPlayable(lineContents[4].trim());
+          if (lineContents[6].trim().length > 0) {
+            try {
+              startInteraction = calcTimeFromAfterEffects(
+                checkTimeInstant(
+                  lineContents[6].trim(),
+                  videoSpecs['framesPerSecond']
+                ),
+                videoSpecs['framesPerSecond']
+              );
+            } catch (e) {
+              throw Object.assign(new Error(), {
+                data: null,
+                errMsg: `START_INTERACTIVE_TIMESTAMP of selection video incorrect. ${e.errMsg}`,
+              });
+            }
+          }
+          if (lineContents[8].trim().length > 0) {
+            try {
+              startLoopback = calcTimeFromAfterEffects(
+                checkTimeInstant(
+                  lineContents[8].trim(),
+                  videoSpecs['framesPerSecond']
+                ),
+                videoSpecs['framesPerSecond']
+              );
+            } catch (e) {
+              throw Object.assign(new Error(), {
+                data: null,
+                errMsg: `START_LOOP_TIMESTAMP of selection video incorrect. ${e.errMsg}`,
+              });
+            }
+          }
+          if (lineContents[10].trim().length > 0) {
+            try {
+              jumpToTimestamp = calcTimeFromAfterEffects(
+                checkTimeInstant(
+                  lineContents[10].trim(),
+                  videoSpecs['framesPerSecond']
+                ),
+                videoSpecs['framesPerSecond']
+              );
+            } catch (e) {
+              throw Object.assign(new Error(), {
+                data: null,
+                errMsg: `JUMPTO_LOOP_TIMESTAMP of selection video incorrect. ${e.errMsg}`,
+              });
+            }
+          }
+          videoSpecs['selectInfo'] = {
+            title: lineContents[2].trim(),
+            url: verifyUrl.data,
+            startInteraction: startInteraction,
+            startLoopback: startLoopback,
+            jumpToTimestamp: jumpToTimestamp,
+            selectText: lineContents[12].trim(),
+          };
+        } catch (e) {
+          if (e.errMsg === 'Video cannot be played') {
+            throw Object.assign(new Error(), {
+              data: null,
+              errMsg: 'Selection video cannot be played.',
+            });
+          }
+          throw Object.assign(new Error(), e);
         }
-        if (lineContents[8].trim().length > 0) {
-          startLoopback = calcTimeFromAfterEffects(
-            lineContents[8].trim(),
-            videoSpecs['framesPerSecond']
-          );
-        }
-        if (lineContents[10].trim().length > 0) {
-          jumpToTimestamp = calcTimeFromAfterEffects(
-            lineContents[10].trim(),
-            videoSpecs['framesPerSecond']
-          );
-        }
-        videoSpecs['selectInfo'] = {
-          title: lineContents[2].trim(),
-          url: lineContents[4].trim(),
-          startInteraction: startInteraction,
-          startLoopback: startLoopback,
-          jumpToTimestamp: jumpToTimestamp,
-          selectText: lineContents[12].trim(),
-        };
         break;
 
       case 'ENDSCREEN_INFO':
-        if (lineContents[6].trim().length > 0) {
-          startLoopback = calcTimeFromAfterEffects(
-            lineContents[6].trim(),
-            videoSpecs['framesPerSecond']
-          );
-        }
-        if (lineContents[8].trim().length > 0) {
-          jumpToTimestamp = calcTimeFromAfterEffects(
-            lineContents[8].trim(),
-            videoSpecs['framesPerSecond']
-          );
-        }
-        if (lineContents[10].trim().length > 0) {
-          startHotSpot = calcTimeFromAfterEffects(
-            lineContents[10].trim(),
-            videoSpecs['framesPerSecond']
-          );
-        }
-        if (lineContents[12].trim().length > 0) {
-          if (lineContents[12].trim().substring(0, 4) !== 'http') {
-            jumpToUrl = 'http://' + lineContents[12].trim();
-          } else {
-            jumpToUrl = lineContents[12].trim();
+        try {
+          const verifyUrl = await checkVideoPlayable(lineContents[4].trim());
+          if (lineContents[6].trim().length > 0) {
+            try {
+              startLoopback = calcTimeFromAfterEffects(
+                checkTimeInstant(
+                  lineContents[6].trim(),
+                  videoSpecs['framesPerSecond']
+                ),
+                videoSpecs['framesPerSecond']
+              );
+            } catch (e) {
+              throw Object.assign(new Error(), {
+                data: null,
+                errMsg: `START_LOOP_TIMESTAMP of ending video incorrect. ${e.errMsg}`,
+              });
+            }
           }
+          if (lineContents[8].trim().length > 0) {
+            try {
+              startLoopback = calcTimeFromAfterEffects(
+                checkTimeInstant(
+                  lineContents[8].trim(),
+                  videoSpecs['framesPerSecond']
+                ),
+                videoSpecs['framesPerSecond']
+              );
+            } catch (e) {
+              throw Object.assign(new Error(), {
+                data: null,
+                errMsg: `JUMPTO_LOOP_TIMESTAMP of ending video incorrect. ${e.errMsg}`,
+              });
+            }
+          }
+          if (lineContents[10].trim().length > 0) {
+            try {
+              startLoopback = calcTimeFromAfterEffects(
+                checkTimeInstant(
+                  lineContents[10].trim(),
+                  videoSpecs['framesPerSecond']
+                ),
+                videoSpecs['framesPerSecond']
+              );
+            } catch (e) {
+              throw Object.assign(new Error(), {
+                data: null,
+                errMsg: `START_HOTSPOT_TIMESTAMP of ending video incorrect. ${e.errMsg}`,
+              });
+            }
+          }
+          if (lineContents[12].trim().length > 0) {
+            if (lineContents[12].trim().substring(0, 4) !== 'http') {
+              jumpToUrl = 'http://' + lineContents[12].trim();
+            } else {
+              jumpToUrl = lineContents[12].trim();
+            }
+            try {
+              new URL(jumpToUrl);
+            } catch (e) {
+              throw Object.assign(new Error(), {
+                data: null,
+                errMsg: 'Call to action URL in ending video not valid.',
+              });
+            }
+          }
+          videoSpecs['endscreenInfo'] = {
+            title: lineContents[2].trim(),
+            url: verifyUrl.data,
+            startLoopback: startLoopback,
+            jumpToTimestamp: jumpToTimestamp,
+            startHotSpot: startHotSpot,
+            jumpToUrl: jumpToUrl,
+          };
+        } catch (e) {
+          if (e.errMsg === 'Video cannot be played') {
+            throw Object.assign(new Error(), {
+              data: null,
+              errMsg: 'Ending video cannot be played.',
+            });
+          }
+          throw Object.assign(new Error(), e);
         }
-        videoSpecs['endscreenInfo'] = {
-          title: lineContents[2].trim(),
-          url: lineContents[4].trim(),
-          startLoopback: startLoopback,
-          jumpToTimestamp: jumpToTimestamp,
-          startHotSpot: startHotSpot,
-          jumpToUrl: jumpToUrl,
-        };
         break;
 
       case 'SEGMENT_TITLES':
@@ -124,7 +240,15 @@ export default function readCsv(data) {
           if (lineContents[j].trim().length === 0) {
             break;
           }
-          longVideos.push(lineContents[j].trim());
+          try {
+            const verifyUrl = await checkVideoPlayable(lineContents[j].trim());
+            longVideos.push(verifyUrl.data);
+          } catch (e) {
+            throw Object.assign(new Error(), {
+              data: null,
+              errMsg: `Long video number ${j} not playable.`,
+            });
+          }
         }
         break;
 
@@ -133,7 +257,15 @@ export default function readCsv(data) {
           if (lineContents[j].trim().length === 0) {
             break;
           }
-          shortVideos.push(lineContents[j].trim());
+          try {
+            const verifyUrl = await checkVideoPlayable(lineContents[j].trim());
+            shortVideos.push(verifyUrl.data);
+          } catch (e) {
+            throw Object.assign(new Error(), {
+              data: null,
+              errMsg: `Short video number ${j} not playable.`,
+            });
+          }
         }
         break;
       default:

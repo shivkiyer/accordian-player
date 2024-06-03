@@ -27,11 +27,15 @@ const checkVideoUrl = (urlInput) => {
           if (result.headers.get('content-type') === 'text/plain') {
             if (result.ok) {
               const csvText = await result.text();
-              const videoSpecs = readCsv(csvText);
-              resolve({
-                errMsg: null,
-                data: videoSpecs,
-              });
+              try {
+                const videoSpecs = await readCsv(csvText);
+                resolve({
+                  errMsg: null,
+                  data: videoSpecs,
+                });
+              } catch (e) {
+                reject(e);
+              }
             }
           } else if (result.headers.get('content-type') === 'video/mp4') {
             resolve({
@@ -52,7 +56,11 @@ const checkVideoUrl = (urlInput) => {
           const playStatus = await checkVideoPlayable(urlInput);
           resolve(playStatus);
         } catch (urlErr) {
-          reject(urlErr);
+          reject({
+            errMsg:
+              'Unexpected error occurred. Please ensure that the resource can accept AJAX requests.',
+            data: null,
+          });
         }
       }
     }

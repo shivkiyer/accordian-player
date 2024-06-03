@@ -330,7 +330,9 @@ export default function VideoPlayer({ width, height, url, name }) {
       )}
       {isSelectPanelVisible && <SelectionPanel />}
       {videoUrl && <Video mouseMoveHandler={controlBarVisibilityHandler} />}
-      {videoUrl && (isControlBarVisible || isControlBarActive) && <ControlBar />}
+      {videoUrl && (isControlBarVisible || isControlBarActive) && (
+        <ControlBar />
+      )}
     </div>
   );
 }

@@ -18,7 +18,7 @@ export default function checkVideoPlayable(url) {
     checkForVideo.addEventListener('error', function () {
       reject({
         errMsg:
-          'Unexpected error occurred. Please ensure that the resource can accept AJAX requests.',
+          'Video cannot be played',
         data: null,
       });
     });
