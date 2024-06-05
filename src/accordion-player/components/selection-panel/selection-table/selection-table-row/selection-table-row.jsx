@@ -184,7 +184,8 @@ export default function SelectionTableRow({ title, row, data }) {
   };
 
   let videoChoice = null;
-  switch (userSelection[row]) {
+  const userSelectionRow = userSelection === null ? null : userSelection[row];
+  switch (userSelectionRow) {
     case 'long':
       videoChoice = 'long';
       break;

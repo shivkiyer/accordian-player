@@ -66,7 +66,7 @@ export default function SelectionPanel() {
     SELECT_PANEL_HEADING_HEIGHT_LARGE +
     SELECT_TABLE_TOP_MARGIN_LARGE +
     SELECT_TABLE_PADDING_LARGE +
-    videoData['videoOptions'].length *
+    videoData?.videoOptions.length *
       (SELECT_PANEL_ROW_HEIGHT_LARGE + SELECT_PANEL_ROW_MARGIN_LARGE) +
     CONTROL_BAR_HEIGHT_LARGE;
 
@@ -74,7 +74,7 @@ export default function SelectionPanel() {
     SELECT_PANEL_HEADING_HEIGHT_SMALL +
     SELECT_TABLE_TOP_MARGIN_SMALL +
     SELECT_TABLE_PADDING_SMALL +
-    videoData['videoOptions'].length *
+    videoData?.videoOptions.length *
       (SELECT_PANEL_ROW_HEIGHT_SMALL + SELECT_PANEL_ROW_MARGIN_SMALL) +
     CONTROL_BAR_HEIGHT_SMALL;
 
@@ -106,11 +106,13 @@ export default function SelectionPanel() {
     fontSize: `${selectPanelHeadingFont}px`,
   };
 
+  const tableHeading = videoData?.selectInfo?.selectText;
+
   return (
     <>
       <div className={styles.SelectionPanel} style={selectPanelStyle}>
         <h1 className={styles.SelectionPanelHeading} style={headingStyle}>
-          {videoData['selectInfo']['selectText']}
+          {tableHeading}
         </h1>
 
         <SelectionTable />

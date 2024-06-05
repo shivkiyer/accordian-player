@@ -39,7 +39,7 @@ export default function SelectionTable() {
     paddingRight: `${tablePadding}px`,
   };
 
-  const videoOptions = videoData['videoOptions'];
+  const videoOptions = videoData?.videoOptions;
 
   return (
     <div className={styles.Table} style={tableStyle}>

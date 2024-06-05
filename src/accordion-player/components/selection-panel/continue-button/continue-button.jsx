@@ -58,10 +58,14 @@ export default function ContinueButton() {
 
   const btnLeftSpace = (window.innerWidth - btnWidth) / 2;
 
-  const disableBtn = userSelection.includes(null);
+  const disableBtn = userSelection === null || userSelection.includes(null);
 
-  const noOfItems =
-    userSelection.length - userSelection.filter((el) => el === null).length;
+  const totalNoOfItems = userSelection !== null ? userSelection.length : 0;
+  const unselectedItems =
+    userSelection !== null
+      ? userSelection.filter((el) => el === null).length
+      : 0;
+  const noOfItems = totalNoOfItems - unselectedItems;
 
   const btnStyle = {
     width: `${btnWidth}px`,
@@ -96,7 +100,7 @@ export default function ContinueButton() {
     <div className={styles.ContinueButton} style={btnStyle}>
       {disableBtn ? (
         <button className={styles.SelectButton} style={selectedTextStyle}>
-          {noOfItems}/{userSelection.length} Selected
+          {noOfItems}/{totalNoOfItems} Selected
         </button>
       ) : (
         <img
