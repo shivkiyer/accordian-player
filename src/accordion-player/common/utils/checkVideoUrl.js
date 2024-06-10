@@ -1,5 +1,6 @@
 import readCsv from './readCsvFile';
 import checkVideoPlayable from './checkVideoPlayable';
+import fetchUrl from './fetchUrl';
 
 /**
  * Checks if a URL can be fetched by making a HEAD request
@@ -22,7 +23,7 @@ const checkVideoUrl = (urlInput) => {
     }
     if (url) {
       try {
-        const result = await fetch(url, { method: 'GET' });
+        const result = await fetchUrl(url);
         if (result && result.headers) {
           if (result.headers.get('content-type') === 'text/plain') {
             if (result.ok) {
