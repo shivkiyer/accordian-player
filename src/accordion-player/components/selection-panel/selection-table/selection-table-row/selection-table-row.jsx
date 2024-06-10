@@ -202,7 +202,7 @@ export default function SelectionTableRow({ title, row, data }) {
   let dataRow = null;
   if (data !== null && data !== undefined) {
     dataRow = (
-      <div style={rowStyle}>
+      <div style={rowStyle} data-testid='selection-table-row'>
         <div
           className={`${styles.TableColumn} ${styles.TitleColumn}`}
           style={titleStyle}
@@ -223,7 +223,7 @@ export default function SelectionTableRow({ title, row, data }) {
               className={styles.ChoiceButton}
               style={radioBtnStyle}
               src={videoChoice === 'long' ? radioBtnOn : radioBtnOff}
-              alt='radio-btn'
+              alt='very-interested-btn'
             />
           </div>
           <div
@@ -239,7 +239,7 @@ export default function SelectionTableRow({ title, row, data }) {
               className={styles.ChoiceButton}
               style={radioBtnStyle}
               src={videoChoice === 'short' ? radioBtnOn : radioBtnOff}
-              alt='radio-btn'
+              alt='interested-btn'
             />
           </div>
           <div
@@ -255,7 +255,7 @@ export default function SelectionTableRow({ title, row, data }) {
               className={styles.ChoiceButton}
               style={radioBtnStyle}
               src={videoChoice === 'no' ? radioBtnOn : radioBtnOff}
-              alt='radio-btn'
+              alt='not-interested-btn'
             />
           </div>
         </div>

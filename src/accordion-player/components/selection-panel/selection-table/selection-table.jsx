@@ -42,7 +42,11 @@ export default function SelectionTable() {
   const videoOptions = videoData?.videoOptions;
 
   return (
-    <div className={styles.Table} style={tableStyle}>
+    <div
+      className={styles.Table}
+      style={tableStyle}
+      data-testid='selection-table'
+    >
       <SelectionTableRow title='true' />
       {videoOptions &&
         videoOptions.map((_, opIndex) => (
