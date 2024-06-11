@@ -323,4 +323,45 @@ describe('SelectionPanel', () => {
     const continueBtn = await screen.findByAltText('continue-button');
     expect(continueBtn).toBeInTheDocument();
   });
+
+  it('should store user selections in redux state', async () => {
+    const veryInterestedBtns = await screen.findAllByAltText(
+      'very-interested-btn'
+    );
+    const interestedBtns = await screen.findAllByAltText('interested-btn');
+    const notInterestedBtns = await screen.findAllByAltText(
+      'not-interested-btn'
+    );
+
+    act(() => {
+      userEvent.click(notInterestedBtns[0]);
+    });
+
+    await waitFor(() => {});
+
+    act(() => {
+      userEvent.click(interestedBtns[1]);
+    });
+
+    await waitFor(() => {});
+
+    act(() => {
+      userEvent.click(veryInterestedBtns[2]);
+    });
+
+    await waitFor(() => {});
+
+    act(() => {
+      userEvent.click(notInterestedBtns[3]);
+    });
+
+    await waitFor(() => {});
+
+    const updatedState = mockStore.getState();
+    const userSelectedVideos = updatedState.video.userSelection;
+    expect(userSelectedVideos[0]).toBe('no');
+    expect(userSelectedVideos[1]).toBe('short');
+    expect(userSelectedVideos[2]).toBe('long');
+    expect(userSelectedVideos[3]).toBe('no');
+  });
 });
