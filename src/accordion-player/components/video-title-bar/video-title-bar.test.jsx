@@ -1,45 +1,156 @@
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import videoStore from './../../app/store';
 import videoReducer from '../../app/videoReducer';
+import getConfigData from './../../common/test-utils/getConfigData';
 
 describe('VideoTitleBar', () => {
-  const checkVideoUrlObj = require('./../../common/utils/checkVideoUrl');
-  const mockCheckVideoUrl = jest.spyOn(checkVideoUrlObj, 'default');
+  let VideoPlayer;
+  let updatedStore;
 
-  jest.mock('./../../common/utils/videoActions', () => {
-    return {
-      loadVideo: jest.fn(),
-    };
-  });
+  beforeEach(async () => {
+    jest.mock('./../../common/utils/checkVideoPlayable', () => {
+      return (url) => Promise.resolve({ data: url, errMsg: null });
+    });
 
-  const VideoPlayer = require('./../video-player/video-player').default;
+    jest.mock('./../../common/utils/checkVideoUrl', () => {
+      return () => Promise.resolve({ data: 'some-url', errMsg: null });
+    });
 
-  let updatedState = JSON.parse(JSON.stringify(videoStore.getState()));
-  updatedState.video.isControlBarVisible = true;
-  const updatedStore = configureStore({
-    reducer: { video: videoReducer },
-    preloadedState: updatedState,
+    jest.mock('./../../common/utils/videoActions', () => {
+      return {
+        loadVideo: jest.fn(),
+      };
+    });
+
+    const updatedState = JSON.parse(JSON.stringify(videoStore.getState()));
+    updatedState.video.isControlBarVisible = true;
+    updatedStore = configureStore({
+      reducer: { video: videoReducer },
+      preloadedState: updatedState,
+    });
+
+    VideoPlayer = require('./../video-player/video-player').default;
   });
 
   it('should display the video title and video progress', async () => {
-    mockCheckVideoUrl.mockReturnValue(
-      Promise.resolve({ errMsg: null, data: 'some-url' })
-    );
-
     render(
       <Provider store={updatedStore}>
-        <VideoPlayer width='630' url='some-url' />
+        <VideoPlayer name='Test video' url='some-url' />
       </Provider>
     );
 
     await waitFor(() => {});
 
-    const videoTitleEl = await screen.findByTestId('test-video-title');
+    const videoTitleEl = await screen.findByText('Test video');
     expect(videoTitleEl).toBeInTheDocument();
     const videoProgressEl = screen.getByTestId('test-video-progress');
     expect(videoProgressEl).toBeInTheDocument();
+  });
+
+  describe('Config data', () => {
+    let newStore;
+    let ControlBar;
+    let configData;
+
+    beforeEach(async () => {
+      jest.mock('./../../common/utils/checkVideoPlayable', () => {
+        return (url) => Promise.resolve({ data: url, errMsg: null });
+      });
+
+      const readCsv = require('./../../common/utils/readCsvFile').default;
+      configData = await readCsv(getConfigData());
+
+      jest.mock('./../../common/utils/videoActions', () => {
+        return {
+          loadVideo: jest.fn(),
+        };
+      });
+
+      const newState = updatedStore.getState();
+      newState.video.videoData = configData;
+      newState.video.currentVideoLabel = 'introVideo';
+      newState.video.currentVideoName = configData['introVideo']['title'];
+      newStore = configureStore({
+        reducer: { video: videoReducer },
+        preloadedState: newState,
+      });
+
+      ControlBar = require('./../control-bar/control-bar').default;
+    });
+
+    it('should display the title of the introduction video', async () => {
+      render(
+        <Provider store={newStore}>
+          <ControlBar />
+        </Provider>
+      );
+
+      await waitFor(() => {});
+
+      const videoTitle = await screen.findByText(
+        configData['introVideo']['title']
+      );
+      expect(videoTitle).toBeInTheDocument();
+    });
+
+    it('should update title with user choice on videos', async () => {
+      const anotherState = newStore.getState();
+      anotherState.video.userSelection = ['short', 'no', 'long', 'short'];
+      anotherState.video.currentVideoLabel = 'videoOptions_0';
+      anotherState.video.currentVideoName =
+        configData['videoOptions'][0]['name'];
+      const anotherStore = configureStore({
+        reducer: { video: videoReducer },
+        preloadedState: anotherState,
+      });
+
+      render(
+        <Provider store={anotherStore}>
+          <ControlBar />
+        </Provider>
+      );
+
+      await waitFor(() => {});
+
+      const halfFilmIcons = await screen.findAllByAltText('short-icon');
+      const fullFilmIcons = await screen.findAllByAltText('long-icon');
+
+      act(() => {
+        userEvent.click(fullFilmIcons[0]);
+      });
+
+      await waitFor(() => {});
+
+      let videoTitle = await screen.findByText(
+        configData['videoOptions'][2]['name']
+      );
+      expect(videoTitle).toBeInTheDocument();
+
+      act(() => {
+        userEvent.click(halfFilmIcons[1]);
+      });
+
+      await waitFor(() => {});
+
+      videoTitle = await screen.findByText(
+        configData['videoOptions'][3]['name']
+      );
+      expect(videoTitle).toBeInTheDocument();
+
+      act(() => {
+        userEvent.click(halfFilmIcons[0]);
+      });
+
+      await waitFor(() => {});
+
+      videoTitle = await screen.findByText(
+        configData['videoOptions'][0]['name']
+      );
+      expect(videoTitle).toBeInTheDocument();
+    });
   });
 });
