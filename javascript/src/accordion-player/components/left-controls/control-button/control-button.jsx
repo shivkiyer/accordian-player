@@ -11,7 +11,7 @@ import {
 import getScaledDimension from '../../../common/utils/getScaledDimension';
 import { selectVideoWidth } from '../../../app/videoReducer';
 import getButtonPlacement from '../../../common/utils/getButtonPlacement';
-import styles from './control-button.module.scss';
+import styles from './control-button.module.css';
 
 /**
  * A generic control button that is placed centrally

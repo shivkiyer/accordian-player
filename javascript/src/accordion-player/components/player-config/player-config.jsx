@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import styles from './player-config.module.scss';
+import styles from './player-config.module.css';
 import {
   selectVideoWidth,
   selectVideoHeight,

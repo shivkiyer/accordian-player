@@ -22,7 +22,7 @@ import {
   SELECT_TABLE_RADIO_BTN_LARGE,
   SELECT_TABLE_RADIO_BTN_SMALL,
 } from '../../../../common/constants';
-import styles from './selection-table-row.module.scss';
+import styles from './selection-table-row.module.css';
 import radioBtnOff from './../../../../assets/images/radio_btn_off.svg';
 import radioBtnOn from './../../../../assets/images/radio_btn_on.svg';
 

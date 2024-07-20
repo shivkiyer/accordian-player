@@ -12,7 +12,7 @@ import {
   TIME_LEFT_MARGIN_LARGE,
   TIME_LEFT_MARGIN_SMALL,
 } from '../../../common/constants';
-import styles from './video-progress.module.scss';
+import styles from './video-progress.module.css';
 
 /**
  * Time completed of video

@@ -33,7 +33,7 @@ import getSelectPanelVisible from '../../../common/utils/getSelectPanelVisible';
 import checkVideoLoops from '../../../common/utils/checkVideoLoops';
 import checkForVideoAction from '../../../common/utils/checkForVideoAction';
 import getActionUrl from '../../../common/utils/getActionUrl';
-import styles from './video.module.scss';
+import styles from './video.module.css';
 
 /**
  * The video element

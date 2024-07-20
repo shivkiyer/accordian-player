@@ -1,7 +1,7 @@
 import { useRef, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import styles from './progress-bar.module.scss';
+import styles from './progress-bar.module.css';
 import {
   PROGRESS_BAR_HEIGHT_LARGE,
   PROGRESS_BAR_HEIGHT_SMALL,

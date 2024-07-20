@@ -23,7 +23,7 @@ import {
 import getScaledDimension from '../../../common/utils/getScaledDimension';
 import getNextVideoData from '../../../common/utils/getNextVideoData';
 import continueBtn from './../../../assets/images/continue_button.svg';
-import styles from './continue-button.module.scss';
+import styles from './continue-button.module.css';
 
 export default function ContinueButton() {
   const dispatch = useDispatch();

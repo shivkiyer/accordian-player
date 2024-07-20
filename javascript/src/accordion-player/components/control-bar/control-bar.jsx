@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 
-import styles from './control-bar.module.scss';
+import styles from './control-bar.module.css';
 import getScaledDimension from '../../common/utils/getScaledDimension';
 import getFullscreenWidth from '../../common/utils/getFullscreenWidth';
 import {

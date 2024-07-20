@@ -27,7 +27,7 @@ import {
   selectIsFullScreen,
 } from './../../app/videoReducer';
 import getScaledDimension from './../../common/utils/getScaledDimension';
-import styles from './selection-panel.module.scss';
+import styles from './selection-panel.module.css';
 
 /**
  * Returns a panel for user to select videos

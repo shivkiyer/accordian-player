@@ -13,7 +13,7 @@ import {
   LEFT_BUTTONS_LEFT_MARGIN_LARGE,
   LEFT_BUTTONS_LEFT_MARGIN_SMALL,
 } from '../../common/constants';
-import styles from './left-controls.module.scss';
+import styles from './left-controls.module.css';
 import PlayButton from './play-button/play-button';
 import PauseButton from './pause-button/pause-button';
 import RewindButton from './rewind-button/rewind-button';

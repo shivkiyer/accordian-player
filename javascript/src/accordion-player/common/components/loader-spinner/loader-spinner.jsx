@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import styles from './loader-spinner.module.scss';
+import styles from './loader-spinner.module.css';
 import { selectVideoHeight } from '../../../app/videoReducer';
 
 export default function LoaderSpinner() {

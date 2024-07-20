@@ -5,7 +5,7 @@ import useWindowDimensions from '../../hooks/useWindowDimensions';
 import getVideoDimensions from '../../common/utils/getVideoDimensions';
 import getScaledDimension from '../../common/utils/getScaledDimension';
 import checkVideoUrl from '../../common/utils/checkVideoUrl';
-import styles from './video-player.module.scss';
+import styles from './video-player.module.css';
 import ControlBar from '../control-bar/control-bar';
 import PlayerConfig from '../player-config/player-config';
 import Video from './video/video';

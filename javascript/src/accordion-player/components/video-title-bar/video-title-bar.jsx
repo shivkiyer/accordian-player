@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import VideoTitle from './video-title/video-title';
 import VideoProgress from './video-progress/video-progress';
-import styles from './video-title-bar.module.scss';
+import styles from './video-title-bar.module.css';
 import {
   selectVideoWidth,
   selectIsVolumeSliderVisible,

@@ -8,9 +8,9 @@
 .ProgressBar {
   background-color: white;
   user-select: none;
+}
 
-  .ProgressBarComplete {
-    background-color: red;
-    height: 100%;
-  }
+.ProgressBar .ProgressBarComplete {
+  background-color: red;
+  height: 100%;
 }

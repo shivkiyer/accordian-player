@@ -25,7 +25,7 @@ import {
 import getScaledDimension from '../../../common/utils/getScaledDimension';
 import longClipBtn from './../../../assets/images/full_film_icon.svg';
 import shortClipBtn from './../../../assets/images/half_film_icon.svg';
-import styles from './video-selector-bar.module.scss';
+import styles from './video-selector-bar.module.css';
 
 /**
  * Selector with film icons for choosing video options

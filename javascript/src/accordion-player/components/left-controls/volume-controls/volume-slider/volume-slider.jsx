@@ -28,7 +28,7 @@ import {
   setVolumeLevel,
   setIsVolumeChanging,
 } from '../../../../app/videoReducer';
-import styles from './volume-slider.module.scss';
+import styles from './volume-slider.module.css';
 
 /**
  * Volume adjustment slider

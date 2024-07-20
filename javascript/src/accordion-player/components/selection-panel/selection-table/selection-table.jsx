@@ -9,7 +9,7 @@ import {
   SELECT_TABLE_PADDING_SMALL,
 } from '../../../common/constants';
 import getScaledDimension from '../../../common/utils/getScaledDimension';
-import styles from './selection-table.module.scss';
+import styles from './selection-table.module.css';
 
 /**
  * Generates table for user to choose videos

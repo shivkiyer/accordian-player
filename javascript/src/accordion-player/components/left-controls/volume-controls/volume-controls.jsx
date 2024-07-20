@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import VolumeButton from './volume-button/volume-button';
 import VolumeSlider from './volume-slider/volume-slider';
-import styles from './volume-controls.module.scss';
+import styles from './volume-controls.module.css';
 import {
   selectIsVolumeChanging,
   selectIsVolumeMuted,

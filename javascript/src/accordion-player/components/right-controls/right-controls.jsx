@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 
 import FullScreenButton from './fullscreen-button/fullscreen-button';
 import VideoSelectorBar from './video-selector-bar/video-selector-bar';
-import styles from './right-controls.module.scss';
+import styles from './right-controls.module.css';
 import {
   RIGHT_CONTROL_BTNS_RIGHT_MARGIN_LARGE,
   RIGHT_CONTROL_BTNS_RIGHT_MARGIN_SMALL,

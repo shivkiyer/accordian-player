@@ -1,4 +1,4 @@
-import styles from './video-title.module.scss';
+import styles from './video-title.module.css';
 
 /**
  * Title of the video
