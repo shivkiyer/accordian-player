@@ -140,7 +140,10 @@ export const videoSlice = createSlice({
      * @param {string} payload Play/pause status of video JS node
      *
      */
-    playPauseVideo: (state, action: PayloadAction<string>) => {
+    playPauseVideo: (
+      state,
+      action: PayloadAction<string | null | undefined>
+    ) => {
       state.prevIsPlaying = state.isPlaying;
       if (action.payload === 'paused') {
         state.isPlaying = false;

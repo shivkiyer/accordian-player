@@ -1,0 +1,10 @@
+.videoPlayer {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.videoPlayer h1 {
+  text-align: center;
+  padding-top: 20px;
+}

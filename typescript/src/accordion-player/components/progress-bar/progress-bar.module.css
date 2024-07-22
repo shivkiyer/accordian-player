@@ -1,0 +1,16 @@
+.ProgressBarContainer {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.ProgressBar {
+  background-color: white;
+  user-select: none;
+}
+
+.ProgressBar .ProgressBarComplete {
+  background-color: red;
+  height: 100%;
+}
