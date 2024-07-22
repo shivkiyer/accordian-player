@@ -1,0 +1,45 @@
+import { useAppSelector } from '../../app/hooks';
+import FullScreenButton from './fullscreen-button/fullscreen-button';
+import VideoSelectorBar from './video-selector-bar/video-selector-bar';
+import styles from './right-controls.module.css';
+import {
+  RIGHT_CONTROL_BTNS_RIGHT_MARGIN_LARGE,
+  RIGHT_CONTROL_BTNS_RIGHT_MARGIN_SMALL,
+} from '../../common/constants';
+import getScaledDimension from '../../common/utils/getScaledDimension';
+import {
+  selectVideoWidth,
+  selectCurrentVideoLabel,
+} from '../../app/videoReducer';
+
+/**
+ * Container for right aligned control buttons
+ * Along with full screen toggle, there will also be
+ * video selector buttons
+ *
+ * @returns {ReactNode} A container with control buttons
+ */
+export default function RightControls() {
+  const videoWidth = useAppSelector(selectVideoWidth);
+  const currentVideoLabel = useAppSelector(selectCurrentVideoLabel);
+
+  const rightMargin = getScaledDimension({
+    smallDim: RIGHT_CONTROL_BTNS_RIGHT_MARGIN_SMALL,
+    largeDim: RIGHT_CONTROL_BTNS_RIGHT_MARGIN_LARGE,
+    videoWidth,
+  });
+
+  const style = {
+    marginRight: `${rightMargin}px`,
+  };
+
+  const isVideoSelectorVisible =
+    currentVideoLabel !== null && currentVideoLabel.includes('videoOptions');
+
+  return (
+    <div className={styles.RightControls} style={style}>
+      {isVideoSelectorVisible && <VideoSelectorBar />}
+      <FullScreenButton />
+    </div>
+  );
+}

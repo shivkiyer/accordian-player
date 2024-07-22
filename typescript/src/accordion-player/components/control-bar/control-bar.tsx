@@ -47,7 +47,7 @@ export default function ControlBar() {
    *
    * @returns {object} Modified height and width of control bar
    */
-  const adjustControlBar = (barStyle) => {
+  const adjustControlBar = (barStyle: {width: string, height: string}) => {
     const adjustedWidth = getFullscreenWidth(isFullscreen, isMobile);
     if (adjustedWidth !== null) {
       return {
