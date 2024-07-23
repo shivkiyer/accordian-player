@@ -7,15 +7,14 @@
  *
  */
 export default function getVideoTime(rawTimeSeconds: number): string {
-    if (rawTimeSeconds) {
-      const date = new Date();
-      date.setSeconds(rawTimeSeconds);
-      date.setMinutes(0);
-      date.setHours(0);
-  
-      return date.toISOString().substring(15, 19);
-    } else {
-      return '0:00';
-    }
+  if (rawTimeSeconds) {
+    const date = new Date();
+    date.setSeconds(rawTimeSeconds);
+    date.setMinutes(0);
+    date.setHours(0);
+
+    return date.toISOString().substring(15, 19);
+  } else {
+    return '0:00';
   }
-  
+}

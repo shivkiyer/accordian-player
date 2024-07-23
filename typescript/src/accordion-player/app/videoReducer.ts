@@ -287,7 +287,7 @@ export const videoSlice = createSlice({
      *
      * @param {number} payload X-coordinate of mouse event
      */
-    setVolumeMousePositionX: (state, action: PayloadAction<number>) => {
+    setVolumeMousePositionX: (state, action: PayloadAction<number | null>) => {
       state.volumeMousePositionX = action.payload;
     },
     /**
@@ -296,7 +296,10 @@ export const videoSlice = createSlice({
      *
      * @param {number} payload X-coordinate of mouse event
      */
-    setProgressMousePositionX: (state, action: PayloadAction<number>) => {
+    setProgressMousePositionX: (
+      state,
+      action: PayloadAction<number | null>
+    ) => {
       state.progressMousePositionX = action.payload;
     },
     /**

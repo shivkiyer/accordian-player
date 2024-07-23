@@ -1,0 +1,47 @@
+.TableColumn {
+  display: inline-block;
+  background-color: #e6e6e6;
+  overflow: hidden !important;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.TitleColumn {
+  text-transform: uppercase;
+}
+
+.TitleHeadingCell {
+  color: white;
+  font-weight: bold;
+  background-color: #a19f9f;
+}
+
+.ChoiceColumns {
+  float: right;
+  text-align: center;
+}
+
+.ChoiceColumns .TableColumn {
+  cursor: pointer;
+}
+
+.ChoiceHeading {
+  font-weight: bold;
+  color: white;
+}
+
+.VeryInterestedCell {
+  background-color: #2d9600;
+}
+
+.InterestedCell {
+  background-color: #18330c;
+}
+
+.NotInterestedCell {
+  background-color: #4a4a4a;
+}
+
+.ChoiceButton {
+  display: inline-block;
+}

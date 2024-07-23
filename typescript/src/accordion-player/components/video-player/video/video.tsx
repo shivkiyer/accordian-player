@@ -41,7 +41,11 @@ import styles from './video.module.css';
  * @returns {ReactNode} video element with controls
  *
  */
-export default function Video({ mouseMoveHandler }: {mouseMoveHandler: () => void}) {
+export default function Video({
+  mouseMoveHandler,
+}: {
+  mouseMoveHandler: () => void;
+}) {
   const videoRef = useRef<any>();
   const dispatch = useAppDispatch();
   const videoUrl = useAppSelector(selectVideoUrl);

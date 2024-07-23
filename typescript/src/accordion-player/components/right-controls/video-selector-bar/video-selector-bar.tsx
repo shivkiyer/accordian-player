@@ -89,7 +89,7 @@ export default function VideoSelectorBar() {
     width: `${shortBtnWidth}px`,
   };
 
-  let videoIndex = null;
+  let videoIndex: number | null = null;
   if (currentVideoLabel?.includes('videoOptions')) {
     videoIndex = parseInt(currentVideoLabel.split('_')[1]);
   }
@@ -110,7 +110,7 @@ export default function VideoSelectorBar() {
   };
 
   const buttonList = userSelection.map((item: string, index: number) => {
-    let inactiveBtnStyle: {opacity?: string} = {};
+    let inactiveBtnStyle: { opacity?: string } = {};
     if (videoIndex !== index) {
       inactiveBtnStyle.opacity = '0.5';
     }

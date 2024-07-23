@@ -31,9 +31,10 @@ export function goFullscreen(element: HTMLElement) {
   return element.requestFullscreen();
 }
 
-const HTMLElementExitFullScreen: any = document.documentElement as HTMLElement & {
-    mozExitFullScreen(): Promise<void>;   
-}
+const HTMLElementExitFullScreen: any =
+  document.documentElement as HTMLElement & {
+    mozExitFullScreen(): Promise<void>;
+  };
 
 /**
  * Request exit fullscreen on a HTML element

@@ -7,15 +7,14 @@
  * @returns {boolean}
  */
 export default function checkForVideoEnding(
-    currentTime: number,
-    videoLabel: string | null,
-    videoData: any
-  ): boolean {
-    if (videoLabel === 'endscreenInfo') {
-      if (currentTime >= videoData[videoLabel]['startHotSpot'] / 1000) {
-        return true;
-      }
+  currentTime: number,
+  videoLabel: string | null,
+  videoData: any
+): boolean {
+  if (videoLabel === 'endscreenInfo') {
+    if (currentTime >= videoData[videoLabel]['startHotSpot'] / 1000) {
+      return true;
     }
-    return false;
   }
-  
+  return false;
+}

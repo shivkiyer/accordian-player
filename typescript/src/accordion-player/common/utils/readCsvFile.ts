@@ -31,7 +31,9 @@ export default async function readCsv(data: string): Promise<any> {
     switch (lineContents[0].trim()) {
       case 'INTRO_INFO':
         try {
-          const verifyUrl: VideoLinkType = await checkVideoPlayable(lineContents[4].trim());
+          const verifyUrl: VideoLinkType = await checkVideoPlayable(
+            lineContents[4].trim()
+          );
           videoSpecs['introVideo'] = {
             title: lineContents[2].trim(),
             url: verifyUrl.data,

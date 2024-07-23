@@ -1,0 +1,14 @@
+.ContinueButton {
+  position: absolute;
+  display: inline-block;
+  z-index: 5;
+}
+
+.SelectButton {
+  background-color: #7a7a7a;
+  color: white;
+  border-width: 0px;
+  border-radius: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+}

@@ -142,8 +142,12 @@ export default function VideoTitleBar() {
     currentVideoLabel !== null &&
     currentVideoLabel.includes('videoOptions')
   ) {
-    const noOfLongVideos = userSelection?.filter((el: string) => el === 'long').length;
-    const noOfShortVideos = userSelection?.filter((el: string) => el === 'short').length;
+    const noOfLongVideos = userSelection?.filter(
+      (el: string) => el === 'long'
+    ).length;
+    const noOfShortVideos = userSelection?.filter(
+      (el: string) => el === 'short'
+    ).length;
 
     let selectorWidthLarge = 0;
     let selectorWidthSmall = 0;

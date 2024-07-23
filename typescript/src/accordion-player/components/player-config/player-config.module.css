@@ -3,7 +3,8 @@
   background-color: #708794;
 }
 
-.PlayerConfig input, .PlayerConfig p {
+.PlayerConfig input,
+.PlayerConfig p {
   display: block;
   width: 80%;
   margin-left: auto;

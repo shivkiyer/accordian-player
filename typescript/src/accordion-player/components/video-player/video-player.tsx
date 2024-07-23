@@ -74,5 +74,266 @@ import styles from './video-player.module.css';
  *
  */
 export default function VideoPlayer({ width, height, url, name }: PlayerProps) {
-  return <p>Video Player</p>;
+  const dispatch = useAppDispatch();
+  const playerRef = useRef<any>();
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
+  const videoUrl = useAppSelector(selectVideoUrl);
+  const isControlBarVisible = useAppSelector(selectIsControlBarVisible);
+  const isControlBarActive = useAppSelector(selectIsControlBarActive);
+  const isVolumeChanging = useAppSelector(selectIsVolumeChanging);
+  const isVideoPositionChanging = useAppSelector(selectIsVideoPositionChanging);
+  const prevIsPlaying = useAppSelector(selectPrevIsPlaying);
+  const isFullscreen = useAppSelector(selectIsFullScreen);
+  const isBtnFullScreen = useAppSelector(selectIsBtnFullScreen);
+  const isSelectPanelVisible = useAppSelector(selectIsSelectPanelVisible);
+  const [errMsg, setErrMsg] = useState(null);
+  const [mouseMoveTimerEnd1, setMouseMoveTimerEnd1] = useState(false);
+  const [mouseMoveTimerEnd2, setMouseMoveTimerEnd2] = useState(true);
+
+  /**
+   * Video player will play the dynamic videoUrl
+   * if it is updated, or will try to fetch data
+   * from the input URL.
+   */
+  useEffect(() => {
+    const fetchUrl = async (urlSetting: string) => {
+      if (urlSetting) {
+        try {
+          const urlResult = await checkVideoUrl(urlSetting);
+          if (urlResult.errMsg === null) {
+            if (typeof urlResult.data === 'string') {
+              dispatch(setVideoUrl(urlResult.data));
+              dispatch(setCurrentVideoName(name || ''));
+            } else {
+              const videoData = urlResult.data;
+              dispatch(setCurrentVideoLabel(videoData['videoSequence'][0]));
+              dispatch(
+                setVideoUrl(videoData[videoData['videoSequence'][0]]['url'])
+              );
+              dispatch(
+                setBackgroundImageUrl(
+                  videoData[videoData['videoSequence'][0]]['image']
+                )
+              );
+              dispatch(
+                setCurrentVideoName(
+                  videoData[videoData['videoSequence'][0]]['title']
+                )
+              );
+              dispatch(setVideoData(videoData));
+            }
+          }
+        } catch (e: any) {
+          setErrMsg(e.errMsg);
+        }
+      }
+    };
+
+    fetchUrl(url || '');
+  }, [url, name, dispatch]);
+
+  const { playerWidth, playerHeight, marginTop } = getVideoDimensions({
+    width,
+    height,
+    maxWidth: windowWidth,
+    maxHeight: windowHeight,
+  });
+
+  /**
+   * Set dimensions of video
+   */
+  useEffect(() => {
+    dispatch(setDimensions({ width: playerWidth, height: playerHeight }));
+  }, [playerHeight, playerWidth, dispatch]);
+
+  const playerStyle = {
+    width: `${playerWidth}px`,
+    height: `${playerHeight}px`,
+    paddingTop: `${marginTop}px`,
+    paddingLeft: `${(windowWidth - playerWidth) / 2}px`,
+    paddingRight: `${(windowWidth - playerWidth) / 2}px`,
+  };
+
+  /**
+   * Helper function that returns dimensions of device
+   */
+  const getFullscreenView = () => {
+    const screenWidth = window.screen.width;
+    const screenHeight = window.screen.height;
+    return {
+      width: screenWidth,
+      height: screenHeight,
+    };
+  };
+
+  /**
+   * Updates device dimensions when device is rotated.
+   */
+  window.addEventListener('orientationchange', () => {
+    if (isFullscreen) {
+      dispatch(setDimensions(getFullscreenView()));
+    }
+  });
+
+  const fullScreenStyle = {
+    ...getFullscreenView(),
+  };
+
+  /**
+   * Detect on app load whether device is a mobile device
+   */
+  useEffect(() => {
+    if (
+      window.screen.width < MOBILE_DEVICE_WIDTH ||
+      window.screen.height < MOBILE_DEVICE_WIDTH
+    ) {
+      dispatch(setIsMobile(true));
+    } else {
+      dispatch(setIsMobile(false));
+    }
+  }, [dispatch]);
+
+  const textFont = getScaledDimension({
+    smallDim: CONFIG_TEXT_SMALL,
+    largeDim: CONFIG_TEXT_LARGE,
+    videoWidth: playerWidth,
+  });
+  const textStyle = {
+    paddingTop: `${playerHeight / 2 - textFont}px`,
+    fontSize: `${textFont}px`,
+  };
+
+  /**
+   * Setting display of control bar when user moves mouse
+   * Sets timers that roll over when mouse is moving
+   */
+  const controlBarVisibilityHandler = () => {
+    if (!mouseMoveTimerEnd1) {
+      dispatch(setControlBarVisible(true));
+      setTimeout(() => {
+        setMouseMoveTimerEnd1(true);
+      }, 4000);
+    } else if (!mouseMoveTimerEnd2) {
+      dispatch(setControlBarVisible(true));
+      setTimeout(() => {
+        setMouseMoveTimerEnd2(true);
+      }, 4000);
+    }
+  };
+
+  /**
+   * Hides control bar when both timers end
+   */
+  useEffect(() => {
+    if (mouseMoveTimerEnd1 && mouseMoveTimerEnd2) {
+      dispatch(setControlBarVisible(false));
+      setMouseMoveTimerEnd1(false);
+      setMouseMoveTimerEnd2(false);
+    }
+  }, [mouseMoveTimerEnd1, mouseMoveTimerEnd2, dispatch]);
+
+  /**
+   * Release handler for when volume slider
+   * or progress bar is being dragged
+   * but mouse is outside the elements.
+   */
+  const mouseUpHandler = () => {
+    if (isVolumeChanging) {
+      dispatch(setIsVolumeChanging(false));
+      dispatch(setVolumeMousePositionX(null));
+    }
+    if (isVideoPositionChanging) {
+      dispatch(setIsVideoPositionChanging(false));
+      dispatch(setProgressMousePositionX(null));
+      if (prevIsPlaying) {
+        dispatch(playPauseVideo('playing'));
+      }
+    }
+  };
+
+  /**
+   * When mouse is moving, if volume or video
+   * position is changing, mouse position is recorded.
+   *
+   * @param {object} event Mouse move event
+   */
+  const mouseMoveHandler = (event: React.MouseEvent<HTMLElement>) => {
+    if (isVideoPositionChanging) {
+      dispatch(setProgressMousePositionX(event.clientX));
+    }
+    if (isVolumeChanging) {
+      dispatch(setVolumeMousePositionX(event.clientX));
+    }
+  };
+
+  /**
+   * Fullscreen toggler - user click on fullscreen button
+   */
+  useEffect(() => {
+    if (isFullscreen) {
+      goFullscreen(playerRef.current)
+        .then(() => {
+          const screenDimensions = getFullscreenView();
+          dispatch(setDimensions(screenDimensions));
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } else if (isBtnFullScreen) {
+      exitFullscreen(document)
+        .then(() => {
+          dispatch(setDimensions({ width: playerWidth, height: playerHeight }));
+        })
+        .catch((e: any) => {
+          console.log(e);
+        });
+    }
+  }, [isFullscreen, isBtnFullScreen, playerWidth, playerHeight, dispatch]);
+
+  /**
+   * Fullscreen toggler when user presses Escape
+   *
+   * @param {object} event fullscreenchange event object
+   */
+  const exitFullscreenHandler = () => {
+    if (document.fullscreenElement === null) {
+      dispatch(setIsButtonFullScreen(false));
+      dispatch(toggleFullScreen(false));
+      dispatch(setDimensions({ width: playerWidth, height: playerHeight }));
+    }
+  };
+  document.addEventListener('fullscreenchange', exitFullscreenHandler, false);
+  document.addEventListener(
+    'mozfullscreenchange',
+    exitFullscreenHandler,
+    false
+  );
+  document.addEventListener('MSFullscreenChange', exitFullscreenHandler, false);
+  document.addEventListener(
+    'webkitfullscreenchange',
+    exitFullscreenHandler,
+    false
+  );
+
+  return (
+    <div
+      className={styles.videoPlayer}
+      style={isFullscreen ? fullScreenStyle : playerStyle}
+      onMouseUp={mouseUpHandler}
+      onMouseMove={mouseMoveHandler}
+      ref={playerRef}
+    >
+      {!(url || videoUrl) && !errMsg && <PlayerConfig />}
+      {errMsg && (
+        <p className='error' style={textStyle}>
+          {errMsg}
+        </p>
+      )}
+      {isSelectPanelVisible && <SelectionPanel />}
+      {videoUrl && <Video mouseMoveHandler={controlBarVisibilityHandler} />}
+      {videoUrl && (isControlBarVisible || isControlBarActive) && (
+        <ControlBar />
+      )}
+    </div>
+  );
 }

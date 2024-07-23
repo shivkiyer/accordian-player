@@ -8,15 +8,14 @@
  * @returns {boolean}
  */
 export default function getSelectPanelVisible(
-    currentTime: number,
-    videoLabel: string | null,
-    videoData: any
-  ): boolean {
-    if (videoLabel === 'selectInfo') {
-      if (currentTime > videoData['selectInfo']['startInteraction'] / 1000) {
-        return true;
-      }
+  currentTime: number,
+  videoLabel: string | null,
+  videoData: any
+): boolean {
+  if (videoLabel === 'selectInfo') {
+    if (currentTime > videoData['selectInfo']['startInteraction'] / 1000) {
+      return true;
     }
-    return false;
   }
-  
+  return false;
+}

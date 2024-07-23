@@ -10,7 +10,7 @@ import VideoInfo from '../../models/video-info';
  */
 export default function getNextVideoData(
   videoData: any,
-  currentLabel: string,
+  currentLabel: string | null,
   userChoice: any[]
 ): VideoInfo | null {
   let nextVideo: VideoInfo | null = null;
