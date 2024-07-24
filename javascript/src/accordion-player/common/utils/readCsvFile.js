@@ -162,7 +162,7 @@ export default async function readCsv(data) {
           }
           if (lineContents[8].trim().length > 0) {
             try {
-              startLoopback = calcTimeFromAfterEffects(
+              jumpToTimestamp = calcTimeFromAfterEffects(
                 checkTimeInstant(
                   lineContents[8].trim(),
                   videoSpecs['framesPerSecond']
@@ -178,7 +178,7 @@ export default async function readCsv(data) {
           }
           if (lineContents[10].trim().length > 0) {
             try {
-              startLoopback = calcTimeFromAfterEffects(
+              startHotSpot = calcTimeFromAfterEffects(
                 checkTimeInstant(
                   lineContents[10].trim(),
                   videoSpecs['framesPerSecond']

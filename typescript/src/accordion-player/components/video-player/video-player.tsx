@@ -75,7 +75,7 @@ import styles from './video-player.module.css';
  */
 export default function VideoPlayer({ width, height, url, name }: PlayerProps) {
   const dispatch = useAppDispatch();
-  const playerRef = useRef<any>();
+  const playerRef = useRef<HTMLDivElement | null>(null);
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const videoUrl = useAppSelector(selectVideoUrl);
   const isControlBarVisible = useAppSelector(selectIsControlBarVisible);

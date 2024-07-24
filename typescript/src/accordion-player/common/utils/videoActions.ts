@@ -2,8 +2,8 @@
  * Loads a video into DOM
  * @param {HTMLElement} video
  */
-export function loadVideo(video: HTMLVideoElement) {
-  video.load();
+export function loadVideo(video: HTMLVideoElement | null) {
+  video?.load();
 }
 
 /**
@@ -18,8 +18,8 @@ export function playVideo(video: HTMLVideoElement) {
  * Pauses a video
  * @param {HTMLElement} video
  */
-export function pauseVideo(video: HTMLVideoElement) {
-  video.pause();
+export function pauseVideo(video: HTMLVideoElement | null) {
+  video?.pause();
 }
 
 /**
@@ -27,8 +27,11 @@ export function pauseVideo(video: HTMLVideoElement) {
  * @param {HTMLElement} element
  * @returns Promise
  */
-export function goFullscreen(element: HTMLElement) {
-  return element.requestFullscreen();
+export function goFullscreen(element: HTMLElement | null) {
+  if (element !== null) {
+    return element.requestFullscreen();
+  }
+  return Promise.reject();
 }
 
 const HTMLElementExitFullScreen: any =

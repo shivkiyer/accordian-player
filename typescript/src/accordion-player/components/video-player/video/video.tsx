@@ -46,7 +46,7 @@ export default function Video({
 }: {
   mouseMoveHandler: () => void;
 }) {
-  const videoRef = useRef<any>();
+  const videoRef = useRef<HTMLVideoElement | null>(null);
   const dispatch = useAppDispatch();
   const videoUrl = useAppSelector(selectVideoUrl);
   const isPlaying = useAppSelector(selectIsPlaying);
@@ -64,9 +64,9 @@ export default function Video({
    * Handling pause/play from user control action
    */
   useEffect(() => {
-    if (isPlaying && videoRef.current.paused) {
+    if (isPlaying && videoRef?.current?.paused) {
       playVideo(videoRef.current);
-    } else if (!isPlaying && !videoRef.current.paused) {
+    } else if (!isPlaying && !videoRef?.current?.paused) {
       pauseVideo(videoRef.current);
     }
   }, [isPlaying]);
@@ -75,14 +75,16 @@ export default function Video({
    * Changing volume of video from user control action
    */
   useEffect(() => {
-    videoRef.current.volume = volumeLevel;
+    if (videoRef.current !== null) {
+      videoRef.current.volume = volumeLevel;
+    }
   }, [volumeLevel]);
 
   /**
    * Changing video position from user action on progress bar
    */
   useEffect(() => {
-    if (isVideoPositionChanging) {
+    if (isVideoPositionChanging && videoRef.current !== null) {
       videoRef.current.currentTime = currentTime;
     }
   }, [isVideoPositionChanging, dispatch, currentTime]);
@@ -116,7 +118,7 @@ export default function Video({
     if (isVideoEnding) {
       dispatch(setReadyForEnding(true));
     }
-    if (loopTime !== null) {
+    if (loopTime !== null && videoRef.current !== null) {
       videoRef.current.currentTime = loopTime;
     }
   };
