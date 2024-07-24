@@ -45,7 +45,7 @@ export default function VolumeSlider() {
   const isVolumeChanging = useAppSelector(selectIsVolumeChanging);
   const volumeMousePositionX = useAppSelector(selectVolumeMousePositionX);
   const dispatch = useAppDispatch();
-  const sliderRef = useRef<any>();
+  const sliderRef = useRef<HTMLImageElement | null>(null);
 
   const volumeRailWidth = getScaledDimension({
     smallDim: VOLUME_RAIL_WIDTH_SMALL,
@@ -97,8 +97,14 @@ export default function VolumeSlider() {
    * @returns Volume level between 0 and 1
    */
   const calculateVolumeLevel = useCallback((mousePosition: number) => {
-    const { x: xMin, width } = sliderRef.current.getBoundingClientRect();
-    let volPos = mousePosition - xMin;
+    let xMin, width: number | undefined = 0;
+    if (sliderRef.current !== null) {
+      ({ x: xMin, width } = sliderRef.current.getBoundingClientRect());
+    }
+    let volPos = mousePosition;
+    if (xMin !== undefined) {
+      volPos -= xMin;
+    }
     if (volPos < 0) {
       volPos = 0;
     }

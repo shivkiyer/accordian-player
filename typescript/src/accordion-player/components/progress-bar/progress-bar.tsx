@@ -28,6 +28,13 @@ import {
   setCurrentTime,
 } from '../../app/videoReducer';
 
+interface SliderStyleType {
+  width: string;
+  height: string;
+  marginLeft: string;
+  marginRight: string;
+}
+
 /**
  * Progress slider bar
  *
@@ -218,7 +225,10 @@ export default function ProgressBar() {
    * @param {object} sliderMargin Side margins from control bar
    * @returns {object} Recalculated style of sidebar
    */
-  const adjustedProgressBar = (sliderStyle: any, sliderMargin: any): any => {
+  const adjustedProgressBar = (
+    sliderStyle: SliderStyleType,
+    sliderMargin: number
+  ): SliderStyleType => {
     const adjustedWidth = getFullscreenWidth(isFullscreen, isMobile);
 
     if (adjustedWidth !== null) {
