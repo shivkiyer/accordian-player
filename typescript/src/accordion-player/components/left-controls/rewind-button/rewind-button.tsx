@@ -7,6 +7,7 @@ import {
   playPauseVideo,
   setUserSelection,
   setReadyForEnding,
+  setRestartVideo,
 } from '../../../app/videoReducer';
 import rewindBtn from './../../../assets/images/rewind.svg';
 import {
@@ -31,15 +32,19 @@ export default function RewindButton() {
   const videoData = useAppSelector(selectVideoData);
 
   const rewindHandler = () => {
-    const introVideo = videoData['introVideo'];
-    dispatch(playPauseVideo('paused'));
-    dispatch(setVideoUrl(introVideo['url']));
-    dispatch(setCurrentVideoLabel('introVideo'));
-    dispatch(setCurrentVideoName(introVideo['title']));
-    dispatch(
-      setUserSelection(Array(videoData['videoOptions'].length).fill(null))
-    );
-    dispatch(setReadyForEnding(false));
+    if (videoData !== null) {
+      const introVideo = videoData['introVideo'];
+      dispatch(playPauseVideo('paused'));
+      dispatch(setVideoUrl(introVideo['url']));
+      dispatch(setCurrentVideoLabel('introVideo'));
+      dispatch(setCurrentVideoName(introVideo['title']));
+      dispatch(
+        setUserSelection(Array(videoData['videoOptions'].length).fill(null))
+      );
+      dispatch(setReadyForEnding(false));
+    } else {
+      dispatch(setRestartVideo(true));
+    }
   };
 
   return (

@@ -25,7 +25,7 @@ describe('VideoPlayer', () => {
   beforeEach(() => {
     const initStore = getInitStore();
 
-    mockStore = configureStore({
+    mockStore = configureStore<any>({
       reducer: { video: videoReducer },
       preloadedState: initStore,
     });

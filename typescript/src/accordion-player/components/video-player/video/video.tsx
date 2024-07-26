@@ -13,6 +13,7 @@ import {
   selectUserSelection,
   selectReadyForEnding,
   selectIsLoaded,
+  selectRestartVideo,
   setCurrentTime,
   setDuration,
   playPauseVideo,
@@ -22,6 +23,7 @@ import {
   setSelectPanelVisible,
   setReadyForEnding,
   setIsLoaded,
+  setRestartVideo,
 } from '../../../app/videoReducer';
 import {
   loadVideo,
@@ -59,17 +61,28 @@ export default function Video({
   const userSelection = useAppSelector(selectUserSelection);
   const isReadyForEnding = useAppSelector(selectReadyForEnding);
   const isLoaded = useAppSelector(selectIsLoaded);
+  const restartVideo = useAppSelector(selectRestartVideo);
 
   /**
    * Handling pause/play from user control action
    */
   useEffect(() => {
-    if (isPlaying && videoRef?.current?.paused) {
+    if (isPlaying && videoRef.current?.paused) {
       playVideo(videoRef.current);
-    } else if (!isPlaying && !videoRef?.current?.paused) {
+    } else if (!isPlaying && !videoRef.current?.paused) {
       pauseVideo(videoRef.current);
     }
   }, [isPlaying]);
+
+  /**
+   * Handle the rewind button for single video playing
+   */
+  useEffect(() => {
+    if (restartVideo && videoRef.current !== null) {
+      videoRef.current.currentTime = 0;
+      dispatch(setRestartVideo(false));
+    }
+  }, [restartVideo, dispatch]);
 
   /**
    * Changing volume of video from user control action

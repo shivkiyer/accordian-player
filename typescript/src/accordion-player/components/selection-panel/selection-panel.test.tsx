@@ -19,7 +19,7 @@ describe('SelectionPanel', () => {
     const initStoreState = getInitStore();
     initStoreState.video.isSelectPanelVisible = true;
 
-    mockStore = configureStore({
+    mockStore = configureStore<any>({
       reducer: { video: videoReducer },
       preloadedState: initStoreState,
     });

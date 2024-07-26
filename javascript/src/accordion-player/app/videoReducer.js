@@ -8,6 +8,7 @@ import { createSlice } from '@reduxjs/toolkit';
  * height {number} The height of the video player
  * volume {number} Volume level between 0 and 1
  * isPlaying {boolean} Indicated whether the video is playing
+ * restartVideo {boolean} Flag to restart video
  * prevIsPlaying {boolean} Stores video playing status
  * currentTime {number} Current time position in seconds of the video
  * duration {number} Duration in seconds of the video
@@ -34,13 +35,18 @@ import { createSlice } from '@reduxjs/toolkit';
  * Reducers:
  * setDimensions : Setting the width and height of the video player
  * playPauseVideo: Toggling play/pause status of the video
+ * setRestartVideo: Set the flag to restart the video
+ * setCurrentTime: Set the current playing time instant of the video
+ * setDuration: Set the duration of the video
  * setControlBarVisible: Change visibility of control bar
+ * setControlBarActive: Flag to indicate user interaction with control bar
  * setVolumeSlider: Toggle visible status of volume slider
  * toggleVolumeMute: Mute/unmute volume
  * setVolumeLevel: Set the volume of the video
  * setIsVolumeChanging: Set the flag whether volume slider is being changed
  * toggleFullScreen: Toggle the full screen status flag
  * setIsBtnFullScreen: Is user clicking on fullscreen control button
+ * setVideoUrl: Sets the url of the video
  * setIsVideoPositionChanging: Set the flag if video position is changing
  * setVolumeMousePositionX: Set the X-position of the mouse for volume change
  * setProgressMousePositionX: Set the X-position of the mouse for progress change
@@ -63,6 +69,7 @@ export const videoSlice = createSlice({
     volume: 1.0,
     prevVolume: 1.0,
     isPlaying: false,
+    restartVideo: false,
     prevIsPlaying: false,
     currentTime: 0,
     duration: 0,
@@ -112,6 +119,14 @@ export const videoSlice = createSlice({
       } else {
         state.isPlaying = !state.isPlaying;
       }
+    },
+    /**
+     * Sets the flag to restart the video
+     *
+     * @param {boolean} payload Restart flag
+     */
+    setRestartVideo: (state, action) => {
+      state.restartVideo = action.payload;
     },
     /**
      * Set the current play time of the video
@@ -336,6 +351,7 @@ export const videoSlice = createSlice({
 export const {
   setDimensions,
   playPauseVideo,
+  setRestartVideo,
   setCurrentTime,
   setDuration,
   setControlBarVisible,
@@ -364,6 +380,7 @@ export const {
 export const selectVideoWidth = (state) => state.video.width;
 export const selectVideoHeight = (state) => state.video.height;
 export const selectIsPlaying = (state) => state.video.isPlaying;
+export const selectRestartVideo = (state) => state.video.restartVideo;
 export const selectPrevIsPlaying = (state) => state.video.prevIsPlaying;
 export const selectCurrentTime = (state) => state.video.currentTime;
 export const selectDuration = (state) => state.video.duration;
