@@ -49,7 +49,7 @@ import {
  * @returns {ReactNode} Container with video title and video time
  */
 export default function VideoTitleBar() {
-  const progressRef = useRef<any>();
+  const progressRef = useRef<HTMLDivElement | null>(null);
   const videoWidth = useAppSelector(selectVideoWidth);
   const isVolumeSliderVisible = useAppSelector(selectIsVolumeSliderVisible);
   const currentVideoName = useAppSelector(selectCurrentVideoName);
