@@ -1,3 +1,5 @@
+import VideoDataType from '../../models/video-data';
+
 /**
  * Check if the video is ready for the ending action
  *
@@ -9,12 +11,14 @@
 export default function checkForVideoEnding(
   currentTime: number,
   videoLabel: string | null,
-  videoData: any
+  videoData: VideoDataType | null
 ): boolean {
-  if (videoLabel === 'endscreenInfo') {
-    if (currentTime >= videoData[videoLabel]['startHotSpot'] / 1000) {
-      return true;
-    }
+  if (videoLabel !== 'endscreenInfo') {
+    return false;
+  }
+  const hotSpotInstance: number = videoData?.endscreenInfo?.startHotSpot || -1;
+  if (hotSpotInstance > 0 && currentTime >= hotSpotInstance / 1000) {
+    return true;
   }
   return false;
 }

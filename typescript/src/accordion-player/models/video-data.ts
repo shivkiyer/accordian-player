@@ -23,9 +23,9 @@ export default interface VideoDataType {
   endscreenInfo?: {
     title: string;
     url: string;
-    startLoopback: number;
-    jumpToTimestamp: number;
-    startHotSpot: number;
+    startLoopback?: number;
+    jumpToTimestamp?: number;
+    startHotSpot?: number;
     jumpToUrl?: string;
   };
 }

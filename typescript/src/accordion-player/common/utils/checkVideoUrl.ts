@@ -1,6 +1,12 @@
 import readCsv from './readCsvFile';
 import checkVideoPlayable from './checkVideoPlayable';
 import fetchUrl from './fetchUrl';
+import VideoDataType from '../../models/video-data';
+
+interface HttpResponseType {
+  data: string | VideoDataType | null;
+  errMsg: string | null;
+}
 
 /**
  * Checks if a URL can be fetched by making a HEAD request
@@ -10,8 +16,8 @@ import fetchUrl from './fetchUrl';
  * @returns {Promise} Video data or video URL is returned, or error message
  *
  */
-const checkVideoUrl = (urlInput: string): Promise<any> => {
-  const result = new Promise(async (resolve, reject) => {
+const checkVideoUrl = (urlInput: string): Promise<HttpResponseType> => {
+  const result: Promise<HttpResponseType> = new Promise(async (resolve, reject) => {
     let url;
     try {
       url = new URL(urlInput);

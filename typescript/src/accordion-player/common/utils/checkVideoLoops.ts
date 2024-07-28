@@ -1,3 +1,5 @@
+import VideoDataType from '../../models/video-data';
+
 /**
  * Check if a video should loop
  *
@@ -9,11 +11,19 @@
 export default function checkVideoLoops(
   currentTime: number,
   videoLabel: string | null,
-  videoData: any
+  videoData: VideoDataType | null
 ): number | null {
   if (videoLabel === 'selectInfo' || videoLabel === 'endscreenInfo') {
-    if (currentTime >= videoData[videoLabel]['startLoopback'] / 1000) {
-      return videoData[videoLabel]['jumpToTimestamp'] / 1000;
+    if (videoData !== null) {
+      const clipData = videoData[videoLabel];
+      const startLoopBackTime: number = clipData?.startLoopback || -1;
+      let jumpToTime: number | null = null;
+      if (clipData?.jumpToTimestamp != undefined) {
+        jumpToTime = clipData?.jumpToTimestamp / 1000;
+      }
+      if (startLoopBackTime > 0 && currentTime >= startLoopBackTime / 1000) {
+        return jumpToTime;
+      }
     }
   }
   return null;

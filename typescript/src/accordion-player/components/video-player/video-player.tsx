@@ -106,21 +106,17 @@ export default function VideoPlayer({ width, height, url, name }: PlayerProps) {
               dispatch(setCurrentVideoName(name || ''));
             } else {
               const videoData = urlResult.data;
-              dispatch(setCurrentVideoLabel(videoData['videoSequence'][0]));
-              dispatch(
-                setVideoUrl(videoData[videoData['videoSequence'][0]]['url'])
-              );
-              dispatch(
-                setBackgroundImageUrl(
-                  videoData[videoData['videoSequence'][0]]['image']
-                )
-              );
-              dispatch(
-                setCurrentVideoName(
-                  videoData[videoData['videoSequence'][0]]['title']
-                )
-              );
-              dispatch(setVideoData(videoData));
+              if (videoData !== null) {
+                dispatch(setCurrentVideoLabel('introVideo'));
+                dispatch(setVideoUrl(videoData.introVideo?.url || ''));
+                dispatch(
+                  setBackgroundImageUrl(videoData.introVideo?.image || '')
+                );
+                dispatch(
+                  setCurrentVideoName(videoData.introVideo?.title || '')
+                );
+                dispatch(setVideoData(videoData));
+              }
             }
           }
         } catch (e: any) {
