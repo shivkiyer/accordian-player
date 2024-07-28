@@ -3,6 +3,7 @@ import calcTimeFromAfterEffects from './calcTimeFromAfterEffects';
 import checkTimeInstant from './checkTimeInstant';
 import VideoLinkType from '../../models/videoLink';
 import { DEFAULT_FRAMES_PER_SECOND } from '../constants';
+import VideoDataType from '../../models/video-data';
 
 /**
  * Reads a config.csv file and produces the video specs
@@ -12,8 +13,9 @@ import { DEFAULT_FRAMES_PER_SECOND } from '../constants';
  * @return {object} Details of videos to be played in app
  */
 export default async function readCsv(data: string): Promise<any> {
-  const videoSpecs: any = {
+  const videoSpecs: VideoDataType = {
     videoOptions: [],
+    framesPerSecond: DEFAULT_FRAMES_PER_SECOND,
   };
   const segmentTitles = [];
   const longVideos = [];
@@ -36,7 +38,7 @@ export default async function readCsv(data: string): Promise<any> {
           );
           videoSpecs['introVideo'] = {
             title: lineContents[2].trim(),
-            url: verifyUrl.data,
+            url: verifyUrl.data || '',
             image: lineContents[8].trim(),
           };
           if (lineContents[6].trim().length > 0) {
@@ -47,8 +49,6 @@ export default async function readCsv(data: string): Promise<any> {
                 errMsg: 'Frames per second must be integer',
               });
             }
-          } else {
-            videoSpecs['framesPerSecond'] = DEFAULT_FRAMES_PER_SECOND;
           }
           if (lineContents[10].trim().length > 0) {
             let backGroundColor = lineContents[10].trim();
@@ -127,7 +127,7 @@ export default async function readCsv(data: string): Promise<any> {
           }
           videoSpecs['selectInfo'] = {
             title: lineContents[2].trim(),
-            url: verifyUrl.data,
+            url: verifyUrl.data || '',
             startInteraction: startInteraction,
             startLoopback: startLoopback,
             jumpToTimestamp: jumpToTimestamp,
@@ -212,7 +212,7 @@ export default async function readCsv(data: string): Promise<any> {
           }
           videoSpecs['endscreenInfo'] = {
             title: lineContents[2].trim(),
-            url: verifyUrl.data,
+            url: verifyUrl.data || '',
             startLoopback: startLoopback,
             jumpToTimestamp: jumpToTimestamp,
             startHotSpot: startHotSpot,
@@ -277,8 +277,8 @@ export default async function readCsv(data: string): Promise<any> {
   for (let i = 0; i < segmentTitles.length; i++) {
     videoSpecs['videoOptions'].push({
       name: segmentTitles[i],
-      longVideoUrl: longVideos[i],
-      shortVideoUrl: shortVideos[i],
+      longVideoUrl: longVideos[i] || '',
+      shortVideoUrl: shortVideos[i] || '',
     });
   }
   let videoSequence = [];

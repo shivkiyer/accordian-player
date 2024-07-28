@@ -96,16 +96,18 @@ export default function VideoSelectorBar() {
 
   const clickHandler = (iconIndex: number, isLong: boolean) => {
     if (iconIndex !== videoIndex) {
-      const nextVideo = videoData['videoOptions'][iconIndex];
+      const nextVideo = videoData?.videoOptions[iconIndex];
       const nextVideoLabel = `videoOptions_${iconIndex}`;
-      const nextVideoName = nextVideo['name'];
-      const nextVideoUrl = isLong
-        ? nextVideo['longVideoUrl']
-        : nextVideo['shortVideoUrl'];
-      dispatch(playPauseVideo('paused'));
-      dispatch(setCurrentVideoLabel(nextVideoLabel));
-      dispatch(setCurrentVideoName(nextVideoName));
-      dispatch(setVideoUrl(nextVideoUrl));
+      if (nextVideo !== undefined && nextVideo !== null) {
+        const nextVideoName = nextVideo['name'];
+        const nextVideoUrl = isLong
+          ? nextVideo['longVideoUrl']
+          : nextVideo['shortVideoUrl'] || '';
+        dispatch(playPauseVideo('paused'));
+        dispatch(setCurrentVideoLabel(nextVideoLabel));
+        dispatch(setCurrentVideoName(nextVideoName));
+        dispatch(setVideoUrl(nextVideoUrl));
+      }
     }
   };
 

@@ -34,10 +34,12 @@ export default function RewindButton() {
   const rewindHandler = () => {
     if (videoData !== null) {
       const introVideo = videoData['introVideo'];
+      if (introVideo !== null && introVideo !== undefined) {
+        dispatch(setVideoUrl(introVideo.url));
+        dispatch(setCurrentVideoLabel('introVideo'));
+        dispatch(setCurrentVideoName(introVideo.title));
+      }
       dispatch(playPauseVideo('paused'));
-      dispatch(setVideoUrl(introVideo['url']));
-      dispatch(setCurrentVideoLabel('introVideo'));
-      dispatch(setCurrentVideoName(introVideo['title']));
       dispatch(
         setUserSelection(Array(videoData['videoOptions'].length).fill(null))
       );

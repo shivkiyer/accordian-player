@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from './store';
+import VideoDataType from '../models/video-data';
 
 interface VideoType {
   width: number;
@@ -23,7 +24,7 @@ interface VideoType {
   volumeMousePositionX: number | null;
   progressMousePositionX: number | null;
   backgroundImageUrl: string | null;
-  videoData: any; // update later
+  videoData: VideoDataType | null;
   currentVideoLabel: string | null;
   currentVideoName: string | null;
   isSelectPanelVisible: boolean;

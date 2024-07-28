@@ -61,11 +61,13 @@ export default function SelectionPanel() {
     selectPanelSideMargin = selectPanelSideMargin / 2;
   }
 
+  const noOfVideoOptions: number = videoData?.videoOptions.length || 0;
+
   const largeSpace =
     SELECT_PANEL_HEADING_HEIGHT_LARGE +
     SELECT_TABLE_TOP_MARGIN_LARGE +
     SELECT_TABLE_PADDING_LARGE +
-    videoData?.videoOptions.length *
+    noOfVideoOptions *
       (SELECT_PANEL_ROW_HEIGHT_LARGE + SELECT_PANEL_ROW_MARGIN_LARGE) +
     CONTROL_BAR_HEIGHT_LARGE;
 
@@ -73,7 +75,7 @@ export default function SelectionPanel() {
     SELECT_PANEL_HEADING_HEIGHT_SMALL +
     SELECT_TABLE_TOP_MARGIN_SMALL +
     SELECT_TABLE_PADDING_SMALL +
-    videoData?.videoOptions.length *
+    noOfVideoOptions *
       (SELECT_PANEL_ROW_HEIGHT_SMALL + SELECT_PANEL_ROW_MARGIN_SMALL) +
     CONTROL_BAR_HEIGHT_SMALL;
 
