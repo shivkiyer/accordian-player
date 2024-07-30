@@ -12,7 +12,7 @@ import VideoDataType from '../../models/video-data';
  *
  * @return {object} Details of videos to be played in app
  */
-export default async function readCsv(data: string): Promise<any> {
+export default async function readCsv(data: string): Promise<VideoDataType> {
   const videoSpecs: VideoDataType = {
     videoOptions: [],
     framesPerSecond: DEFAULT_FRAMES_PER_SECOND,

@@ -1,3 +1,5 @@
+import VideoDataType from '../../models/video-data';
+
 /**
  * Return the URL for the user to continue after video
  *
@@ -7,10 +9,12 @@
  */
 export default function getActionUrl(
   isReady: boolean,
-  videoData: any
+  videoData: VideoDataType | null
 ): string | null {
+  let actionUrl: string | null;
   if (isReady) {
-    return videoData['endscreenInfo']['jumpToUrl'];
+    actionUrl = videoData?.endscreenInfo?.jumpToUrl || null;
+    return actionUrl;
   }
   return null;
 }
