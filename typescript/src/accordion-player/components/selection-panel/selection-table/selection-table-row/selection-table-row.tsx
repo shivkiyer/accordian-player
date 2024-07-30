@@ -167,33 +167,39 @@ export default function SelectionTableRow({
    * Setting user choice on long video
    */
   const longChoiceHandler = () => {
-    const selected = userSelection.slice();
-    if (row !== undefined && row !== null) {
-      selected[row] = 'long';
+    if (userSelection !== null) {
+      const selected = userSelection.slice();
+      if (row !== undefined && row !== null) {
+        selected[row] = 'long';
+      }
+      dispatch(setUserSelection(selected));
     }
-    dispatch(setUserSelection(selected));
   };
 
   /**
    * Setting user choice on short video
    */
   const shortChoiceHandler = () => {
-    const selected = userSelection.slice();
-    if (row !== undefined && row !== null) {
-      selected[row] = 'short';
+    if (userSelection !== null) {
+      const selected = userSelection.slice();
+      if (row !== undefined && row !== null) {
+        selected[row] = 'short';
+      }
+      dispatch(setUserSelection(selected));
     }
-    dispatch(setUserSelection(selected));
   };
 
   /**
    * Setting user choice on not interested
    */
   const noChoiceHandler = () => {
-    const selected = userSelection.slice();
-    if (row !== undefined && row !== null) {
-      selected[row] = 'no';
+    if (userSelection !== null) {
+      const selected = userSelection.slice();
+      if (row !== undefined && row !== null) {
+        selected[row] = 'no';
+      }
+      dispatch(setUserSelection(selected));
     }
-    dispatch(setUserSelection(selected));
   };
 
   let videoChoice = null;

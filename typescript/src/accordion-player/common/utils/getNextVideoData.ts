@@ -11,7 +11,7 @@ import VideoInfo from '../../models/video-info';
 export default function getNextVideoData(
   videoData: any,
   currentLabel: string | null,
-  userChoice: any[]
+  userChoice: (string | null)[] | null
 ): VideoInfo | null {
   let nextVideo: VideoInfo | null = null;
   if (videoData !== null) {
@@ -23,7 +23,7 @@ export default function getNextVideoData(
         if (nextVideoLabel.includes('_')) {
           const videoLabelParts = nextVideoLabel.split('_');
           const choiceIndex = parseInt(videoLabelParts[1]);
-          if (userChoice[choiceIndex] !== 'no') {
+          if (userChoice !== null && userChoice[choiceIndex] !== 'no') {
             if (videoLabelParts.length === 2) {
               const nextVideoUrl =
                 userChoice[choiceIndex] === 'long'

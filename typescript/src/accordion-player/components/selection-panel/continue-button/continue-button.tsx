@@ -57,12 +57,12 @@ export default function ContinueButton() {
 
   const btnLeftSpace = (window.innerWidth - btnWidth) / 2;
 
-  const disableBtn = userSelection === null || userSelection.includes(null);
+  const disableBtn = userSelection === null || userSelection?.includes(null);
 
   const totalNoOfItems = userSelection !== null ? userSelection.length : 0;
   const unselectedItems =
     userSelection !== null
-      ? userSelection.filter((el: string) => el === null).length
+      ? userSelection.filter((el: string | null) => el === null).length
       : 0;
   const noOfItems = totalNoOfItems - unselectedItems;
 

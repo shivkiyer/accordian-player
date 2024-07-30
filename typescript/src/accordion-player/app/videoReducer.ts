@@ -28,7 +28,7 @@ interface VideoType {
   currentVideoLabel: string | null;
   currentVideoName: string | null;
   isSelectPanelVisible: boolean;
-  userSelection: any | null;
+  userSelection: (string | null)[] | null;
   readyForEnding: boolean;
   isLoaded: boolean;
   isMobile: boolean;

@@ -111,37 +111,39 @@ export default function VideoSelectorBar() {
     }
   };
 
-  const buttonList = userSelection.map((item: string, index: number) => {
-    let inactiveBtnStyle: { opacity?: string } = {};
-    if (videoIndex !== index) {
-      inactiveBtnStyle.opacity = '0.5';
-    }
+  const buttonList = userSelection?.map(
+    (item: string | null, index: number) => {
+      let inactiveBtnStyle: { opacity?: string } = {};
+      if (videoIndex !== index) {
+        inactiveBtnStyle.opacity = '0.5';
+      }
 
-    switch (item) {
-      case 'long':
-        return (
-          <img
-            src={longClipBtn}
-            alt='long-icon'
-            key={index}
-            style={{ ...longBtnStyle, ...inactiveBtnStyle }}
-            onClick={() => clickHandler(index, true)}
-          />
-        );
-      case 'short':
-        return (
-          <img
-            src={shortClipBtn}
-            alt='short-icon'
-            key={index}
-            style={{ ...shortBtnStyle, ...inactiveBtnStyle }}
-            onClick={() => clickHandler(index, false)}
-          />
-        );
-      default:
-        return null;
+      switch (item) {
+        case 'long':
+          return (
+            <img
+              src={longClipBtn}
+              alt='long-icon'
+              key={index}
+              style={{ ...longBtnStyle, ...inactiveBtnStyle }}
+              onClick={() => clickHandler(index, true)}
+            />
+          );
+        case 'short':
+          return (
+            <img
+              src={shortClipBtn}
+              alt='short-icon'
+              key={index}
+              style={{ ...shortBtnStyle, ...inactiveBtnStyle }}
+              onClick={() => clickHandler(index, false)}
+            />
+          );
+        default:
+          return null;
+      }
     }
-  });
+  );
 
   return (
     <div className={styles.VideoSelectorBar} style={videoSelectorStyle}>
