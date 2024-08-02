@@ -1,7 +1,8 @@
 import getConfigData from './../../test-utils/getConfigData';
+import VideoDataType from '../../../models/video-data';
 
 describe('getNextVideoData', () => {
-  let videoData: any;
+  let videoData: VideoDataType;
 
   beforeEach(async () => {
     jest.mock('./../checkVideoPlayable', () => {
@@ -67,7 +68,7 @@ describe('getNextVideoData', () => {
 
       const result = getNextVideoData(videoData, 'selectInfo', mockUserChoice);
       expect(result.label).toBe('endscreenInfo');
-      expect(result.url).toBe(videoData['endscreenInfo']['url']);
+      expect(result.url).toBe(videoData.endscreenInfo?.url);
     });
   });
 
@@ -111,7 +112,7 @@ describe('getNextVideoData', () => {
         mockUserChoice
       );
       expect(result.label).toBe('endscreenInfo');
-      expect(result.url).toBe(videoData['endscreenInfo']['url']);
+      expect(result.url).toBe(videoData.endscreenInfo?.url);
     });
 
     it('should jump to ending video if other options are not selected', () => {
@@ -125,7 +126,7 @@ describe('getNextVideoData', () => {
         mockUserChoice
       );
       expect(result.label).toBe('endscreenInfo');
-      expect(result.url).toBe(videoData['endscreenInfo']['url']);
+      expect(result.url).toBe(videoData.endscreenInfo?.url);
     });
   });
 
