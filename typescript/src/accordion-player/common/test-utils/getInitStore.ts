@@ -1,16 +1,19 @@
+import VideoType from '../../models/video-type';
+
 /**
  * Return a mock initial state for testing purposes
  *
  * @returns {object} Initial state of video reducer
  */
 export default function getInitStore() {
-  const initStoreState = {
+  const initStoreState: { video: VideoType } = {
     video: {
       width: 1980,
       height: 1020,
       volume: 1.0,
       prevVolume: 1.0,
       isPlaying: false,
+      restartVideo: false,
       prevIsPlaying: false,
       currentTime: 0,
       duration: 0,
