@@ -1,7 +1,6 @@
 import readCsv from './readCsvFile';
 import checkVideoPlayable from './checkVideoPlayable';
 import fetchUrl from './fetchUrl';
-import VideoDataType from '../../models/video-data';
 import HttpResponseType from '../../models/http-response';
 
 /**

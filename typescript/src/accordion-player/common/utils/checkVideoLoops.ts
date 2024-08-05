@@ -18,7 +18,7 @@ export default function checkVideoLoops(
       const clipData = videoData[videoLabel];
       const startLoopBackTime: number = clipData?.startLoopback || -1;
       let jumpToTime: number | null = null;
-      if (clipData?.jumpToTimestamp != undefined) {
+      if (clipData?.jumpToTimestamp !== undefined) {
         jumpToTime = clipData?.jumpToTimestamp / 1000;
       }
       if (startLoopBackTime > 0 && currentTime >= startLoopBackTime / 1000) {
